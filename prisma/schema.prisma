@@ -1,0 +1,272 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  VIEWER
+  SALES_MANAGER
+  PRODUCT_MANAGER
+  ADMIN
+}
+
+enum SaleStatus {
+  DRAFT
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum NotificationType {
+  LOW_STOCK
+  SALE_COMPLETED
+  PRICE_CHANGED
+  SYSTEM_ALERT
+}
+
+enum AuditAction {
+  INSERT
+  UPDATE
+  DELETE
+}
+
+enum SettingDataType {
+  STRING
+  NUMBER
+  BOOLEAN
+  JSON
+}
+
+model User {
+  id                    String          @id @default(cuid())
+  email                 String          @unique @db.VarChar(255)
+  name                  String?         @db.VarChar(100)
+  password              String          @db.VarChar(255)
+  role                  UserRole        @default(VIEWER)
+  isFirstTimeLogin      Boolean         @default(true) @map("is_first_time_login")
+  emailVerified         DateTime?       @map("email_verified")
+  lastLoginAt           DateTime?       @map("last_login_at")
+  isActive              Boolean         @default(true) @map("is_active")
+  //
+  sales                 Sales[]
+  auditLogs             AuditLog[]
+  notifications         Notification[]
+  systemSettingsCreated SystemSetting[] @relation("SettingCreatedBy")
+  systemSettingsUpdated SystemSetting[] @relation("SettingUpdatedBy")
+  //
+  createdAt             DateTime        @default(now()) @map("created_at")
+  updatedAt             DateTime        @updatedAt @map("updated_at")
+
+  @@index([role])
+  @@index([isActive])
+}
+
+model Store {
+  id          String    @id @default(cuid())
+  name        String    @db.VarChar(255)
+  description String?   @db.Text
+  address     String?   @db.Text
+  phone       String?   @db.VarChar(20)
+  email       String?   @db.VarChar(255)
+  isActive    Boolean   @default(true) @map("is_active")
+  //
+  products    Product[] @relation("StoreToProduct")
+  sales       Sales[]   @relation("StoreToSales")
+  //
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@index([name])
+  @@index([isActive])
+  @@index([deletedAt])
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  parentId    String?    @map("parent_id")
+  //
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children    Category[] @relation("CategoryHierarchy")
+  //
+  products    Product[]
+  //
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@unique([name, parentId])
+  @@index([name])
+  @@index([parentId])
+}
+
+model Product {
+  id             String         @id @default(cuid())
+  name           String         @db.VarChar(255)
+  imageId        String?        @map("image_id")
+  imageUrl       String?        @map("image_url")
+  description    String?        @db.Text
+  sku            String?        @unique @db.VarChar(50) // article
+  barcode        String?        @unique @db.VarChar(50)
+  weight         Float?
+  dimensions     Json? // {length: number, width: number, height: number}
+  price          Decimal        @db.Decimal(10, 2)
+  costPrice      Decimal?       @map("cost_price") @db.Decimal(10, 2)
+  stock          Int            @default(0) @db.UnsignedInt
+  stockThreshold Int            @default(0) @map("stock_threshold")
+  isActive       Boolean        @default(true) @map("is_active")
+  //
+  sales          Sales[]        @relation("ProductToSales")
+  priceHistory   PriceHistory[]
+  //
+  storeId        String         @map("store_id")
+  store          Store          @relation("StoreToProduct", fields: [storeId], references: [id], onDelete: Cascade)
+  //
+  categoryId     String?        @map("category_id")
+  category       Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  //
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  deletedAt      DateTime?      @map("deleted_at")
+
+  @@unique([name, storeId])
+  @@index([sku])
+  @@index([barcode])
+  @@index([name])
+  @@index([categoryId])
+  @@index([storeId])
+  @@index([isActive])
+  @@index([stock])
+  @@index([deletedAt])
+}
+
+model Merchant {
+  id        String    @id @default(cuid())
+  name      String    @db.VarChar(255)
+  email     String?   @db.VarChar(255)
+  phone     String?   @db.VarChar(20)
+  address   String?   @db.Text
+  isActive  Boolean   @default(true) @map("is_active")
+  //
+  sales     Sales[]
+  //
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([name])
+  @@index([isActive])
+  @@index([deletedAt])
+}
+
+model Sales {
+  id          String     @id @default(cuid())
+  quantity    Int        @db.UnsignedInt
+  notes       String?
+  discount    Decimal?   @db.Decimal(5, 2)
+  unitPrice   Decimal    @map("unit_price") @db.Decimal(10, 2)
+  totalAmount Decimal    @map("total_amount") @db.Decimal(10, 2)
+  saleDate    DateTime   @default(now()) @map("sale_date")
+  status      SaleStatus @default(PENDING)
+  refundedAt  DateTime?  @map("refunded_at")
+  //
+  merchantId  String     @map("merchant_id")
+  merchant    Merchant   @relation(fields: [merchantId], references: [id], onDelete: Restrict)
+  //
+  storeId     String     @map("store_id")
+  store       Store      @relation("StoreToSales", fields: [storeId], references: [id], onDelete: Restrict)
+  //
+  userId      String     @map("user_id")
+  user        User       @relation(fields: [userId], references: [id], onDelete: Restrict)
+  //
+  productId   String     @map("product_id")
+  product     Product    @relation("ProductToSales", fields: [productId], references: [id], onDelete: Restrict)
+  //
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@index([saleDate])
+  @@index([merchantId, saleDate])
+  @@index([storeId, saleDate])
+  @@index([productId])
+  @@index([status])
+  @@index([userId, saleDate])
+}
+
+model PriceHistory {
+  id        String   @id @default(cuid())
+  oldPrice  Decimal  @map("old_price") @db.Decimal(10, 2)
+  newPrice  Decimal  @map("new_price") @db.Decimal(10, 2)
+  reason    String?
+  //
+  productId String   @map("product_id")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  //
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([productId, createdAt])
+}
+
+model AuditLog {
+  id        String      @id @default(cuid())
+  tableName String      @map("table_name") @db.VarChar(50)
+  recordId  String      @map("record_id")
+  action    AuditAction
+  oldValues Json?       @map("old_values")
+  newValues Json?       @map("new_values")
+  userId    String?     @map("user_id")
+  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  @@index([tableName, recordId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model SystemSetting {
+  id          String          @id @default(cuid())
+  key         String          @unique @db.VarChar(100)
+  value       String          @db.Text
+  description String?         @db.Text
+  dataType    SettingDataType
+  //
+  createdBy   String          @map("created_by")
+  createdUser User            @relation("SettingCreatedBy", fields: [createdBy], references: [id], onDelete: Restrict)
+  //
+  updatedBy   String          @map("updated_by")
+  updatedUser User            @relation("SettingUpdatedBy", fields: [updatedBy], references: [id], onDelete: Restrict)
+  //
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  @@index([dataType])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  title     String           @db.VarChar(255)
+  message   String           @db.Text
+  isRead    Boolean          @default(false) @map("is_read")
+  metadata  Json?
+  expiresAt DateTime?        @map("expires_at")
+  //
+  userId    String           @map("user_id")
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  //
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+  @@index([expiresAt])
+}
