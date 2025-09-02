@@ -65,20 +65,6 @@ export const ProductColumns: ColumnDef<ProductColumn>[] = [
 	},
 
 	{
-		accessorKey: 'stockThreshold',
-		header: ({ column }) => {
-			return (
-				<TableHeader
-					variant='sortable-center'
-					name='productStockThreshold'
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				/>
-			)
-		},
-		cell: ({ row }) => <div className='flex items-center justify-center'>{row.original.stockThreshold}</div>,
-	},
-
-	{
 		accessorKey: 'stock',
 		header: ({ column }) => {
 			return (
@@ -95,6 +81,20 @@ export const ProductColumns: ColumnDef<ProductColumn>[] = [
 	{
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,
+	},
+
+	{
+		accessorKey: 'stockThreshold',
+		header: ({ column }) => {
+			return (
+				<TableHeader
+					variant='sortable-center'
+					name='productStockThreshold'
+					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+				/>
+			)
+		},
+		cell: ({ row }) => <div className='flex items-center justify-center'>{row.original.stockThreshold}</div>,
 	},
 ]
 
@@ -156,20 +156,6 @@ export const ProductColumnsWithoutAction: ColumnDef<ProductColumn>[] = [
 	},
 
 	{
-		accessorKey: 'stockThreshold',
-		header: ({ column }) => {
-			return (
-				<TableHeader
-					variant='sortable-center'
-					name='productStockThreshold'
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				/>
-			)
-		},
-		cell: ({ row }) => <div className='flex items-center justify-center'>{row.original.stockThreshold}</div>,
-	},
-
-	{
 		accessorKey: 'stock',
 		header: ({ column }) => {
 			return (
@@ -181,5 +167,19 @@ export const ProductColumnsWithoutAction: ColumnDef<ProductColumn>[] = [
 			)
 		},
 		cell: ({ row }) => <div className='flex items-center justify-center'>{row.original.stock}</div>,
+	},
+
+	{
+		accessorKey: 'stockThreshold',
+		header: ({ column }) => {
+			return (
+				<TableHeader
+					variant='sortable-center'
+					name='productStockThreshold'
+					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+				/>
+			)
+		},
+		cell: ({ row }) => <div className='flex items-center justify-center'>{row.original.stockThreshold}</div>,
 	},
 ]

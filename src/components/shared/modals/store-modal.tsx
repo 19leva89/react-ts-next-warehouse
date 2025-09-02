@@ -5,7 +5,6 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { Store } from '@prisma/client'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,6 +19,7 @@ import {
 	FormMessage,
 	Input,
 } from '@/components/ui'
+import { useRouter } from '@/i18n/navigation'
 import { Modal } from '@/components/shared/modals'
 import { useStoreList } from '@/hooks/use-store-list-modal'
 import { useAddStoreModal } from '@/hooks/use-add-store-modal'
@@ -29,9 +29,9 @@ const formSchema = z.object({
 })
 
 export const StoreModal = () => {
-	const t = useTranslations('Store')
 	const router = useRouter()
 	const storeList = useStoreList()
+	const t = useTranslations('Store')
 	const storeModalStore = useAddStoreModal()
 
 	const [loading, setLoading] = useState<boolean>(false)
@@ -79,7 +79,7 @@ export const StoreModal = () => {
 				form.reset()
 				storeModalStore.setIsEditing(false)
 				storeModalStore.onClose()
-				window.location.assign(`/en/${response.data.id}`)
+				router.push(`/${response.data.id}`)
 			}
 		} catch {
 			toast.error(t('storeError'))

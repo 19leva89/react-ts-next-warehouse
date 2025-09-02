@@ -4,10 +4,10 @@ import * as z from 'zod'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
+import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useParams, useRouter } from 'next/navigation'
 
 import {
 	Button,
@@ -19,6 +19,7 @@ import {
 	FormMessage,
 	Input,
 } from '@/components/ui'
+import { useRouter } from '@/i18n/navigation'
 import { useProduct } from '@/hooks/use-product'
 import { Modal } from '@/components/shared/modals'
 import { useProductModal } from '@/hooks/use-product-modal'
@@ -32,11 +33,11 @@ const formSchema = z.object({
 })
 
 export const ProductModal = () => {
-	const t = useTranslations('Products')
-	const productStore = useProductModal()
-	const productListStore = useProduct()
 	const params = useParams()
 	const router = useRouter()
+	const t = useTranslations('Products')
+	const productListStore = useProduct()
+	const productStore = useProductModal()
 
 	const [file, setFile] = useState<File | null>(null)
 	const [loading, setLoading] = useState<boolean>(false)
@@ -187,15 +188,15 @@ export const ProductModal = () => {
 
 								<FormField
 									control={form.control}
-									name='stockThreshold'
+									name='stock'
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>{t('productStockThreshold')}</FormLabel>
+											<FormLabel>{t('productStock')}</FormLabel>
 
 											<FormControl>
 												<Input
 													disabled={loading}
-													placeholder={t('productStockThresholdPlaceholder')}
+													placeholder={t('productStockPlaceholder')}
 													type='number'
 													{...field}
 												/>
@@ -208,15 +209,15 @@ export const ProductModal = () => {
 
 								<FormField
 									control={form.control}
-									name='stock'
+									name='stockThreshold'
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>{t('productStock')}</FormLabel>
+											<FormLabel>{t('productStockThreshold')}</FormLabel>
 
 											<FormControl>
 												<Input
 													disabled={loading}
-													placeholder={t('productStockPlaceholder')}
+													placeholder={t('productStockThresholdPlaceholder')}
 													type='number'
 													{...field}
 												/>

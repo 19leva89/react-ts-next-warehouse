@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 
 import { prisma } from '@/lib/prisma'
 import { ProductData } from '@/lib/types'
+import { redirect } from '@/i18n/navigation'
 import { SetStore } from './_components/set-store'
 import { Navbar } from '@/components/shared/navbar'
 import { SetProduct } from './_components/set-product'
@@ -12,11 +12,11 @@ import { ModalProvider } from '@/providers/modal-provider'
 
 interface Props {
 	children: ReactNode
-	params: Promise<{ storeId: string }>
+	params: Promise<{ storeId: string; locale: string }>
 }
 
 const RootLayout = async ({ children, params }: Props) => {
-	const { storeId } = await params
+	const { storeId, locale } = await params
 
 	const userId = (await cookies()).get('userId')?.value
 
@@ -27,7 +27,7 @@ const RootLayout = async ({ children, params }: Props) => {
 	})
 
 	if (!user) {
-		redirect('/auth/login')
+		redirect({ href: `/${storeId}/auth/login`, locale })
 	}
 
 	const stores = await prisma.store.findMany()

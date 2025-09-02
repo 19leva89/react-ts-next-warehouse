@@ -4,7 +4,7 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { EditIcon, MoreHorizontalIcon, TrashIcon } from 'lucide-react'
 
 import {
@@ -16,6 +16,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui'
 import { SalesColumn } from './columns'
+import { useRouter } from '@/i18n/navigation'
 import { useSaleModal } from '@/hooks/use-sale-modal'
 import { AlertModal } from '@/components/shared/modals'
 

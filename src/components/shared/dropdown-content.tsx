@@ -1,7 +1,7 @@
 'use client'
 
-import { useParams, useRouter } from 'next/navigation'
-import { useLocale, useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import {
 	DropdownMenuContent,
@@ -9,6 +9,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 } from '@/components/ui'
+import { useRouter } from '@/i18n/navigation'
 
 interface Props {
 	name: string
@@ -17,7 +18,6 @@ interface Props {
 export const DropdownContent = ({ name }: Props) => {
 	const params = useParams()
 	const router = useRouter()
-	const currentLocale = useLocale()
 	const t = useTranslations('ManageUser')
 
 	return (
@@ -28,7 +28,7 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${currentLocale}/${params.storeId}/profile`)
+					router.push(`/${params.storeId}/profile`)
 				}}
 			>
 				{t('profileButton')}
@@ -36,7 +36,7 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${currentLocale}/${params.storeId}/manage-user`)
+					router.push(`/${params.storeId}/manage-user`)
 				}}
 			>
 				{t('manageUserButton')}
@@ -44,7 +44,7 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${currentLocale}/auth/logout`)
+					router.push(`/auth/logout`)
 				}}
 			>
 				{t('logoutButton')}

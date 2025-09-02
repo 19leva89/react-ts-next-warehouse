@@ -1,12 +1,12 @@
 'use client'
 
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { ArrowLeftIcon, RefreshCcwIcon, UserIcon } from 'lucide-react'
 
 import { cn } from '@/lib'
 import { Button } from '@/components/ui'
 import { Title } from '@/components/shared'
+import { useRouter } from '@/i18n/navigation'
 
 interface Props {
 	type: 'auth' | 'not-found'
