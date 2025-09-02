@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
 	const { key } = await req.json()
 
 	if (key === 'static_key') {
-		const response = SuccessResponse({ message: 'Logout successful.' })
+		const response = SuccessResponse({ message: 'Logout successful' })
 
 		await Promise.all([
 			response.cookies.delete('token'),

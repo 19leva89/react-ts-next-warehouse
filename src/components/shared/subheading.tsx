@@ -1,15 +1,17 @@
-import { ReactNode } from 'react'
+import { LucideIcon } from 'lucide-react'
 
 interface Props {
-	icon: ReactNode
+	icon: LucideIcon
 	title: string
 	description: string
 }
 
-export const Subheading = ({ icon, title, description }: Props) => {
+export const Subheading = ({ icon: Icon, title, description }: Props) => {
 	return (
 		<div className='flex items-center gap-4'>
-			<div>{icon}</div>
+			<div>
+				<Icon className='size-8' />
+			</div>
 
 			<div className='flex flex-col'>
 				<h2 className='text-xl font-bold tracking-tight'>{title}</h2>

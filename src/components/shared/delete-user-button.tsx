@@ -10,12 +10,11 @@ import { Button } from '@/components/ui'
 import { AlertModal } from '@/components/shared/modals'
 
 interface Props {
-	key: string
 	userId: string
 	setUsers: any
 }
 
-export const DeleteUserButton = ({ key, userId, setUsers }: Props) => {
+export const DeleteUserButton = ({ userId, setUsers }: Props) => {
 	const t = useTranslations('ManageUser')
 
 	const [open, setOpen] = useState<boolean>(false)
@@ -43,17 +42,15 @@ export const DeleteUserButton = ({ key, userId, setUsers }: Props) => {
 				onClose={() => setOpen(false)}
 				onConfirm={onConfirmDelete}
 				loading={loading}
-				key={key}
 			/>
 
 			<Button
-				key={key}
 				variant='ghost'
 				onClick={() => {
 					setOpen(true)
 				}}
 			>
-				<Trash2Icon key={key} className='size-6' />
+				<Trash2Icon className='size-6' />
 			</Button>
 		</>
 	)

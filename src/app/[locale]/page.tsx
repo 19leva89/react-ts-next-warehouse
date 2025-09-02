@@ -1,7 +1,5 @@
 'use client'
 
-import './globals.css'
-
 import axios from 'axios'
 import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'

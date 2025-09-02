@@ -27,13 +27,13 @@ export const StoreListModal = () => {
 			<div>
 				<div className='space-y-4 py-2 pb-4'>
 					<div className='space-y-2'>
-						<ScrollArea className='h-[500px]'>
+						<ScrollArea className='h-125'>
 							<div className='flex flex-col gap-2'>
 								<Separator />
 
 								{storeListStore.storeList!.map((store) => (
 									<Fragment key={store.id}>
-										<div key={store.id} className='flex items-center justify-between'>
+										<div className='flex items-center justify-between'>
 											<div>{store.name}</div>
 
 											<div className='flex'>
@@ -48,11 +48,11 @@ export const StoreListModal = () => {
 													<Edit2Icon className='size-4' />
 												</Button>
 
-												<DeleteStoreButton key={store.id} storeId={store.id} />
+												<DeleteStoreButton storeId={store.id} />
 											</div>
 										</div>
 
-										<Separator key={store.id} />
+										<Separator />
 									</Fragment>
 								))}
 							</div>

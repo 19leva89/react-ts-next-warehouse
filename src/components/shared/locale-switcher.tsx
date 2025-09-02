@@ -1,34 +1,51 @@
 'use client'
 
+import { toast } from 'sonner'
 import { useTransition } from 'react'
-import { useLocale } from 'next-intl'
 import { GlobeIcon } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
 
-import { Button } from '@/components/ui'
 import { useRouter, usePathname } from '@/i18n/navigation'
+import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui'
 
 export const LocaleSwitcher = () => {
-	const locale = useLocale()
 	const router = useRouter()
 	const pathname = usePathname()
+	const currentLocale = useLocale()
+
+	const t = useTranslations('Interface')
 
 	const [isPending, startTransition] = useTransition()
 
-	const targetLocale = locale === 'en' ? 'ua' : 'en'
-
-	console.log('Current locale:', locale)
-	console.log('Target locale:', targetLocale)
-	console.log('Current pathname:', pathname)
+	const targetLocale = currentLocale === 'en' ? 'uk' : 'en'
 
 	const handleToggleLocale = () => {
 		startTransition(() => {
-			router.replace(pathname, { locale: targetLocale })
+			try {
+				router.replace(pathname, { locale: targetLocale })
+			} catch (error) {
+				console.error('Failed to change locale:', error)
+
+				toast.error('Failed to change language')
+			}
 		})
 	}
 
+	const tooltipText = targetLocale === 'en' ? t('switchToEnglish') : t('switchToUkrainian')
+
 	return (
-		<Button variant='ghost' onClick={handleToggleLocale}>
-			<GlobeIcon className='size-6' />
-		</Button>
+		<TooltipProvider>
+			<Tooltip>
+				<TooltipTrigger asChild>
+					<Button variant='ghost' onClick={handleToggleLocale} disabled={isPending} aria-label={tooltipText}>
+						<GlobeIcon className='size-6' />
+					</Button>
+				</TooltipTrigger>
+
+				<TooltipContent>
+					<p>{tooltipText}</p>
+				</TooltipContent>
+			</Tooltip>
+		</TooltipProvider>
 	)
 }

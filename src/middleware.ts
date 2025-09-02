@@ -3,70 +3,72 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { verifyJWT } from '@/lib/token'
 import { routing } from '@/i18n/routing'
-import { GlobalError, UnauthorizedError } from '@/lib/helper'
 
-interface AuthenticatedRequest extends NextRequest {
-	user: {
-		id: string
-	}
+// Utility function to extract token
+function getToken(req: NextRequest): string | undefined {
+	return req.cookies.get('token')?.value || req.headers.get('Authorization')?.replace('Bearer ', '')
 }
 
-export default createMiddleware(routing)
+// Utility function to get locale from pathname
+function getLocaleFromPath(pathname: string): string {
+	const segments = pathname.split('/').filter(Boolean)
 
-let redirectToLogin = false
+	return segments[0] && routing.locales.includes(segments[0] as any) ? segments[0] : routing.defaultLocale
+}
 
-export async function middleware(req: NextRequest) {
-	let token: string | undefined
+async function handleWebAuth(req: NextRequest, intlResponse?: NextResponse) {
+	const token = getToken(req)
+	const pathname = req.nextUrl.pathname
+	const locale = getLocaleFromPath(pathname)
+	const isLoginPage = pathname.includes('/auth/login')
 
-	if (req.nextUrl.pathname === '/') {
-		return NextResponse.redirect(new URL('/en', req.url))
+	// If this is a login page and there is no token, continue
+	if (isLoginPage && !token) {
+		return intlResponse || NextResponse.next()
 	}
 
-	if (req.cookies.has('token')) {
-		token = req.cookies.get('token')?.value
-	} else if (req.headers.get('Authorization')?.startsWith('Bearer ')) {
-		token = req.headers.get('Authorization')?.replace('Bearer ', '')
-	}
-
-	if (req.nextUrl.pathname.includes('/login') && (!token || redirectToLogin)) return
-
-	if (
-		!token &&
-		(req.nextUrl.pathname.startsWith('/api/users') || req.nextUrl.pathname.startsWith('/api/auth/logout'))
-	) {
-		return UnauthorizedError({ message: 'You are not authorized' })
-	}
-
-	const response = NextResponse.next()
-
-	try {
-		if (token) {
+	// If there is a token, check it
+	if (token) {
+		try {
 			const { sub } = await verifyJWT<{ sub: string }>(token)
+			const response = intlResponse || NextResponse.next()
+
 			response.headers.set('X-USER-ID', sub)
-			;(req as AuthenticatedRequest).user = { id: sub }
+
+			// If user is authenticated and on the login page, redirect to home
+			if (isLoginPage) {
+				return NextResponse.redirect(new URL(`/${locale}`, req.url))
+			}
+
+			return response
+		} catch {
+			// Invalid token - redirect to login
+			return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url))
 		}
-	} catch (error: any) {
-		redirectToLogin = true
-		if (req.nextUrl.pathname.startsWith('/api')) {
-			return GlobalError({ message: error.message })
-		}
-
-		return NextResponse.redirect(new URL(`/en/login`, req.url))
 	}
 
-	const authUser = (req as AuthenticatedRequest).user
-
-	if (!authUser) {
-		return NextResponse.redirect(new URL(`/en/login`, req.url))
+	// No token and not login page - redirect to login
+	if (!isLoginPage) {
+		return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url))
 	}
 
-	if (req.url.includes('/login') && authUser) {
-		return NextResponse.redirect(new URL('/en', req.url))
+	return intlResponse || NextResponse.next()
+}
+
+export default async function middleware(req: NextRequest) {
+	// Handle internationalization
+	const handleI18nRouting = createMiddleware(routing)
+	const intlResponse = handleI18nRouting(req)
+
+	// If internationalization requires a redirect, return it
+	if (intlResponse?.status === 307 || intlResponse?.status === 302) {
+		return intlResponse
 	}
 
-	return response
+	// Handle authorization
+	return handleWebAuth(req, intlResponse)
 }
 
 export const config = {
-	matcher: ['/', '/login', '/api/users/:path*', '/api/auth/logout', '/((?!api|_next|.*\\..*).*)'],
+	matcher: ['/((?!api|_next/static|_next/image|favicon.ico|assets).*)'],
 }

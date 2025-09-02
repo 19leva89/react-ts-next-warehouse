@@ -26,7 +26,7 @@ export function DataTable<TData, TValue>({
 	columns,
 	data,
 	searchKey,
-	placeholder = 'Cari',
+	placeholder = 'Search',
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])

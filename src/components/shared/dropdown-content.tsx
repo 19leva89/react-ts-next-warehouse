@@ -15,10 +15,10 @@ interface Props {
 }
 
 export const DropdownContent = ({ name }: Props) => {
-	const t = useTranslations('ManageUser')
-	const lang = useLocale()
 	const params = useParams()
 	const router = useRouter()
+	const currentLocale = useLocale()
+	const t = useTranslations('ManageUser')
 
 	return (
 		<DropdownMenuContent align='end'>
@@ -28,7 +28,7 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${lang}/${params.storeId}/profile`)
+					router.push(`/${currentLocale}/${params.storeId}/profile`)
 				}}
 			>
 				{t('profileButton')}
@@ -36,7 +36,7 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${lang}/${params.storeId}/manage-user`)
+					router.push(`/${currentLocale}/${params.storeId}/manage-user`)
 				}}
 			>
 				{t('manageUserButton')}
@@ -44,10 +44,10 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${lang}/logout`)
+					router.push(`/${currentLocale}/auth/logout`)
 				}}
 			>
-				Logout
+				{t('logoutButton')}
 			</DropdownMenuItem>
 		</DropdownMenuContent>
 	)
