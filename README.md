@@ -1,3 +1,45 @@
+# This project contains the following technologies
+
+Authentication and User Management:
+- Bcrypt.ts (password hashing)
+- Firebase (storage)
+- jose (JWT)
+
+Core Technologies:
+- React 19
+- TypeScript
+- Next 15 (framework)
+
+Data Fetching and State Management:
+- Axios (sending requests to backend)
+- Prisma 6 (ORM for DB)
+- React Query (TanStack Query) (data fetching and state management)
+- Zustand (state management)
+
+Form and Validation:
+- React Hook Form (working with forms)
+- Zod (first schema validation)
+
+Middleware and Server Utilities:
+- Concurrently (all projects are running in tandem)
+
+Styling and UI Frameworks:
+- Lucide React (stylization)
+- Next Themes (using theme switcher)
+- shadcn/ui (stylization)
+- Tailwind CSS (stylization)
+- Sonner (stylization)
+
+Utilities and Libraries:
+- Date-fns (date/time manipulation)
+- Knip (code analyzer and declutter)
+- next-intl (internationalization)
+- PostCSS (transforms CSS code to AST)
+- Prettier (code formatter)
+- Recharts (visualization graphs and charts)
+
+
+
 # Project setup commands:
 terminal powershell -> `npm i` (install dependencies)
 terminal powershell -> `npx npm-check-updates --interactive` (update dependencies)

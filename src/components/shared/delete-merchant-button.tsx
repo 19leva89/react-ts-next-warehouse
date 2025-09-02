@@ -12,14 +12,13 @@ import { AlertModal } from '@/components/shared/modals'
 import { useMerchantList } from '@/hooks/use-merchant-list-modal'
 
 interface Props {
-	key: string
 	merchantId: string
 }
 
-export const DeleteMerchantButton = ({ key, merchantId }: Props) => {
-	const t = useTranslations('Merchant')
+export const DeleteMerchantButton = ({ merchantId }: Props) => {
 	const router = useRouter()
 	const params = useParams()
+	const t = useTranslations('Merchant')
 	const merchantListStore = useMerchantList()
 
 	const [open, setOpen] = useState<boolean>(false)
@@ -52,17 +51,15 @@ export const DeleteMerchantButton = ({ key, merchantId }: Props) => {
 				onClose={() => setOpen(false)}
 				onConfirm={onConfirmDelete}
 				loading={loading}
-				key={key}
 			/>
 
 			<Button
-				key={key}
 				variant='ghost'
 				onClick={() => {
 					setOpen(true)
 				}}
 			>
-				<Trash2Icon key={key} className='size-4' />
+				<Trash2Icon className='size-4' />
 			</Button>
 		</>
 	)

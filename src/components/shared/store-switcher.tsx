@@ -30,11 +30,11 @@ interface Props extends PopoverTriggerProps {
 	user: User
 }
 
-export const StoreSwitcher = ({ className, items, user }: Props) => {
-	const t = useTranslations('Store')
+export const StoreSwitcher = ({ items, user, className }: Props) => {
 	const params = useParams()
 	const router = useRouter()
 	const storeList = useStoreList()
+	const t = useTranslations('Store')
 	const storeModal = useAddStoreModal()
 
 	const formattedItems = items.map((item) => ({
@@ -60,22 +60,24 @@ export const StoreSwitcher = ({ className, items, user }: Props) => {
 					role='combobox'
 					aria-expanded={open}
 					aria-label='Select a store'
-					className={cn('min-w-[200px] justify-between', className)}
+					className={cn('min-w-50 justify-between', className)}
 				>
 					<StoreIcon className='mr-2 size-4' />
+
 					{currentStore?.label}
+
 					<ChevronsUpDownIcon className='ml-auto size-4 shrink-0 opacity-50' />
 				</Button>
 			</PopoverTrigger>
 
-			<PopoverContent className='min-w-[200px] p-0'>
+			<PopoverContent className='min-w-50 p-0'>
 				<Command>
 					<CommandList>
-						<CommandInput placeholder='Cari toko...' />
+						<CommandInput placeholder={t('searchPlaceholder')} />
 
 						<CommandEmpty>{t('notFound')}</CommandEmpty>
 
-						<CommandGroup heading='Pilih Toko'>
+						<CommandGroup heading={t('storeListTitle')}>
 							{formattedItems.map((store) => (
 								<CommandItem key={store.value} onSelect={() => onStoreSelect(store)} className='text-sm'>
 									<StoreIcon className='mr-2 size-4' />

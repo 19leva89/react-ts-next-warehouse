@@ -1,31 +1,30 @@
 'use client'
 
-import Link from 'next/link'
 import { HTMLAttributes } from 'react'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { useParams, usePathname } from 'next/navigation'
 
 import { cn } from '@/lib'
+import { Link } from '@/i18n/navigation'
 
 export const MainNav = ({ className, ...props }: HTMLAttributes<HTMLElement>) => {
-	const t = useTranslations('Navigation')
-	const locale = useLocale()
-	const pathname = usePathname()
 	const params = useParams()
+	const pathname = usePathname()
+	const t = useTranslations('Navigation')
 
 	const routes = [
 		{
-			href: `/${locale}/${params.storeId}`,
+			href: `/${params.storeId}`,
 			label: t('dashboard'),
 			active: pathname === `/${params.storeId}`,
 		},
 		{
-			href: `/${locale}/${params.storeId}/products`,
+			href: `/${params.storeId}/products`,
 			label: t('products'),
 			active: pathname === `/${params.storeId}/products`,
 		},
 		{
-			href: `/${locale}/${params.storeId}/sales`,
+			href: `/${params.storeId}/sales`,
 			label: t('sales'),
 			active: pathname === `/${params.storeId}/sales`,
 		},

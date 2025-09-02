@@ -12,13 +12,12 @@ import { AlertModal } from '@/components/shared/modals'
 import { useStoreList } from '@/hooks/use-store-list-modal'
 
 interface Props {
-	key: string
 	storeId: string
 }
 
-export const DeleteStoreButton = ({ key, storeId }: Props) => {
-	const t = useTranslations('Store')
+export const DeleteStoreButton = ({ storeId }: Props) => {
 	const router = useRouter()
+	const t = useTranslations('Store')
 	const storeListStore = useStoreList()
 
 	const [open, setOpen] = useState<boolean>(false)
@@ -52,17 +51,15 @@ export const DeleteStoreButton = ({ key, storeId }: Props) => {
 				onClose={() => setOpen(false)}
 				onConfirm={onConfirmDelete}
 				loading={loading}
-				key={key}
 			/>
 
 			<Button
-				key={key}
 				variant='ghost'
 				onClick={() => {
 					setOpen(true)
 				}}
 			>
-				<Trash2Icon key={key} className='size-4' />
+				<Trash2Icon className='size-4' />
 			</Button>
 		</>
 	)
