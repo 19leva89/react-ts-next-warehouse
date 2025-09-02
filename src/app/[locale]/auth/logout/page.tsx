@@ -3,8 +3,9 @@
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+
+import { useRouter } from '@/i18n/navigation'
 
 const LogoutPage = () => {
 	const router = useRouter()

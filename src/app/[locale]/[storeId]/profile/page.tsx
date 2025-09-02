@@ -4,12 +4,12 @@ import * as z from 'zod'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { KeyRoundIcon, User2Icon } from 'lucide-react'
 
+import { useRouter } from '@/i18n/navigation'
 import { Heading, LoadingIndicator, Subheading } from '@/components/shared'
 import { Button, Form, FormControl, FormField, FormItem, FormLabel, Input, Separator } from '@/components/ui'
 

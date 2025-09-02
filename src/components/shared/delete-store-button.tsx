@@ -4,10 +4,10 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { Trash2Icon } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 import { Button } from '@/components/ui'
+import { useRouter } from '@/i18n/navigation'
 import { AlertModal } from '@/components/shared/modals'
 import { useStoreList } from '@/hooks/use-store-list-modal'
 

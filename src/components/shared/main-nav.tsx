@@ -2,10 +2,10 @@
 
 import { HTMLAttributes } from 'react'
 import { useTranslations } from 'next-intl'
-import { useParams, usePathname } from 'next/navigation'
+import { useParams } from 'next/navigation'
 
 import { cn } from '@/lib'
-import { Link } from '@/i18n/navigation'
+import { Link, usePathname } from '@/i18n/navigation'
 
 export const MainNav = ({ className, ...props }: HTMLAttributes<HTMLElement>) => {
 	const params = useParams()

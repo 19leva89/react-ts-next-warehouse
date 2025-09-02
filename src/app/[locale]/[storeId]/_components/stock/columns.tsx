@@ -24,18 +24,20 @@ export const StockColumns: ColumnDef<StockColumn>[] = [
 			)
 		},
 	},
-	{
-		accessorKey: 'stockThreshold',
-		header: () => {
-			return <TableHeader variant='normal' name='productStockThreshold' />
-		},
-		cell: ({ row }) => <div className='flex items-center justify-center'>{row.original.stockThreshold}</div>,
-	},
+
 	{
 		accessorKey: 'stock',
 		header: () => {
 			return <TableHeader variant='normal' name='productStock' />
 		},
 		cell: ({ row }) => <div className='flex items-center justify-center'>{row.original.stock}</div>,
+	},
+
+	{
+		accessorKey: 'stockThreshold',
+		header: () => {
+			return <TableHeader variant='normal' name='productStockThreshold' />
+		},
+		cell: ({ row }) => <div className='flex items-center justify-center'>{row.original.stockThreshold}</div>,
 	},
 ]

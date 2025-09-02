@@ -5,11 +5,11 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
 import { useForm } from 'react-hook-form'
+import { useParams } from 'next/navigation'
 import { CalendarIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useParams, useRouter } from 'next/navigation'
 
 import {
 	Button,
@@ -33,6 +33,7 @@ import {
 } from '@/components/ui'
 import { cn } from '@/lib'
 import { ProductData } from '@/lib/types'
+import { useRouter } from '@/i18n/navigation'
 import { useProduct } from '@/hooks/use-product'
 import { Modal } from '@/components/shared/modals'
 import { useSaleModal } from '@/hooks/use-sale-modal'
@@ -49,14 +50,14 @@ const formSchema = z.object({
 })
 
 export const SaleModal = () => {
-	const tProducts = useTranslations('Products')
-	const t = useTranslations('Sales')
-
 	const params = useParams()
 	const router = useRouter()
 	const saleModalStore = useSaleModal()
 	const productListStore = useProduct()
 	const merchantListStore = useMerchantList()
+
+	const t = useTranslations('Sales')
+	const tProducts = useTranslations('Products')
 
 	const [loading, setLoading] = useState<boolean>(true)
 	const [products, setProducts] = useState<ProductData[]>([])
@@ -161,8 +162,8 @@ export const SaleModal = () => {
 						<Form {...form}>
 							<form className='space-y-4'>
 								<FormField
-									control={form.control}
 									name='merchantId'
+									control={form.control}
 									defaultValue={saleModalStore.saleData?.merchantId}
 									render={({ field }) => (
 										<FormItem className='flex flex-col'>
@@ -187,12 +188,12 @@ export const SaleModal = () => {
 											<FormMessage />
 
 											<Button
-												variant='secondary'
 												type='button'
-												className='mt-2'
+												variant='secondary'
 												onClick={() => {
 													merchantListStore.onOpen()
 												}}
+												className='mt-2'
 											>
 												{t('manageMerchantButton')}
 											</Button>
@@ -201,8 +202,8 @@ export const SaleModal = () => {
 								/>
 
 								<FormField
-									control={form.control}
 									name='productId'
+									control={form.control}
 									render={({ field }) => (
 										<FormItem className='flex flex-col'>
 											<FormLabel>{t('product')}</FormLabel>
@@ -247,11 +248,11 @@ export const SaleModal = () => {
 														<PopoverTrigger asChild>
 															<Button
 																variant='outline'
+																disabled={loading}
 																className={cn(
 																	'w-full justify-start text-left font-normal',
 																	!field.value && 'text-muted-foreground',
 																)}
-																disabled={loading}
 															>
 																<CalendarIcon className='mr-2 size-4' />
 																{field.value ? (
@@ -265,11 +266,11 @@ export const SaleModal = () => {
 														<PopoverContent className='w-auto p-0'>
 															<Calendar
 																mode='single'
+																autoFocus
 																selected={field.value ? new Date(field.value) : new Date()}
 																onSelect={(date) => {
 																	if (date) field.onChange(date)
 																}}
-																initialFocus
 															/>
 														</PopoverContent>
 													</Popover>
@@ -282,17 +283,17 @@ export const SaleModal = () => {
 								/>
 
 								<FormField
-									control={form.control}
 									name='quantity'
+									control={form.control}
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('quantity')}</FormLabel>
 
 											<FormControl>
 												<Input
+													type='number'
 													disabled={loading}
 													placeholder={t('quantityPlaceholder')}
-													type='number'
 													{...field}
 												/>
 											</FormControl>
@@ -304,8 +305,8 @@ export const SaleModal = () => {
 
 								<div className='flex w-full items-center justify-end space-x-2 pt-6'>
 									<Button
-										disabled={loading}
 										variant='outline'
+										disabled={loading}
 										onClick={() => {
 											if (saleModalStore.isEditing) {
 												saleModalStore.setIsEditing(false)
@@ -318,8 +319,8 @@ export const SaleModal = () => {
 									</Button>
 
 									<Button
-										disabled={loading}
 										type='button'
+										disabled={loading}
 										onClick={() => {
 											onSubmit(form.getValues())
 										}}

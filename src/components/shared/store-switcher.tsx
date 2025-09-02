@@ -1,8 +1,8 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Store, User } from '@prisma/client'
-import { useParams, useRouter } from 'next/navigation'
 import React, { ComponentPropsWithoutRef, useState } from 'react'
 import { CheckIcon, ChevronsUpDownIcon, PlusCircleIcon, SettingsIcon, StoreIcon } from 'lucide-react'
 
@@ -20,6 +20,7 @@ import {
 	PopoverTrigger,
 } from '@/components/ui'
 import { cn } from '@/lib'
+import { useRouter } from '@/i18n/navigation'
 import { useStoreList } from '@/hooks/use-store-list-modal'
 import { useAddStoreModal } from '@/hooks/use-add-store-modal'
 

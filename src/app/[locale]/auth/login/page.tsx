@@ -6,7 +6,6 @@ import Image from 'next/image'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -20,6 +19,7 @@ import {
 	FormMessage,
 	Input,
 } from '@/components/ui'
+import { useRouter } from '@/i18n/navigation'
 import { LocaleSwitcher } from '@/components/shared'
 import { LoginUserSchema } from '@/lib/validations/user.schema'
 

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { EditIcon, MoreHorizontalIcon, TrashIcon } from 'lucide-react'
 
 import {
@@ -16,6 +16,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui'
 import { ProductColumn } from './columns'
+import { useRouter } from '@/i18n/navigation'
 import { AlertModal } from '@/components/shared/modals'
 import { useProductModal } from '@/hooks/use-product-modal'
 
@@ -31,7 +32,6 @@ export const CellAction = ({ data }: Props) => {
 
 	const [open, setOpen] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
-
 
 	const onConfirmDelete = async () => {
 		try {

@@ -1,15 +1,18 @@
 'use client'
 
 import axios from 'axios'
-import { redirect } from 'next/navigation'
+import { useLocale } from 'use-intl/react'
 import { useEffect, useState } from 'react'
 
 import { StoreData } from '@/lib/types'
+import { redirect } from '@/i18n/navigation'
 import { LoadingIndicator } from '@/components/shared'
 import { StoreModal } from '@/components/shared/modals'
 import { useAddStoreModal } from '@/hooks/use-add-store-modal'
 
 const MainPage = () => {
+	const currentLocale = useLocale()
+
 	const [store, setStore] = useState<StoreData>()
 	const [loading, setLoading] = useState<boolean>(true)
 
@@ -47,7 +50,7 @@ const MainPage = () => {
 	}
 
 	if (store) {
-		redirect(`/en/${store.id}`)
+		redirect({ href: `/${store.id}`, locale: currentLocale })
 	}
 
 	return <StoreModal />
