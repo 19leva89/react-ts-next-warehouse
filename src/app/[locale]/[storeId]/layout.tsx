@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { cookies } from 'next/headers'
+import { notFound } from 'next/navigation'
 
 import { prisma } from '@/lib/prisma'
 import { ProductData } from '@/lib/types'
@@ -27,7 +28,17 @@ const RootLayout = async ({ children, params }: Props) => {
 	})
 
 	if (!user) {
-		redirect({ href: `/${storeId}/auth/login`, locale })
+		redirect({ href: `/auth/login`, locale })
+	}
+
+	const currentStore = await prisma.store.findUnique({
+		where: {
+			id: storeId,
+		},
+	})
+
+	if (!currentStore) {
+		notFound()
 	}
 
 	const stores = await prisma.store.findMany()

@@ -1,8 +1,6 @@
-export { Alert, AlertTitle, AlertDescription } from './alert'
 export { Avatar, AvatarImage, AvatarFallback } from './avatar'
 export { Button, buttonVariants } from './button'
 export { Calendar } from './calendar'
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card'
 export {
 	Command,
 	CommandEmpty,
