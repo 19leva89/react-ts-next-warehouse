@@ -21,11 +21,6 @@ export function absoluteUrl(path: string): string {
 	return new URL(path, baseUrl).toString()
 }
 
-export const formatter = new Intl.NumberFormat('id-ID', {
-	style: 'currency',
-	currency: 'IDR',
-})
-
 export function constructMetadata({
 	title = 'Warehouse',
 	description = 'Modern warehouse management system. Accounting of goods, control of balances, automation of warehouse processes.',

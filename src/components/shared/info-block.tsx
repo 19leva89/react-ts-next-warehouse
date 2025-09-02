@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { ArrowLeftIcon, RefreshCcwIcon, UserIcon } from 'lucide-react'
 
 import { cn } from '@/lib'
@@ -18,6 +19,7 @@ interface Props {
 
 export const InfoBlock = ({ title, text, imageUrl, type, className }: Props) => {
 	const router = useRouter()
+	const t = useTranslations('InfoBlock')
 
 	return (
 		<>
@@ -37,7 +39,7 @@ export const InfoBlock = ({ title, text, imageUrl, type, className }: Props) => 
 							className='rounded-xl text-white transition-colors duration-300 ease-in-out'
 						>
 							<ArrowLeftIcon size={16} />
-							Back
+							{t('back')}
 						</Button>
 
 						{type === 'auth' ? (
@@ -47,7 +49,7 @@ export const InfoBlock = ({ title, text, imageUrl, type, className }: Props) => 
 								className='rounded-xl transition-colors duration-300 ease-in-out'
 							>
 								<UserIcon size={16} />
-								Sign In
+								{t('signIn')}
 							</Button>
 						) : (
 							<Button
@@ -57,7 +59,7 @@ export const InfoBlock = ({ title, text, imageUrl, type, className }: Props) => 
 								className='rounded-xl transition-colors duration-300 ease-in-out'
 							>
 								<RefreshCcwIcon size={16} />
-								Refresh
+								{t('refresh')}
 							</Button>
 						)}
 					</div>

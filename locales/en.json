@@ -14,6 +14,15 @@
     "products": "Products",
     "sales": "Sales"
   },
+	"InfoBlock": {
+		"notFoundTitle": "Page not found",
+		"notFoundText": "Please check the address entered is correct or try again later",
+		"unauthorizedTitle": "Access denied",
+		"unauthorizedText": "This page can only be viewed by authorized users",
+		"back": "Back",
+		"signIn": "Sign In",
+		"refresh": "Refresh"
+	},
   "Store": {
     "storeListTitle": "Store List",
     "storeListDescription": "List of stores that you can manage",

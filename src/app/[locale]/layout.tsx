@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
 import { Nunito } from 'next/font/google'
 import { notFound } from 'next/navigation'
-import { getMessages } from 'next-intl/server'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 
 import { routing } from '@/i18n/routing'
@@ -34,12 +33,10 @@ export default async function LocaleLayout({ children, params }: Props) {
 		notFound()
 	}
 
-	const messages = await getMessages()
-
 	return (
 		<html lang={locale}>
 			<body className={nunito.variable}>
-				<NextIntlClientProvider locale={locale} messages={messages}>
+				<NextIntlClientProvider>
 					{children}
 
 					<ToasterProvider />
