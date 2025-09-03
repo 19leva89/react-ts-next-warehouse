@@ -28,25 +28,7 @@ import {
 import { useRouter } from '@/i18n/navigation'
 import { Modal } from '@/components/shared/modals'
 import { useUserModal } from '@/hooks/use-user-modal'
-
-const roleOption = [
-	{
-		label: 'Admin',
-		value: 'ADMIN',
-	},
-	{
-		label: 'Product Manager',
-		value: 'PRODUCT_MANAGER',
-	},
-	{
-		label: 'Sales Manager',
-		value: 'SALES_MANAGER',
-	},
-	{
-		label: 'Viewer',
-		value: 'VIEWER',
-	},
-]
+import { useRoleOptions } from '@/hooks/use-role-option'
 
 const userProfileFormSchema = z.object({
 	name: z.string().min(1),
@@ -61,7 +43,8 @@ const userPasswordFormSchema = z.object({
 
 export const UserModal = () => {
 	const router = useRouter()
-	const userStore = useUserModal()
+	const roleOptions = useRoleOptions()
+	const userWarehouse = useUserModal()
 	const t = useTranslations('ManageUser')
 
 	const [loading, setLoading] = useState<boolean>(false)
@@ -85,11 +68,11 @@ export const UserModal = () => {
 	})
 
 	useEffect(() => {
-		if (userStore.isEditing && userStore.userData) {
+		if (userWarehouse.isEditing && userWarehouse.userData) {
 			userProfileForm.reset({
-				name: userStore.userData.name || '',
-				email: userStore.userData.email || '',
-				role: userStore.userData.role || 'VIEWER',
+				name: userWarehouse.userData.name || '',
+				email: userWarehouse.userData.email || '',
+				role: userWarehouse.userData.role || 'VIEWER',
 			})
 
 			userPasswordForm.reset({
@@ -97,7 +80,7 @@ export const UserModal = () => {
 				confirmPassword: '',
 			})
 		}
-	}, [userStore.isEditing, userStore.userData, userProfileForm, userPasswordForm])
+	}, [userWarehouse.isEditing, userWarehouse.userData, userProfileForm, userPasswordForm])
 
 	const onSubmit = async (
 		profileValues: z.infer<typeof userProfileFormSchema>,
@@ -113,8 +96,8 @@ export const UserModal = () => {
 				}
 			}
 
-			const response = await axios.put(`/api/auth/users/${userStore.userData?.id}`, {
-				id: userStore.userData?.id,
+			const response = await axios.put(`/api/auth/users/${userWarehouse.userData?.id}`, {
+				id: userWarehouse.userData?.id,
 				name: profileValues.name,
 				email: profileValues.email.toLowerCase(),
 				role: profileValues.role,
@@ -126,9 +109,9 @@ export const UserModal = () => {
 
 			userProfileForm.reset()
 			setUpdatePassword(false)
-			userStore.setIsEditing(false)
-			userStore.userSetter(response.data?.users)
-			userStore.onClose()
+			userWarehouse.setIsEditing(false)
+			userWarehouse.userSetter(response.data?.users)
+			userWarehouse.onClose()
 			router.refresh()
 		} catch {
 			toast.error(t('updateUserFailed'))
@@ -141,12 +124,12 @@ export const UserModal = () => {
 		<Modal
 			title={t('updateUserTitle')}
 			description={t('updateUserDescription')}
-			isOpen={userStore.isOpen}
+			isOpen={userWarehouse.isOpen}
 			onClose={() => {
 				userProfileForm.reset()
 				setUpdatePassword(false)
-				userStore.setIsEditing(false)
-				userStore.onClose()
+				userWarehouse.setIsEditing(false)
+				userWarehouse.onClose()
 			}}
 		>
 			<div>
@@ -201,7 +184,7 @@ export const UserModal = () => {
 												</FormControl>
 
 												<SelectContent>
-													{roleOption.map((role) => (
+													{roleOptions.map((role) => (
 														<SelectItem value={role.value} key={role.value}>
 															{role.label}
 														</SelectItem>
@@ -265,13 +248,13 @@ export const UserModal = () => {
 						)}
 
 						<div className='flex w-full items-center justify-end space-x-2 pt-6'>
-							<Button disabled={loading} variant='outline' onClick={userStore.onClose}>
+							<Button variant='outline' disabled={loading} onClick={userWarehouse.onClose}>
 								{t('cancelButton')}
 							</Button>
 
 							<Button
-								disabled={loading}
 								type='submit'
+								disabled={loading}
 								onClick={() => {
 									onSubmit(userProfileForm.getValues(), userPasswordForm.getValues())
 								}}

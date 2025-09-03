@@ -7,7 +7,7 @@
 	"tailwindFunctions": ["clsx", "cn", "cva", "twMerge", "tw"],
 	"tailwindPreserveDuplicates": true,
 	"tailwindPreserveWhitespace": true,
-	"tailwindStylesheet": "./src/app/globals.css",
+	"tailwindStylesheet": "./src/app/[locale]/globals.css",
 	"tabWidth": 2,
 	"trailingComma": "all",
 	"useTabs": true

@@ -28,7 +28,7 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${params.storeId}/profile`)
+					router.push(`/${params.warehouseId}/profile`)
 				}}
 			>
 				{t('profileButton')}
@@ -36,7 +36,7 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${params.storeId}/manage-user`)
+					router.push(`/${params.warehouseId}/manage-user`)
 				}}
 			>
 				{t('manageUserButton')}

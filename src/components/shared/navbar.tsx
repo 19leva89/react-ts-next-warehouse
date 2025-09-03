@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 
 import { prisma } from '@/lib/prisma'
-import { LocaleSwitcher, MainNav, StoreSwitcher } from '@/components/shared'
+import { LocaleSwitcher, MainNav, WarehouseSwitcher } from '@/components/shared'
 import { UserButton } from './user-button'
 
 export const Navbar = async () => {
@@ -13,12 +13,12 @@ export const Navbar = async () => {
 		},
 	})
 
-	const stores = await prisma.store.findMany()
+	const warehouses = await prisma.warehouse.findMany()
 
 	return (
 		<div className='border-b'>
 			<div className='flex h-16 items-center px-4'>
-				<StoreSwitcher items={stores} user={user!} />
+				<WarehouseSwitcher items={warehouses} user={user!} />
 
 				<MainNav className='mx-6' />
 

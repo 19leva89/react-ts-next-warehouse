@@ -20,7 +20,7 @@ export const DeleteMerchantButton = ({ merchantId }: Props) => {
 	const router = useRouter()
 	const params = useParams()
 	const t = useTranslations('Merchant')
-	const merchantListStore = useMerchantList()
+	const merchantListWarehouse = useMerchantList()
 
 	const [open, setOpen] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
@@ -28,12 +28,12 @@ export const DeleteMerchantButton = ({ merchantId }: Props) => {
 	const onConfirmDelete = async () => {
 		try {
 			setLoading(true)
-			await axios.delete(`/api/${params.storeId}/merchants/${merchantId}`)
+			await axios.delete(`/api/${params.warehouseId}/merchants/${merchantId}`)
 
-			const merchantList = merchantListStore.merchantList ?? []
+			const merchantList = merchantListWarehouse.merchantList ?? []
 			const newMerchantList = merchantList.filter((merchant) => merchant.id !== merchantId)
 
-			merchantListStore.setMerchantList(newMerchantList)
+			merchantListWarehouse.setMerchantList(newMerchantList)
 
 			toast.success(t('deleteMerchantSuccess'))
 			router.refresh()

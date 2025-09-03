@@ -1,7 +1,7 @@
-import { User } from '@prisma/client'
 import { create } from 'zustand'
+import { User } from '@prisma/client'
 
-interface useUserModalStore {
+interface useUserModalWarehouse {
 	isOpen: boolean
 	isEditing: boolean
 	userData?: User
@@ -13,7 +13,7 @@ interface useUserModalStore {
 	setUserSetter: (userSetter: any) => void
 }
 
-export const useUserModal = create<useUserModalStore>((set) => ({
+export const useUserModal = create<useUserModalWarehouse>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	onOpen: () => set({ isOpen: true }),

@@ -62,7 +62,7 @@ const LoginPage = () => {
 	return (
 		<section id='background' className='flex h-screen w-screen items-center justify-center bg-slate-600'>
 			<div id='box' className='flex w-full flex-col px-8 md:h-3/4 md:w-1/2 md:flex-row'>
-				<div id='image' className='bg-accent rounded-l-xl md:h-full md:w-1/2'>
+				<div id='image' className='rounded-l-xl bg-accent md:h-full md:w-1/2'>
 					<Image
 						src='/assets/svg/auth-logo.svg'
 						alt='Auth Logo'
@@ -77,13 +77,13 @@ const LoginPage = () => {
 					id='login-form'
 					className='relative flex size-full flex-col items-center justify-center rounded-b-xl bg-white p-8 md:w-1/2 md:rounded-r-xl md:rounded-bl-none'
 				>
-					<div className='absolute right-4 top-4'>
+					<div className='absolute top-4 right-4'>
 						<LocaleSwitcher />
 					</div>
 
 					<h2 className='text-center text-3xl font-bold'>{t('appName')}</h2>
 
-					<h2 className='mb-8 mt-4 text-center text-sm font-bold text-gray-400'>{t('appDescription')}</h2>
+					<h2 className='mt-4 mb-8 text-center text-sm font-bold text-gray-400'>{t('appDescription')}</h2>
 
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
@@ -119,7 +119,7 @@ const LoginPage = () => {
 								)}
 							/>
 
-							<Button type='submit' className='w-full' disabled={loading}>
+							<Button type='submit' disabled={loading} className='w-full'>
 								{t('login')}
 							</Button>
 						</form>

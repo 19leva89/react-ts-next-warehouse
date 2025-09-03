@@ -94,7 +94,7 @@ function Calendar({
 		props.monthCaptionClassName,
 	)
 	const _weekdaysClassName = cn('flex flex-row', props.weekdaysClassName)
-	const _weekdayClassName = cn('text-muted-foreground w-8 text-sm font-normal', props.weekdayClassName)
+	const _weekdayClassName = cn('w-8 text-sm font-normal text-muted-foreground', props.weekdayClassName)
 	const _monthClassName = cn('w-full', props.monthClassName)
 	const _captionClassName = cn('relative flex items-center justify-center pt-1', props.captionClassName)
 	const _captionLabelClassName = cn('truncate text-sm font-medium', props.captionLabelClassName)
@@ -122,7 +122,7 @@ function Calendar({
 	)
 	const _rangeEndClassName = cn(buttonRangeClassName, 'day-range-end rounded-e-md', props.rangeEndClassName)
 	const _rangeMiddleClassName = cn(
-		'bg-accent text-foreground! [&>button]:text-foreground! hover:[&>button]:text-foreground! [&>button]:bg-transparent hover:[&>button]:bg-transparent',
+		'bg-accent text-foreground! [&>button]:bg-transparent [&>button]:text-foreground! hover:[&>button]:bg-transparent hover:[&>button]:text-foreground!',
 		props.rangeMiddleClassName,
 	)
 	const _selectedClassName = cn(
@@ -131,7 +131,7 @@ function Calendar({
 	)
 	const _todayClassName = cn('[&>button]:bg-accent [&>button]:text-accent-foreground', props.todayClassName)
 	const _outsideClassName = cn(
-		'day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground opacity-50 aria-selected:opacity-30',
+		'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
 		props.outsideClassName,
 	)
 	const _disabledClassName = cn('text-muted-foreground opacity-50', props.disabledClassName)
@@ -285,9 +285,8 @@ function Nav({
 	return (
 		<nav className={cn('flex items-center', className)}>
 			<Button
-				variant='outline'
-				className='absolute left-0 size-7 bg-transparent p-0 opacity-80 hover:opacity-100'
 				type='button'
+				variant='outline'
 				tabIndex={isPreviousDisabled ? undefined : -1}
 				disabled={isPreviousDisabled}
 				aria-label={
@@ -296,14 +295,14 @@ function Nav({
 						: labelPrevious(previousMonth)
 				}
 				onClick={handlePreviousClick}
+				className='absolute left-0 size-7 bg-transparent p-0 opacity-80 hover:opacity-100'
 			>
 				<ChevronLeftIcon className='size-4' />
 			</Button>
 
 			<Button
-				variant='outline'
-				className='absolute right-0 size-7 bg-transparent p-0 opacity-80 hover:opacity-100'
 				type='button'
+				variant='outline'
 				tabIndex={isNextDisabled ? undefined : -1}
 				disabled={isNextDisabled}
 				aria-label={
@@ -312,6 +311,7 @@ function Nav({
 						: labelNext(nextMonth)
 				}
 				onClick={handleNextClick}
+				className='absolute right-0 size-7 bg-transparent p-0 opacity-80 hover:opacity-100'
 			>
 				<ChevronRightIcon className='size-4' />
 			</Button>
@@ -335,10 +335,10 @@ function CaptionLabel({
 	if (!showYearSwitcher) return <span {...props}>{children}</span>
 	return (
 		<Button
-			className='h-7 w-full truncate text-sm font-medium'
 			variant='ghost'
 			size='sm'
 			onClick={() => setNavView((prev) => (prev === 'days' ? 'years' : 'days'))}
+			className='h-7 w-full truncate text-sm font-medium'
 		>
 			{navView === 'days' ? children : displayYears.from + ' - ' + displayYears.to}
 		</Button>
@@ -412,17 +412,17 @@ function YearGrid({
 				return (
 					<Button
 						key={i}
-						className={cn(
-							'text-foreground h-7 w-full text-sm font-normal',
-							displayYears.from + i === new Date().getFullYear() &&
-								'bg-accent text-accent-foreground font-medium',
-						)}
 						variant='ghost'
+						disabled={navView === 'years' ? isDisabled : undefined}
 						onClick={() => {
 							setNavView('days')
 							goToMonth(new Date(displayYears.from + i, (selected as Date | undefined)?.getMonth() ?? 0))
 						}}
-						disabled={navView === 'years' ? isDisabled : undefined}
+						className={cn(
+							'h-7 w-full text-sm font-normal text-foreground',
+							displayYears.from + i === new Date().getFullYear() &&
+								'bg-accent font-medium text-accent-foreground',
+						)}
 					>
 						{displayYears.from + i}
 					</Button>

@@ -20,7 +20,7 @@ export async function PUT(req: NextRequest) {
 
 		if (!userId || user?.role !== 'ADMIN') {
 			return UnauthorizedError({
-				message: 'You are not authorized to access this resource.',
+				message: 'You are not authorized to access this resource',
 			})
 		}
 
@@ -78,7 +78,7 @@ export async function PUT(req: NextRequest) {
 		})
 
 		return SuccessResponse({
-			message: 'Successfully updated user.',
+			message: 'Successfully updated user',
 			users,
 		})
 	} catch (error: any) {
@@ -100,7 +100,7 @@ export async function DELETE(req: NextRequest, { params }: Props) {
 
 		if (!currentUserId || currentUser?.role !== 'ADMIN') {
 			return UnauthorizedError({
-				message: 'You are not authorized to access this resource.',
+				message: 'You are not authorized to access this resource',
 			})
 		}
 
@@ -120,7 +120,7 @@ export async function DELETE(req: NextRequest, { params }: Props) {
 		})
 
 		return SuccessResponse({
-			message: 'Successfully deleted user.',
+			message: 'Successfully deleted user',
 			currentUser: currentUserId,
 			users,
 		})

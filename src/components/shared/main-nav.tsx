@@ -14,19 +14,19 @@ export const MainNav = ({ className, ...props }: HTMLAttributes<HTMLElement>) =>
 
 	const routes = [
 		{
-			href: `/${params.storeId}`,
+			href: `/${params.warehouseId}`,
 			label: t('dashboard'),
-			active: pathname === `/${params.storeId}`,
+			active: pathname === `/${params.warehouseId}`,
 		},
 		{
-			href: `/${params.storeId}/products`,
+			href: `/${params.warehouseId}/products`,
 			label: t('products'),
-			active: pathname === `/${params.storeId}/products`,
+			active: pathname === `/${params.warehouseId}/products`,
 		},
 		{
-			href: `/${params.storeId}/sales`,
+			href: `/${params.warehouseId}/sales`,
 			label: t('sales'),
-			active: pathname === `/${params.storeId}/sales`,
+			active: pathname === `/${params.warehouseId}/sales`,
 		},
 	]
 
@@ -37,7 +37,7 @@ export const MainNav = ({ className, ...props }: HTMLAttributes<HTMLElement>) =>
 					key={route.href}
 					href={route.href}
 					className={cn(
-						'hover:text-primary text-sm font-medium transition-colors',
+						'text-sm font-medium transition-colors hover:text-primary',
 						route.active ? 'text-black dark:text-white' : 'text-muted-foreground',
 					)}
 				>

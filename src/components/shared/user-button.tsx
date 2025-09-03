@@ -5,8 +5,8 @@ import { DropdownContent } from '@/components/shared'
 import { Avatar, AvatarFallback, DropdownMenu, DropdownMenuTrigger } from '@/components/ui'
 
 export async function UserButton() {
-	const cookieStore = cookies()
-	const userId = (await cookieStore).get('userId')?.value
+	const cookieWarehouse = cookies()
+	const userId = (await cookieWarehouse).get('userId')?.value
 
 	const user = await prisma.user.findFirst({
 		where: {

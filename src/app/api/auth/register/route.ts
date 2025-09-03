@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
 			return SuccessResponse({
 				status: 'success',
-				message: 'Successfully registered.',
+				message: 'Successfully registered',
 				data: {
 					user: {
 						...user,
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 			})
 		} else {
 			return GlobalError({
-				message: 'You are not allowed to register.',
+				message: 'You are not allowed to register',
 				errorCode: 400,
 			})
 		}

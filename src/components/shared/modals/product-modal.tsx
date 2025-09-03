@@ -36,16 +36,16 @@ export const ProductModal = () => {
 	const params = useParams()
 	const router = useRouter()
 	const t = useTranslations('Products')
-	const productListStore = useProduct()
-	const productStore = useProductModal()
+	const productListWarehouse = useProduct()
+	const productWarehouse = useProductModal()
 
 	const [file, setFile] = useState<File | null>(null)
 	const [loading, setLoading] = useState<boolean>(false)
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
-		defaultValues: productStore.isEditing
-			? productStore.productData
+		defaultValues: productWarehouse.isEditing
+			? productWarehouse.productData
 			: {
 					name: '',
 					description: '',
@@ -55,13 +55,13 @@ export const ProductModal = () => {
 	})
 
 	useEffect(() => {
-		if (productStore.isEditing) {
-			form.setValue('name', productStore.productData?.name ?? '')
-			form.setValue('description', productStore.productData?.description ?? '')
-			form.setValue('stockThreshold', productStore.productData?.stockThreshold ?? '')
-			form.setValue('stock', productStore.productData?.stock ?? '')
+		if (productWarehouse.isEditing) {
+			form.setValue('name', productWarehouse.productData?.name ?? '')
+			form.setValue('description', productWarehouse.productData?.description ?? '')
+			form.setValue('stockThreshold', productWarehouse.productData?.stockThreshold ?? '')
+			form.setValue('stock', productWarehouse.productData?.stock ?? '')
 		}
-	}, [productStore.isEditing, productStore.productData, form])
+	}, [productWarehouse.isEditing, productWarehouse.productData, form])
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
@@ -76,22 +76,22 @@ export const ProductModal = () => {
 			formData.append('stockThreshold', values.stockThreshold)
 			formData.append('stock', values.stock)
 
-			if (productStore.isEditing) {
-				formData.append('previousImageId', productStore.productData?.imageId ?? '')
-				formData.append('previousImageUrl', productStore.productData?.imageUrl ?? '')
+			if (productWarehouse.isEditing) {
+				formData.append('previousImageId', productWarehouse.productData?.imageId ?? '')
+				formData.append('previousImageUrl', productWarehouse.productData?.imageUrl ?? '')
 
-				await axios.put(`/api/${params.storeId}/products/${productStore.productData?.id}`, formData, {
+				await axios.put(`/api/${params.warehouseId}/products/${productWarehouse.productData?.id}`, formData, {
 					headers: {
 						'Content-Type': 'multipart/form-data',
 					},
 				})
 
 				toast.success(t('updateProductSuccess'))
-				productStore.setIsEditing(false)
+				productWarehouse.setIsEditing(false)
 			} else {
 				formData.append('type', 'single')
 
-				await axios.post(`/api/${params.storeId}/products`, formData, {
+				await axios.post(`/api/${params.warehouseId}/products`, formData, {
 					headers: {
 						'Content-Type': 'multipart/form-data',
 					},
@@ -103,8 +103,8 @@ export const ProductModal = () => {
 			router.refresh()
 			setFile(null)
 			form.reset()
-			productListStore.setProductUpdated(true)
-			productStore.onClose()
+			productListWarehouse.setProductUpdated(true)
+			productWarehouse.onClose()
 		} catch {
 			toast.error(t('productError'))
 		} finally {
@@ -114,15 +114,15 @@ export const ProductModal = () => {
 
 	return (
 		<Modal
-			title={productStore.isEditing ? t('updateProductTitle') : t('addProductTitle')}
-			description={productStore.isEditing ? t('updateProductDescription') : t('addProductDescription')}
-			isOpen={productStore.isOpen}
+			title={productWarehouse.isEditing ? t('updateProductTitle') : t('addProductTitle')}
+			description={productWarehouse.isEditing ? t('updateProductDescription') : t('addProductDescription')}
+			isOpen={productWarehouse.isOpen}
 			onClose={() => {
-				if (productStore.isEditing) {
-					productStore.setIsEditing(false)
+				if (productWarehouse.isEditing) {
+					productWarehouse.setIsEditing(false)
 				}
 				form.reset()
-				productStore.onClose()
+				productWarehouse.onClose()
 			}}
 		>
 			<div>
@@ -133,7 +133,7 @@ export const ProductModal = () => {
 								<FormField
 									control={form.control}
 									name='name'
-									defaultValue={productStore.productData?.name}
+									defaultValue={productWarehouse.productData?.name}
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{t('productName')}</FormLabel>
@@ -160,6 +160,7 @@ export const ProductModal = () => {
 											onChange={(event: any) => {
 												setFile(event.target.files?.[0] ?? null)
 											}}
+											className='cursor-pointer file:cursor-pointer'
 										/>
 									</FormControl>
 
@@ -230,27 +231,27 @@ export const ProductModal = () => {
 
 								<div className='flex w-full items-center justify-end space-x-2 pt-6'>
 									<Button
-										disabled={loading}
 										variant='outline'
+										disabled={loading}
 										onClick={() => {
-											if (productStore.isEditing) {
-												productStore.setIsEditing(false)
+											if (productWarehouse.isEditing) {
+												productWarehouse.setIsEditing(false)
 											}
 											form.reset()
-											productStore.onClose()
+											productWarehouse.onClose()
 										}}
 									>
 										{t('cancelButton')}
 									</Button>
 
 									<Button
-										disabled={loading}
 										type='button'
+										disabled={loading}
 										onClick={() => {
 											onSubmit(form.getValues())
 										}}
 									>
-										{productStore.isEditing ? t('updateProductButton') : t('addProductButton')}
+										{productWarehouse.isEditing ? t('updateProductButton') : t('addProductButton')}
 									</Button>
 								</div>
 							</form>

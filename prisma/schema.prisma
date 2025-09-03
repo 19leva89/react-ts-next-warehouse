@@ -70,7 +70,7 @@ model User {
   @@index([isActive])
 }
 
-model Store {
+model Warehouse {
   id          String    @id @default(cuid())
   name        String    @db.VarChar(255)
   description String?   @db.Text
@@ -79,8 +79,8 @@ model Store {
   email       String?   @db.VarChar(255)
   isActive    Boolean   @default(true) @map("is_active")
   //
-  products    Product[] @relation("StoreToProduct")
-  sales       Sales[]   @relation("StoreToSales")
+  products    Product[] @relation("WarehouseToProduct")
+  sales       Sales[]   @relation("WarehouseToSales")
   //
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
@@ -120,8 +120,8 @@ model Product {
   barcode        String?        @unique @db.VarChar(50)
   weight         Float?
   dimensions     Json? // {length: number, width: number, height: number}
-  price          Decimal        @db.Decimal(10, 2)
-  costPrice      Decimal?       @map("cost_price") @db.Decimal(10, 2)
+  price          Int            @default(0)
+  costPrice      Int?           @map("cost_price")
   stock          Int            @default(0) @db.UnsignedInt
   stockThreshold Int            @default(0) @map("stock_threshold")
   isActive       Boolean        @default(true) @map("is_active")
@@ -129,8 +129,8 @@ model Product {
   sales          Sales[]        @relation("ProductToSales")
   priceHistory   PriceHistory[]
   //
-  storeId        String         @map("store_id")
-  store          Store          @relation("StoreToProduct", fields: [storeId], references: [id], onDelete: Cascade)
+  warehouseId    String         @map("warehouse_id")
+  warehouse      Warehouse      @relation("WarehouseToProduct", fields: [warehouseId], references: [id], onDelete: Cascade)
   //
   categoryId     String?        @map("category_id")
   category       Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
@@ -139,12 +139,12 @@ model Product {
   updatedAt      DateTime       @updatedAt @map("updated_at")
   deletedAt      DateTime?      @map("deleted_at")
 
-  @@unique([name, storeId])
+  @@unique([name, warehouseId])
   @@index([sku])
   @@index([barcode])
   @@index([name])
   @@index([categoryId])
-  @@index([storeId])
+  @@index([warehouseId])
   @@index([isActive])
   @@index([stock])
   @@index([deletedAt])
@@ -173,9 +173,9 @@ model Sales {
   id          String     @id @default(cuid())
   quantity    Int        @db.UnsignedInt
   notes       String?
-  discount    Decimal?   @db.Decimal(5, 2)
-  unitPrice   Decimal    @map("unit_price") @db.Decimal(10, 2)
-  totalAmount Decimal    @map("total_amount") @db.Decimal(10, 2)
+  discount    Int?
+  unitPrice   Int        @default(0) @map("unit_price")
+  totalAmount Int        @default(0) @map("total_amount")
   saleDate    DateTime   @default(now()) @map("sale_date")
   status      SaleStatus @default(PENDING)
   refundedAt  DateTime?  @map("refunded_at")
@@ -183,8 +183,8 @@ model Sales {
   merchantId  String     @map("merchant_id")
   merchant    Merchant   @relation(fields: [merchantId], references: [id], onDelete: Restrict)
   //
-  storeId     String     @map("store_id")
-  store       Store      @relation("StoreToSales", fields: [storeId], references: [id], onDelete: Restrict)
+  warehouseId String     @map("warehouse_id")
+  warehouse   Warehouse  @relation("WarehouseToSales", fields: [warehouseId], references: [id], onDelete: Restrict)
   //
   userId      String     @map("user_id")
   user        User       @relation(fields: [userId], references: [id], onDelete: Restrict)
@@ -197,7 +197,7 @@ model Sales {
 
   @@index([saleDate])
   @@index([merchantId, saleDate])
-  @@index([storeId, saleDate])
+  @@index([warehouseId, saleDate])
   @@index([productId])
   @@index([status])
   @@index([userId, saleDate])
@@ -205,8 +205,8 @@ model Sales {
 
 model PriceHistory {
   id        String   @id @default(cuid())
-  oldPrice  Decimal  @map("old_price") @db.Decimal(10, 2)
-  newPrice  Decimal  @map("new_price") @db.Decimal(10, 2)
+  oldPrice  Int      @default(0) @map("old_price")
+  newPrice  Int      @default(0) @map("new_price")
   reason    String?
   //
   productId String   @map("product_id")

@@ -19,6 +19,6 @@ export const verifyJWT = async <T>(token: string): Promise<T> => {
 	try {
 		return (await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET_TOKEN))).payload as T
 	} catch {
-		throw new Error('Your token has expired.')
+		throw new Error('Your token has expired')
 	}
 }

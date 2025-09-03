@@ -12,16 +12,16 @@ import { useAddMerchantModal } from '@/hooks/use-add-merchant-modal'
 
 export const MerchantListModal = () => {
 	const t = useTranslations('Merchant')
-	const merchantListStore = useMerchantList()
+	const merchantListWarehouse = useMerchantList()
 	const addMerchantModal = useAddMerchantModal()
 
 	return (
 		<Modal
 			title={t('merchantListTitle')}
 			description={t('merchantListDescription')}
-			isOpen={merchantListStore.isOpen}
+			isOpen={merchantListWarehouse.isOpen}
 			onClose={() => {
-				merchantListStore.onClose()
+				merchantListWarehouse.onClose()
 			}}
 		>
 			<div>
@@ -31,7 +31,7 @@ export const MerchantListModal = () => {
 							<div className='flex flex-col gap-2'>
 								<Separator />
 
-								{merchantListStore.merchantList!.map((merchant) => (
+								{merchantListWarehouse.merchantList!.map((merchant) => (
 									<Fragment key={merchant.id}>
 										<div className='flex items-center justify-between'>
 											<div>{merchant.name}</div>

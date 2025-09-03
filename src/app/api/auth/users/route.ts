@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
 		if (!userId || user?.role !== 'ADMIN') {
 			return UnauthorizedError({
-				message: 'You are not authorized to access this resource.',
+				message: 'You are not authorized to access this resource',
 			})
 		}
 
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 
 		if (!userId || user?.role !== 'ADMIN') {
 			return UnauthorizedError({
-				message: 'You are not authorized to access this resource.',
+				message: 'You are not authorized to access this resource',
 			})
 		}
 
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
 		})
 
 		return SuccessResponse({
-			message: 'Successfully created user.',
+			message: 'Successfully created user',
 			currentUser: userId,
 			users,
 		})

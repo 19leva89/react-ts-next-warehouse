@@ -19,7 +19,7 @@ export async function PUT(req: NextRequest) {
 
 		if (await compare(hashedOldPassword, user?.password || '')) {
 			return GlobalError({
-				message: 'Old password is incorrect.',
+				message: 'Old password is incorrect',
 				errorCode: 400,
 			})
 		}
@@ -36,7 +36,7 @@ export async function PUT(req: NextRequest) {
 		})
 
 		return SuccessResponse({
-			message: 'Successfully changed password.',
+			message: 'Successfully changed password',
 		})
 	} catch (error: any) {
 		return GlobalError(error)

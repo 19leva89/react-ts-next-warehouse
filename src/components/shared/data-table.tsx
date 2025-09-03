@@ -12,6 +12,7 @@ import {
 	useReactTable,
 } from '@tanstack/react-table'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 import { Button, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 
@@ -28,6 +29,8 @@ export function DataTable<TData, TValue>({
 	searchKey,
 	placeholder = 'Search',
 }: DataTableProps<TData, TValue>) {
+	const t = useTranslations('TableData')
+
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
@@ -89,7 +92,7 @@ export function DataTable<TData, TValue>({
 						) : (
 							<TableRow>
 								<TableCell colSpan={columns.length} className='h-24 text-center'>
-									No results
+									{t('noResults')}
 								</TableCell>
 							</TableRow>
 						)}
@@ -104,7 +107,7 @@ export function DataTable<TData, TValue>({
 					onClick={() => table.previousPage()}
 					disabled={!table.getCanPreviousPage()}
 				>
-					Previous
+					{t('previousButton')}
 				</Button>
 
 				<Button
@@ -113,7 +116,7 @@ export function DataTable<TData, TValue>({
 					onClick={() => table.nextPage()}
 					disabled={!table.getCanNextPage()}
 				>
-					Next
+					{t('nextButton')}
 				</Button>
 			</div>
 		</div>

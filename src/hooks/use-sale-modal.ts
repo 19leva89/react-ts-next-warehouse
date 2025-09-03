@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface useSaleModalStore {
+interface useSaleModalWarehouse {
 	isOpen: boolean
 	isEditing: boolean
 	saleUpdated: boolean
@@ -24,7 +24,7 @@ interface useSaleModalStore {
 	setSaleUpdated: (saleUpdated: boolean) => void
 }
 
-export const useSaleModal = create<useSaleModalStore>((set) => ({
+export const useSaleModal = create<useSaleModalWarehouse>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	saleUpdated: false,

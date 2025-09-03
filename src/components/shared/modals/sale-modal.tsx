@@ -52,9 +52,9 @@ const formSchema = z.object({
 export const SaleModal = () => {
 	const params = useParams()
 	const router = useRouter()
-	const saleModalStore = useSaleModal()
-	const productListStore = useProduct()
-	const merchantListStore = useMerchantList()
+	const saleModalWarehouse = useSaleModal()
+	const productListWarehouse = useProduct()
+	const merchantListWarehouse = useMerchantList()
 
 	const t = useTranslations('Sales')
 	const tProducts = useTranslations('Products')
@@ -65,7 +65,7 @@ export const SaleModal = () => {
 	useEffect(() => {
 		async function getProducts() {
 			try {
-				const response = await axios.get(`/api/${params.storeId}/products`)
+				const response = await axios.get(`/api/${params.warehouseId}/products`)
 				const products = response.data.products as ProductData[]
 
 				setProducts(products)
@@ -77,16 +77,16 @@ export const SaleModal = () => {
 			}
 		}
 
-		if (productListStore.productUpdated) {
-			productListStore.setProductUpdated(false)
+		if (productListWarehouse.productUpdated) {
+			productListWarehouse.setProductUpdated(false)
 		}
 		getProducts()
-	}, [params.storeId, productListStore, tProducts])
+	}, [params.warehouseId, productListWarehouse, tProducts])
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
-		defaultValues: saleModalStore.isEditing
-			? saleModalStore.saleData
+		defaultValues: saleModalWarehouse.isEditing
+			? saleModalWarehouse.saleData
 			: {
 					merchantId: '',
 					productId: '',
@@ -96,13 +96,13 @@ export const SaleModal = () => {
 	})
 
 	useEffect(() => {
-		if (saleModalStore.isEditing) {
-			form.setValue('merchantId', saleModalStore.saleData?.merchantId ?? '')
-			form.setValue('productId', saleModalStore.saleData?.productId ?? '')
-			form.setValue('quantity', saleModalStore.saleData?.quantity ?? '')
-			form.setValue('saleDate', saleModalStore.saleData?.saleDate ?? new Date())
+		if (saleModalWarehouse.isEditing) {
+			form.setValue('merchantId', saleModalWarehouse.saleData?.merchantId ?? '')
+			form.setValue('productId', saleModalWarehouse.saleData?.productId ?? '')
+			form.setValue('quantity', saleModalWarehouse.saleData?.quantity ?? '')
+			form.setValue('saleDate', saleModalWarehouse.saleData?.saleDate ?? new Date())
 		}
-	}, [saleModalStore.isEditing, saleModalStore.saleData, form])
+	}, [saleModalWarehouse.isEditing, saleModalWarehouse.saleData, form])
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
@@ -114,17 +114,17 @@ export const SaleModal = () => {
 				quantity: parseInt(values.quantity),
 			}
 
-			if (saleModalStore.isEditing) {
-				await axios.put(`/api/${params.storeId}/sales/${saleModalStore.saleData?.id}`, {
+			if (saleModalWarehouse.isEditing) {
+				await axios.put(`/api/${params.warehouseId}/sales/${saleModalWarehouse.saleData?.id}`, {
 					...sale,
-					previousQuantity: saleModalStore.saleData?.quantity
-						? parseInt(saleModalStore.saleData.quantity)
+					previousQuantity: saleModalWarehouse.saleData?.quantity
+						? parseInt(saleModalWarehouse.saleData.quantity)
 						: 0,
 				})
 				toast.success(t('updateSaleSuccess'))
-				saleModalStore.setIsEditing(false)
+				saleModalWarehouse.setIsEditing(false)
 			} else {
-				await axios.post(`/api/${params.storeId}/sales`, {
+				await axios.post(`/api/${params.warehouseId}/sales`, {
 					...sale,
 					type: 'single',
 				})
@@ -133,8 +133,8 @@ export const SaleModal = () => {
 
 			form.reset()
 			router.refresh()
-			saleModalStore.setSaleUpdated(true)
-			saleModalStore.onClose()
+			saleModalWarehouse.setSaleUpdated(true)
+			saleModalWarehouse.onClose()
 		} catch (error) {
 			console.log(error)
 			toast.error(t('saleError'))
@@ -145,15 +145,15 @@ export const SaleModal = () => {
 
 	return (
 		<Modal
-			title={saleModalStore.isEditing ? t('updateSaleTitle') : t('addSaleTitle')}
-			description={saleModalStore.isEditing ? t('updateSaleDescription') : t('addSaleDescription')}
-			isOpen={saleModalStore.isOpen}
+			title={saleModalWarehouse.isEditing ? t('updateSaleTitle') : t('addSaleTitle')}
+			description={saleModalWarehouse.isEditing ? t('updateSaleDescription') : t('addSaleDescription')}
+			isOpen={saleModalWarehouse.isOpen}
 			onClose={() => {
-				if (saleModalStore.isEditing) {
-					saleModalStore.setIsEditing(false)
+				if (saleModalWarehouse.isEditing) {
+					saleModalWarehouse.setIsEditing(false)
 				}
 				form.reset()
-				saleModalStore.onClose()
+				saleModalWarehouse.onClose()
 			}}
 		>
 			<div>
@@ -164,7 +164,7 @@ export const SaleModal = () => {
 								<FormField
 									name='merchantId'
 									control={form.control}
-									defaultValue={saleModalStore.saleData?.merchantId}
+									defaultValue={saleModalWarehouse.saleData?.merchantId}
 									render={({ field }) => (
 										<FormItem className='flex flex-col'>
 											<FormLabel>{t('merchant')}</FormLabel>
@@ -177,7 +177,7 @@ export const SaleModal = () => {
 												</FormControl>
 
 												<SelectContent>
-													{merchantListStore.merchantList!.map((merchant) => (
+													{merchantListWarehouse.merchantList!.map((merchant) => (
 														<SelectItem value={merchant.id} key={merchant.id}>
 															{merchant.name}
 														</SelectItem>
@@ -191,7 +191,7 @@ export const SaleModal = () => {
 												type='button'
 												variant='secondary'
 												onClick={() => {
-													merchantListStore.onOpen()
+													merchantListWarehouse.onOpen()
 												}}
 												className='mt-2'
 											>
@@ -308,11 +308,11 @@ export const SaleModal = () => {
 										variant='outline'
 										disabled={loading}
 										onClick={() => {
-											if (saleModalStore.isEditing) {
-												saleModalStore.setIsEditing(false)
+											if (saleModalWarehouse.isEditing) {
+												saleModalWarehouse.setIsEditing(false)
 											}
 											form.reset()
-											saleModalStore.onClose()
+											saleModalWarehouse.onClose()
 										}}
 									>
 										{t('cancelButton')}
@@ -325,7 +325,7 @@ export const SaleModal = () => {
 											onSubmit(form.getValues())
 										}}
 									>
-										{saleModalStore.isEditing ? t('updateSaleButton') : t('addSaleButton')}
+										{saleModalWarehouse.isEditing ? t('updateSaleButton') : t('addSaleButton')}
 									</Button>
 								</div>
 							</form>

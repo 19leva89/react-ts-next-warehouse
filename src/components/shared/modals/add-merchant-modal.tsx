@@ -33,7 +33,7 @@ export const AddMerchantModal = () => {
 
 	const params = useParams()
 	const router = useRouter()
-	const merchantListStore = useMerchantList()
+	const merchantListWarehouse = useMerchantList()
 	const addMerchantModal = useAddMerchantModal()
 
 	const [loading, setLoading] = useState<boolean>(false)
@@ -56,22 +56,22 @@ export const AddMerchantModal = () => {
 			setLoading(true)
 
 			if (addMerchantModal.isEditing) {
-				await axios.put(`/api/${params.storeId}/merchants/${addMerchantModal.merchantData?.id}`, values)
+				await axios.put(`/api/${params.warehouseId}/merchants/${addMerchantModal.merchantData?.id}`, values)
 
-				const merchantList = merchantListStore.merchantList ?? []
+				const merchantList = merchantListWarehouse.merchantList ?? []
 				const updatedMerchant = merchantList.find(
 					(merchant) => merchant.id === addMerchantModal.merchantData?.id,
 				)!
 				updatedMerchant.name = values.name
 				merchantList.splice(merchantList.indexOf(updatedMerchant), 1, updatedMerchant)
 
-				merchantListStore.setMerchantList(merchantList)
+				merchantListWarehouse.setMerchantList(merchantList)
 			} else {
-				const response = await axios.post(`/api/${params.storeId}/merchants`, values)
+				const response = await axios.post(`/api/${params.warehouseId}/merchants`, values)
 
-				const merchantList = merchantListStore.merchantList ?? []
+				const merchantList = merchantListWarehouse.merchantList ?? []
 
-				merchantListStore.setMerchantList(
+				merchantListWarehouse.setMerchantList(
 					merchantList.concat({
 						id: response.data.id,
 						name: response.data.name,

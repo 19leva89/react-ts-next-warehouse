@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
 		if (!user || !(await compare(data.password, user.password))) {
 			return GlobalError({
-				message: 'Invalid email or password.',
+				message: 'Invalid email or password',
 				errorCode: 400,
 			})
 		}
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
 		const response = SuccessResponse({
 			status: 'success',
-			message: 'Successfully logged in.',
+			message: 'Successfully logged in',
 			token,
 		})
 

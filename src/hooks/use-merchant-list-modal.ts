@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface useMerchantListStore {
+interface useMerchantListWarehouse {
 	isOpen: boolean
 	isEditing: boolean
 	merchantList?: {
@@ -18,7 +18,7 @@ interface useMerchantListStore {
 	) => void
 }
 
-export const useMerchantList = create<useMerchantListStore>((set) => ({
+export const useMerchantList = create<useMerchantListWarehouse>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	onOpen: () => set({ isOpen: true }),

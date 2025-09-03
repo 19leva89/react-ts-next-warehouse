@@ -4,26 +4,26 @@ import axios from 'axios'
 import { useLocale } from 'use-intl/react'
 import { useEffect, useState } from 'react'
 
-import { StoreData } from '@/lib/types'
+import { WarehouseData } from '@/lib/types'
 import { redirect } from '@/i18n/navigation'
 import { LoadingIndicator } from '@/components/shared'
-import { StoreModal } from '@/components/shared/modals'
-import { useAddStoreModal } from '@/hooks/use-add-store-modal'
+import { WarehouseModal } from '@/components/shared/modals'
+import { useAddWarehouseModal } from '@/hooks/use-add-warehouse-modal'
 
 const MainPage = () => {
 	const currentLocale = useLocale()
 
-	const [store, setStore] = useState<StoreData>()
+	const [warehouse, setWarehouse] = useState<WarehouseData>()
 	const [loading, setLoading] = useState<boolean>(true)
 
-	const { isOpen, onOpen } = useAddStoreModal()
+	const { isOpen, onOpen } = useAddWarehouseModal()
 
 	useEffect(() => {
-		async function getStore() {
+		async function getWarehouse() {
 			try {
-				const response = await axios.get('/api/stores')
+				const response = await axios.get('/api/warehouses')
 
-				setStore(response.data.store)
+				setWarehouse(response.data.warehouse)
 			} catch (error) {
 				console.error(error)
 			} finally {
@@ -31,29 +31,29 @@ const MainPage = () => {
 			}
 		}
 
-		getStore()
+		getWarehouse()
 	}, [])
 
 	useEffect(() => {
 		if (loading) {
 			return
 		}
-		if (!store) {
+		if (!warehouse) {
 			if (!isOpen) {
 				onOpen()
 			}
 		}
-	}, [isOpen, onOpen, store, loading])
+	}, [isOpen, onOpen, warehouse, loading])
 
 	if (loading) {
 		return <LoadingIndicator />
 	}
 
-	if (store) {
-		redirect({ href: `/${store.id}`, locale: currentLocale })
+	if (warehouse) {
+		redirect({ href: `/${warehouse.id}`, locale: currentLocale })
 	}
 
-	return <StoreModal />
+	return <WarehouseModal />
 }
 
 export default MainPage

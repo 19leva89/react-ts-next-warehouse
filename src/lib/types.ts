@@ -4,7 +4,7 @@ export interface UserData {
 	role: string
 }
 
-export interface StoreData {
+export interface WarehouseData {
 	id: string
 	name: string
 }
@@ -17,6 +17,8 @@ export interface ProductData {
 	description: string
 	stockThreshold: number
 	stock: number
+	price: number
+	costPrice: number | null
 }
 
 export interface SalesData {

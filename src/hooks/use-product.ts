@@ -1,14 +1,14 @@
-import { ProductData } from '@/lib/types'
 import { create } from 'zustand'
+import { ProductData } from '@/lib/types'
 
-interface useProductStore {
+interface useProductWarehouse {
 	products: ProductData[]
 	productUpdated: boolean
 	setProducts: (products: ProductData[]) => void
 	setProductUpdated: (productUpdated: boolean) => void
 }
 
-export const useProduct = create<useProductStore>((set) => ({
+export const useProduct = create<useProductWarehouse>((set) => ({
 	products: [],
 	productUpdated: false,
 	setProducts: (products) => set({ products }),

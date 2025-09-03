@@ -7,7 +7,7 @@ export function UnauthorizedError({ message }: { message?: any }) {
 export function GlobalError({ message, errorCode }: { message: any; errorCode?: number }) {
 	console.log(message)
 
-	return NextResponse.json({ error: 'Something went wrong.', message }, { status: errorCode || 500 })
+	return NextResponse.json({ error: 'Something went wrong', message }, { status: errorCode || 500 })
 }
 
 export function SuccessResponse(data: any) {
