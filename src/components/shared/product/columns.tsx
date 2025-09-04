@@ -4,7 +4,7 @@ import { ColumnDef } from '@tanstack/react-table'
 
 import { CellAction } from './cell-action'
 import { TableHeader } from '@/components/shared'
-import { ProductImageCell } from './cell-product-image'
+import { CellProductImage } from './cell-product-image'
 
 export type ProductColumn = {
 	id: string
@@ -23,7 +23,7 @@ export const ProductColumns: ColumnDef<ProductColumn>[] = [
 			return <TableHeader variant='normal' name='productImage' />
 		},
 		cell: ({ row }) => {
-			return <ProductImageCell image={row.original.image} name={row.original.name} />
+			return <CellProductImage image={row.original.image} name={row.original.name} />
 		},
 	},
 
@@ -94,7 +94,7 @@ export const ProductColumnsWithoutAction: ColumnDef<ProductColumn>[] = [
 			return <TableHeader variant='normal' name='productImage' />
 		},
 		cell: ({ row }) => {
-			return <ProductImageCell image={row.original.image} name={row.original.name} />
+			return <CellProductImage image={row.original.image} name={row.original.name} />
 		},
 	},
 

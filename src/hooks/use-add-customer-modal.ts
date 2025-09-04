@@ -1,23 +1,23 @@
 import { create } from 'zustand'
 
-interface useAddMerchantModalStore {
+interface useAddCustomerModalStore {
 	isOpen: boolean
 	isEditing: boolean
-	merchantData?: {
+	customerData?: {
 		id: string
 		name: string
 	}
 	onOpen: () => void
 	onClose: () => void
 	setIsEditing: (isEditing: boolean) => void
-	setMerchantData: (merchantData: { id: string; name: string }) => void
+	setCustomerData: (customerData: { id: string; name: string }) => void
 }
 
-export const useAddMerchantModal = create<useAddMerchantModalStore>((set) => ({
+export const useAddCustomerModal = create<useAddCustomerModalStore>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	onOpen: () => set({ isOpen: true }),
 	onClose: () => set({ isOpen: false }),
 	setIsEditing: (isEditing) => set({ isEditing }),
-	setMerchantData: (merchantData) => set({ merchantData }),
+	setCustomerData: (customerData) => set({ customerData }),
 }))

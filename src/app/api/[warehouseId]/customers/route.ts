@@ -5,9 +5,9 @@ import { GlobalError, SuccessResponse, UnauthorizedError } from '@/lib/helper'
 
 export async function GET() {
 	try {
-		const merchants = await prisma.merchant.findMany()
+		const customers = await prisma.customer.findMany()
 
-		return SuccessResponse(merchants)
+		return SuccessResponse(customers)
 	} catch (error: any) {
 		return GlobalError(error)
 	}
@@ -32,13 +32,13 @@ export async function POST(req: NextRequest) {
 		const body = await req.json()
 		const { name } = body
 
-		const merchant = await prisma.merchant.create({
+		const customer = await prisma.customer.create({
 			data: {
 				name,
 			},
 		})
 
-		return SuccessResponse(merchant)
+		return SuccessResponse(customer)
 	} catch (error: any) {
 		return GlobalError(error)
 	}

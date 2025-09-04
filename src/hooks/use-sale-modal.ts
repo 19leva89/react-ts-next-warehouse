@@ -6,7 +6,7 @@ interface useSaleModalWarehouse {
 	saleUpdated: boolean
 	saleData?: {
 		id: string
-		merchantId: string
+		customerId: string
 		productId: string
 		saleDate: Date
 		quantity: string
@@ -16,7 +16,7 @@ interface useSaleModalWarehouse {
 	setIsEditing: (isEditing: boolean) => void
 	setSaleData: (saleData: {
 		id: string
-		merchantId: string
+		customerId: string
 		productId: string
 		saleDate: Date
 		quantity: string

@@ -75,8 +75,10 @@
     "noEmptyStock": "All products are safe!"
   },
   "Products": {
-    "title": "Warehouse products",
-    "description": "List of products in your warehouse",
+    "titleProducts": "Warehouse products",
+		"titleAllProducts": "All products",
+    "descriptionProducts": "List of products in your warehouse",
+		"descriptionAllProducts": "List of all products",
     "loadProductError": "Failed to load products. Please refresh the page",
     "loadUserError": "Failed to load users. Please refresh the page",
     "searchPlaceholder": "Find product...",
@@ -105,7 +107,8 @@
     "productStock": "Stock",
     "productStockPlaceholder": "Enter product stock...",
     "cancelButton": "Cancel",
-    "noImage": "No image"
+    "noImage": "No image",
+		"productsButton": "Products list"
   },
   "Sales": {
     "title": "Sales",
@@ -127,9 +130,9 @@
     "addSaleDescription": "Add sale to your warehouse",
     "updateSaleTitle": "Update sale",
     "updateSaleDescription": "Update sale of your warehouse",
-    "merchant": "Merchant",
-    "merchantPlaceholder": "Select merchant...",
-    "manageMerchantButton": "Manage merchant",
+    "customer": "Customer",
+    "customerPlaceholder": "Select customer...",
+    "manageCustomerButton": "Manage customer",
     "product": "Product",
     "productPlaceholder": "Select product...",
     "noProduct": "No product found",
@@ -139,23 +142,23 @@
     "quantityPlaceholder": "Enter quantity...",
     "cancelButton": "Cancel"
   },
-  "Merchant": {
-    "updateMerchantSuccess": "Merchant updated successfully",
-    "addMerchantSuccess": "Merchant added successfully",
-    "merchantError": "Merchant failed to update. Please try again",
-    "addMerchantTitle": "Add merchant",
-    "addMerchantDescription": "Add merchant to your warehouse",
-    "updateMerchantTitle": "Update merchant",
-    "updateMerchantDescription": "Update merchant of your warehouse",
-    "merchantName": "Merchant name",
-    "merchantNamePlaceholder": "Enter merchant name...",
-    "addMerchantButton": "Add merchant",
+  "Customer": {
+    "updateCustomerSuccess": "Customer updated successfully",
+    "addCustomerSuccess": "Customer added successfully",
+    "customerError": "Customer failed to update. Please try again",
+    "addCustomerTitle": "Add customer",
+    "addCustomerDescription": "Add customer to your warehouse",
+    "updateCustomerTitle": "Update customer",
+    "updateCustomerDescription": "Update customer of your warehouse",
+    "customerName": "Customer name",
+    "customerNamePlaceholder": "Enter customer name...",
+    "addCustomerButton": "Add customer",
     "cancelButton": "Cancel",
-    "updateMerchantButton": "Update merchant",
-    "merchantListTitle": "Merchant list",
-    "merchantListDescription": "List of merchants in your warehouse",
-    "deleteMerchantSuccess": "Merchant deleted successfully",
-    "deleteMerchantError": "Merchant failed to delete. Please make sure the merchant is not in any sale. Please try again"
+    "updateCustomerButton": "Update customer",
+    "customerListTitle": "Customer list",
+    "customerListDescription": "List of customers in your warehouse",
+    "deleteCustomerSuccess": "Customer deleted successfully",
+    "deleteCustomerError": "Customer failed to delete. Please make sure the customer is not in any sale. Please try again"
   },
   "TableHeader": {
     "no": "No",
@@ -166,7 +169,7 @@
     "productStock": "Stock",
     "saleDate": "Date of sale",
     "addedBy": "Added by",
-    "merchant": "Merchant",
+    "customer": "Customer",
     "quantity": "Quantity"
   },
 	"TableData": {

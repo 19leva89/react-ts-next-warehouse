@@ -10,17 +10,17 @@ import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui'
 import { useRouter } from '@/i18n/navigation'
 import { AlertModal } from '@/components/shared/modals'
-import { useMerchantList } from '@/hooks/use-merchant-list-modal'
+import { useCustomerList } from '@/hooks/use-customer-list-modal'
 
 interface Props {
-	merchantId: string
+	customerId: string
 }
 
-export const DeleteMerchantButton = ({ merchantId }: Props) => {
+export const DeleteCustomerButton = ({ customerId }: Props) => {
 	const router = useRouter()
 	const params = useParams()
-	const t = useTranslations('Merchant')
-	const merchantListWarehouse = useMerchantList()
+	const t = useTranslations('Customer')
+	const customerListWarehouse = useCustomerList()
 
 	const [open, setOpen] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
@@ -28,17 +28,17 @@ export const DeleteMerchantButton = ({ merchantId }: Props) => {
 	const onConfirmDelete = async () => {
 		try {
 			setLoading(true)
-			await axios.delete(`/api/${params.warehouseId}/merchants/${merchantId}`)
+			await axios.delete(`/api/${params.warehouseId}/customers/${customerId}`)
 
-			const merchantList = merchantListWarehouse.merchantList ?? []
-			const newMerchantList = merchantList.filter((merchant) => merchant.id !== merchantId)
+			const customerList = customerListWarehouse.customerList ?? []
+			const newCustomerList = customerList.filter((customer) => customer.id !== customerId)
 
-			merchantListWarehouse.setMerchantList(newMerchantList)
+			customerListWarehouse.setCustomerList(newCustomerList)
 
-			toast.success(t('deleteMerchantSuccess'))
+			toast.success(t('deleteCustomerSuccess'))
 			router.refresh()
 		} catch {
-			toast.error(t('deleteMerchantError'))
+			toast.error(t('deleteCustomerError'))
 		} finally {
 			setLoading(false)
 			setOpen(false)

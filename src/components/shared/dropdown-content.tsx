@@ -1,6 +1,5 @@
 'use client'
 
-import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 import {
@@ -16,9 +15,9 @@ interface Props {
 }
 
 export const DropdownContent = ({ name }: Props) => {
-	const params = useParams()
 	const router = useRouter()
 	const t = useTranslations('ManageUser')
+	const tProducts = useTranslations('Products')
 
 	return (
 		<DropdownMenuContent align='end'>
@@ -28,7 +27,7 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${params.warehouseId}/profile`)
+					router.push('/profile')
 				}}
 			>
 				{t('profileButton')}
@@ -36,7 +35,7 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/${params.warehouseId}/manage-user`)
+					router.push('/manage-user')
 				}}
 			>
 				{t('manageUserButton')}
@@ -44,7 +43,15 @@ export const DropdownContent = ({ name }: Props) => {
 
 			<DropdownMenuItem
 				onClick={() => {
-					router.push(`/auth/logout`)
+					router.push('/products')
+				}}
+			>
+				{tProducts('productsButton')}
+			</DropdownMenuItem>
+
+			<DropdownMenuItem
+				onClick={() => {
+					router.push('/auth/logout')
 				}}
 			>
 				{t('logoutButton')}

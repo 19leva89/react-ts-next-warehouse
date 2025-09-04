@@ -24,8 +24,8 @@ export interface ProductData {
 export interface SalesData {
 	id: string
 	addedBy: string
-	merchantId: string
-	merchantName: string
+	customerId: string
+	customerName: string
 	productId: string
 	productName: string
 	saleDate: Date

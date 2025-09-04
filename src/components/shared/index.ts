@@ -1,5 +1,5 @@
 export { DataTable } from './data-table'
-export { DeleteMerchantButton } from './delete-merchant-button'
+export { DeleteCustomerButton } from './delete-customer-button'
 export { DeleteWarehouseButton } from './delete-warehouse-button'
 export { DeleteUserButton } from './delete-user-button'
 export { DropdownContent } from './dropdown-content'

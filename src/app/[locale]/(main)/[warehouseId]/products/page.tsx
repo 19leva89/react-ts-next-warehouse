@@ -6,11 +6,15 @@ import { PackageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { use, useEffect, useState } from 'react'
 
+import {
+	AddProductButton,
+	ProductColumn,
+	ProductColumns,
+	ProductColumnsWithoutAction,
+} from '@/components/shared/product'
 import { useProduct } from '@/hooks/use-product'
 import { ProductData, UserData } from '@/lib/types'
-import { AddProductButton } from './_components/add-product-button'
 import { DataTable, Heading, LoadingIndicator } from '@/components/shared'
-import { ProductColumn, ProductColumns, ProductColumnsWithoutAction } from './_components/columns'
 
 interface Props {
 	params: Promise<{ warehouseId: string }>
@@ -68,6 +72,7 @@ const ProductPage = ({ params }: Props) => {
 		if (productWarehouse.productUpdated) {
 			productWarehouse.setProductUpdated(false)
 		}
+
 		getProducts()
 		getUserData()
 	}, [warehouseId, productWarehouse, t])
@@ -79,7 +84,7 @@ const ProductPage = ({ params }: Props) => {
 	return (
 		<section className='mx-auto my-8 w-4/5 rounded-lg bg-slate-50 p-8 shadow-lg'>
 			<header className='flex flex-col items-center md:flex-row'>
-				<Heading icon={PackageIcon} title={t('title')} description={t('description')} />
+				<Heading icon={PackageIcon} title={t('titleProducts')} description={t('descriptionProducts')} />
 
 				<div className='ml-auto flex'>
 					{(user?.role === 'ADMIN' || user?.role === 'PRODUCT_MANAGER') && <AddProductButton />}

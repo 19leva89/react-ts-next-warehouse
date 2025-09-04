@@ -26,7 +26,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
 		}
 
 		const body = await req.json()
-		const { merchantId, productId, saleDate, quantity, previousQuantity } = body
+		const { customerId, productId, saleDate, quantity, previousQuantity } = body
 
 		const oldProduct = await prisma.product.findUnique({
 			where: {
@@ -63,7 +63,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
 				id: salesId,
 			},
 			data: {
-				merchantId,
+				customerId,
 				productId,
 				saleDate,
 				quantity,

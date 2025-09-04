@@ -31,7 +31,7 @@ export const WarehouseListModal = () => {
 							<div className='flex flex-col gap-2'>
 								<Separator />
 
-								{warehouseListWarehouse.warehouseList!.map((warehouse) => (
+								{warehouseListWarehouse.warehouseList?.map((warehouse) => (
 									<Fragment key={warehouse.id}>
 										<div className='flex items-center justify-between'>
 											<div>{warehouse.name}</div>

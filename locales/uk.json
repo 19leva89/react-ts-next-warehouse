@@ -75,8 +75,10 @@
     "noEmptyStock": "Всі товари в безпеці!"
   },
   "Products": {
-    "title": "Товари складу",
-    "description": "Список товарів у вашому складі",
+    "titleProducts": "Товари складу",
+		"titleAllProducts": "Всі товари",
+    "descriptionProducts": "Список товарів у вашому складі",
+    "descriptionAllProducts": "Список всіх товарів",
     "loadProductError": "Не вдалося завантажити товари. Будь ласка, оновіть сторінку",
     "loadUserError": "Не вдалося завантажити користувачів. Будь ласка, оновіть сторінку",
     "searchPlaceholder": "Знайти товар...",
@@ -105,7 +107,8 @@
     "productStock": "Залишки",
     "productStockPlaceholder": "Введіть залишки товару...",
     "cancelButton": "Скасувати",
-    "noImage": "Немає зображення"
+    "noImage": "Немає зображення",
+		"productsButton": "Список товарів"
   },
   "Sales": {
     "title": "Продажі",
@@ -127,9 +130,9 @@
     "addSaleDescription": "Додайте продаж до вашого складу",
     "updateSaleTitle": "Оновити продаж",
     "updateSaleDescription": "Оновіть продаж вашого складу",
-    "merchant": "Торговець",
-    "merchantPlaceholder": "Оберіть торговця...",
-    "manageMerchantButton": "Керувати торговцями",
+    "customer": "Торговець",
+    "customerPlaceholder": "Оберіть торговця...",
+    "manageCustomerButton": "Керувати торговцями",
     "product": "Товар",
     "productPlaceholder": "Оберіть товар...",
     "noProduct": "Товарів не знайдено",
@@ -139,23 +142,23 @@
     "quantityPlaceholder": "Введіть кількість...",
     "cancelButton": "Скасувати"
   },
-  "Merchant": {
-    "updateMerchantSuccess": "Торговець успішно оновлений",
-    "addMerchantSuccess": "Торговець успішно додано",
-    "merchantError": "Не вдалося оновити торговця. Спробуйте ще раз",
-    "addMerchantTitle": "Додати торговця",
-    "addMerchantDescription": "Додайте торговця до вашого складу",
-    "updateMerchantTitle": "Оновити торговця",
-    "updateMerchantDescription": "Оновіть торговця вашого складу",
-    "merchantName": "Ім'я торговця",
-    "merchantNamePlaceholder": "Введіть ім'я торговця...",
-    "addMerchantButton": "Додати торговця",
+  "Customer": {
+    "updateCustomerSuccess": "Клієнта успішно оновлено",
+    "addCustomerSuccess": "Клієнта успішно додано",
+    "customerError": "Не вдалося оновити клієнта. Спробуйте ще раз",
+    "addCustomerTitle": "Додати клієнта",
+    "addCustomerDescription": "Додайте клієнта до вашого складу",
+    "updateCustomerTitle": "Оновити клієнта",
+    "updateCustomerDescription": "Оновіть клієнта вашого складу",
+    "customerName": "Ім'я клієнта",
+    "customerNamePlaceholder": "Введіть ім'я клієнта...",
+    "addCustomerButton": "Додати клієнта",
     "cancelButton": "Скасувати",
-    "updateMerchantButton": "Оновити торговця",
-    "merchantListTitle": "Список торговців",
-    "merchantListDescription": "Список торговців у вашому складі",
-    "deleteMerchantSuccess": "Торговець успішно видалений",
-    "deleteMerchantError": "Не вдалося видалити торговця. Переконайтеся, що торговець не використовується в жодному продажу. Спробуйте ще раз"
+    "updateCustomerButton": "Оновити клієнта",
+    "customerListTitle": "Список клієнтів",
+    "customerListDescription": "Список клієнтів у вашому складі",
+    "deleteCustomerSuccess": "Клієнта успішно видалено",
+    "deleteCustomerError": "Не вдалося видалити клієнта. Переконайтеся, що клієнт не використовується в жодному продажу. Спробуйте ще раз"
   },
   "TableHeader": {
     "no": "№",
@@ -166,7 +169,7 @@
     "productStock": "Залишки",
     "saleDate": "Дата продажу",
     "addedBy": "Додано",
-    "merchant": "Торговець",
+    "customer": "Торговець",
     "quantity": "Кількість"
   },
 	"TableData": {

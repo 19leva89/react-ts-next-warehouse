@@ -84,7 +84,7 @@ export const WarehouseModal = () => {
 				router.push(`/${response.data.id}`)
 			}
 		} catch {
-			toast.error(t('WarehouseError'))
+			toast.error(t('warehouseError'))
 		} finally {
 			setLoading(false)
 		}

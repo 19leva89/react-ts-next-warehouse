@@ -37,11 +37,11 @@ import { useRouter } from '@/i18n/navigation'
 import { useProduct } from '@/hooks/use-product'
 import { Modal } from '@/components/shared/modals'
 import { useSaleModal } from '@/hooks/use-sale-modal'
-import { useMerchantList } from '@/hooks/use-merchant-list-modal'
+import { useCustomerList } from '@/hooks/use-customer-list-modal'
 
 const formSchema = z.object({
 	id: z.string().min(1),
-	merchantId: z.string().min(1),
+	customerId: z.string().min(1),
 	productId: z.string().min(1),
 	saleDate: z.date({
 		message: 'Date is required',
@@ -54,7 +54,7 @@ export const SaleModal = () => {
 	const router = useRouter()
 	const saleModalWarehouse = useSaleModal()
 	const productListWarehouse = useProduct()
-	const merchantListWarehouse = useMerchantList()
+	const customerListWarehouse = useCustomerList()
 
 	const t = useTranslations('Sales')
 	const tProducts = useTranslations('Products')
@@ -88,7 +88,7 @@ export const SaleModal = () => {
 		defaultValues: saleModalWarehouse.isEditing
 			? saleModalWarehouse.saleData
 			: {
-					merchantId: '',
+					customerId: '',
 					productId: '',
 					saleDate: new Date(),
 					quantity: '',
@@ -97,7 +97,7 @@ export const SaleModal = () => {
 
 	useEffect(() => {
 		if (saleModalWarehouse.isEditing) {
-			form.setValue('merchantId', saleModalWarehouse.saleData?.merchantId ?? '')
+			form.setValue('customerId', saleModalWarehouse.saleData?.customerId ?? '')
 			form.setValue('productId', saleModalWarehouse.saleData?.productId ?? '')
 			form.setValue('quantity', saleModalWarehouse.saleData?.quantity ?? '')
 			form.setValue('saleDate', saleModalWarehouse.saleData?.saleDate ?? new Date())
@@ -108,7 +108,7 @@ export const SaleModal = () => {
 		try {
 			setLoading(true)
 			const sale = {
-				merchantId: values.merchantId,
+				customerId: values.customerId,
 				productId: values.productId,
 				saleDate: values.saleDate,
 				quantity: parseInt(values.quantity),
@@ -162,24 +162,24 @@ export const SaleModal = () => {
 						<Form {...form}>
 							<form className='space-y-4'>
 								<FormField
-									name='merchantId'
+									name='customerId'
 									control={form.control}
-									defaultValue={saleModalWarehouse.saleData?.merchantId}
+									defaultValue={saleModalWarehouse.saleData?.customerId}
 									render={({ field }) => (
 										<FormItem className='flex flex-col'>
-											<FormLabel>{t('merchant')}</FormLabel>
+											<FormLabel>{t('customer')}</FormLabel>
 
 											<Select onValueChange={field.onChange} defaultValue={field.value} disabled={loading}>
 												<FormControl>
 													<SelectTrigger>
-														<SelectValue placeholder={t('merchantPlaceholder')} />
+														<SelectValue placeholder={t('customerPlaceholder')} />
 													</SelectTrigger>
 												</FormControl>
 
 												<SelectContent>
-													{merchantListWarehouse.merchantList!.map((merchant) => (
-														<SelectItem value={merchant.id} key={merchant.id}>
-															{merchant.name}
+													{customerListWarehouse.customerList?.map((customer) => (
+														<SelectItem value={customer.id} key={customer.id}>
+															{customer.name}
 														</SelectItem>
 													))}
 												</SelectContent>
@@ -191,11 +191,11 @@ export const SaleModal = () => {
 												type='button'
 												variant='secondary'
 												onClick={() => {
-													merchantListWarehouse.onOpen()
+													customerListWarehouse.onOpen()
 												}}
 												className='mt-2'
 											>
-												{t('manageMerchantButton')}
+												{t('manageCustomerButton')}
 											</Button>
 										</FormItem>
 									)}
