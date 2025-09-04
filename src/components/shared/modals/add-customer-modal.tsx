@@ -1,6 +1,6 @@
 'use client'
 
-import * as z from 'zod'
+import { z } from 'zod'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
@@ -130,7 +130,7 @@ export const AddCustomerModal = () => {
 
 								<div className='flex w-full items-center justify-end space-x-2 pt-6'>
 									<Button variant='outline' onClick={addCustomerModal.onClose} disabled={loading}>
-										Cancel
+										{t('cancelButton')}
 									</Button>
 
 									<Button type='submit' disabled={loading}>

@@ -15,8 +15,8 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from '@/components/ui'
-import { ProductColumn } from './columns'
 import { useRouter } from '@/i18n/navigation'
+import { ProductColumn } from './table-columns'
 import { AlertModal } from '@/components/shared/modals'
 import { useProductModal } from '@/hooks/use-product-modal'
 
@@ -24,7 +24,7 @@ interface Props {
 	data: ProductColumn
 }
 
-export const CellAction = ({ data }: Props) => {
+export const TableCellAction = ({ data }: Props) => {
 	const router = useRouter()
 	const params = useParams()
 	const t = useTranslations('Products')

@@ -175,7 +175,8 @@
 	"TableData": {
 		"noResults": "No results",
 		"previousButton": "Previous",
-		"nextButton": "Next"
+		"nextButton": "Next",
+		"columns": "Columns"
 	},
   "Logout": {
     "logoutError": "Logout failed. Please try again"

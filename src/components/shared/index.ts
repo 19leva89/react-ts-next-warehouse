@@ -1,4 +1,4 @@
-export { DataTable } from './data-table'
+export { DataTable } from './table-data'
 export { DeleteCustomerButton } from './delete-customer-button'
 export { DeleteWarehouseButton } from './delete-warehouse-button'
 export { DeleteUserButton } from './delete-user-button'

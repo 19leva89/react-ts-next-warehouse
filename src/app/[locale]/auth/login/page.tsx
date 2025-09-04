@@ -1,6 +1,6 @@
 'use client'
 
-import * as z from 'zod'
+import { z } from 'zod'
 import axios from 'axios'
 import Image from 'next/image'
 import { toast } from 'sonner'

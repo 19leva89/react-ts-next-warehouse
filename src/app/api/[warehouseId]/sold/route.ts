@@ -1,6 +1,7 @@
-import { GlobalError, SuccessResponse } from '@/lib/helper'
-import { prisma } from '@/lib/prisma'
 import { NextRequest } from 'next/server'
+
+import { prisma } from '@/lib/prisma'
+import { GlobalError, SuccessResponse } from '@/lib/helper'
 
 interface GraphData {
 	name: string

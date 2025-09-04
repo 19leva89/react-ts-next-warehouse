@@ -2,9 +2,9 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 
-import { CellAction } from './cell-action'
 import { TableHeader } from '@/components/shared'
-import { CellProductImage } from './cell-product-image'
+import { TableCellAction } from './table-cell-action'
+import { TableCellProductImage } from './table-cell-product-image'
 
 export type ProductColumn = {
 	id: string
@@ -23,7 +23,7 @@ export const ProductColumns: ColumnDef<ProductColumn>[] = [
 			return <TableHeader variant='normal' name='productImage' />
 		},
 		cell: ({ row }) => {
-			return <CellProductImage image={row.original.image} name={row.original.name} />
+			return <TableCellProductImage image={row.original.image} name={row.original.name} />
 		},
 	},
 
@@ -38,6 +38,7 @@ export const ProductColumns: ColumnDef<ProductColumn>[] = [
 				/>
 			)
 		},
+		enableHiding: false,
 	},
 
 	{
@@ -68,7 +69,7 @@ export const ProductColumns: ColumnDef<ProductColumn>[] = [
 	},
 
 	{
-		accessorKey: 'stockThreshold',
+		accessorKey: 'stock_threshold',
 		header: ({ column }) => {
 			return (
 				<TableHeader
@@ -83,7 +84,7 @@ export const ProductColumns: ColumnDef<ProductColumn>[] = [
 
 	{
 		id: 'actions',
-		cell: ({ row }) => <CellAction data={row.original} />,
+		cell: ({ row }) => <TableCellAction data={row.original} />,
 	},
 ]
 
@@ -94,7 +95,7 @@ export const ProductColumnsWithoutAction: ColumnDef<ProductColumn>[] = [
 			return <TableHeader variant='normal' name='productImage' />
 		},
 		cell: ({ row }) => {
-			return <CellProductImage image={row.original.image} name={row.original.name} />
+			return <TableCellProductImage image={row.original.image} name={row.original.name} />
 		},
 	},
 
@@ -109,6 +110,7 @@ export const ProductColumnsWithoutAction: ColumnDef<ProductColumn>[] = [
 				/>
 			)
 		},
+		enableHiding: false,
 	},
 
 	{
@@ -139,7 +141,7 @@ export const ProductColumnsWithoutAction: ColumnDef<ProductColumn>[] = [
 	},
 
 	{
-		accessorKey: 'stockThreshold',
+		accessorKey: 'stock_threshold',
 		header: ({ column }) => {
 			return (
 				<TableHeader

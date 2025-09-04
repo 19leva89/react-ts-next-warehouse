@@ -7,7 +7,7 @@ interface Props {
 	params: Promise<{ warehouseId: string }>
 }
 
-export async function GET({ params }: Props) {
+export async function GET(req: NextRequest, { params }: Props) {
 	const { warehouseId } = await params
 
 	try {
