@@ -130,9 +130,9 @@
     "addSaleDescription": "Додайте продаж до вашого складу",
     "updateSaleTitle": "Оновити продаж",
     "updateSaleDescription": "Оновіть продаж вашого складу",
-    "customer": "Торговець",
-    "customerPlaceholder": "Оберіть торговця...",
-    "manageCustomerButton": "Керувати торговцями",
+    "customer": "Клієнт",
+    "customerPlaceholder": "Оберіть клієнта...",
+    "manageCustomerButton": "Керувати клієнтами",
     "product": "Товар",
     "productPlaceholder": "Оберіть товар...",
     "noProduct": "Товарів не знайдено",
@@ -169,13 +169,14 @@
     "productStock": "Залишки",
     "saleDate": "Дата продажу",
     "addedBy": "Додано",
-    "customer": "Торговець",
+    "customer": "Клієнт",
     "quantity": "Кількість"
   },
 	"TableData": {
 		"noResults": "Немає результатів",
 		"previousButton": "Назад",
-		"nextButton": "Вперед"
+		"nextButton": "Вперед",
+		"columns": "Колонки"
 	},
   "Logout": {
     "logoutError": "Не вдалося вийти з системи. Спробуйте ще раз"

@@ -1,5 +1,5 @@
 export { AddProductButton } from './add-product-button'
-export { CellAction } from './cell-action'
-export { CellProductImage } from './cell-product-image'
-export { type ProductColumn, ProductColumns, ProductColumnsWithoutAction } from './columns'
 export { ProductImage } from './product-image'
+export { TableCellAction } from './table-cell-action'
+export { TableCellProductImage } from './table-cell-product-image'
+export { type ProductColumn, ProductColumns, ProductColumnsWithoutAction } from './table-columns'

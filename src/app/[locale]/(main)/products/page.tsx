@@ -10,7 +10,7 @@ import {
 	ProductColumn,
 	ProductColumns,
 	ProductColumnsWithoutAction,
-} from '@/components/shared/product/columns'
+} from '@/components/shared/product/table-columns'
 import { useProduct } from '@/hooks/use-product'
 import { ProductData, UserData } from '@/lib/types'
 import { AddProductButton } from '@/components/shared/product'
