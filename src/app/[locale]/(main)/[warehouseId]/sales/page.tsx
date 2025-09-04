@@ -35,9 +35,9 @@ const SalesPage = ({ params }: Props) => {
 				const tempSales: SalesColumn[] = sales.map((sales) => ({
 					id: sales.id,
 					addedBy: sales.addedBy,
-					merchant: {
-						id: sales.merchantId,
-						name: sales.merchantName,
+					customer: {
+						id: sales.customerId,
+						name: sales.customerName,
 					},
 					product: {
 						id: sales.productId,

@@ -1,28 +1,28 @@
 import { create } from 'zustand'
 
-interface useMerchantListWarehouse {
+interface useCustomerListWarehouse {
 	isOpen: boolean
 	isEditing: boolean
-	merchantList?: {
+	customerList?: {
 		id: string
 		name: string
 	}[]
 	onOpen: () => void
 	onClose: () => void
 	setIsEditing: (isEditing: boolean) => void
-	setMerchantList: (
-		merchantList: {
+	setCustomerList: (
+		customerList: {
 			id: string
 			name: string
 		}[],
 	) => void
 }
 
-export const useMerchantList = create<useMerchantListWarehouse>((set) => ({
+export const useCustomerList = create<useCustomerListWarehouse>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	onOpen: () => set({ isOpen: true }),
 	onClose: () => set({ isOpen: false }),
 	setIsEditing: (isEditing) => set({ isEditing }),
-	setMerchantList: (merchantList) => set({ merchantList }),
+	setCustomerList: (customerList) => set({ customerList }),
 }))

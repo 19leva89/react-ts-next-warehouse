@@ -76,11 +76,17 @@ export const ProductModal = () => {
 			formData.append('stockThreshold', values.stockThreshold)
 			formData.append('stock', values.stock)
 
+			const baseApiPath = params.warehouseId ? `/api/${params.warehouseId}/products` : '/api/products'
+
 			if (productWarehouse.isEditing) {
 				formData.append('previousImageId', productWarehouse.productData?.imageId ?? '')
 				formData.append('previousImageUrl', productWarehouse.productData?.imageUrl ?? '')
 
-				await axios.put(`/api/${params.warehouseId}/products/${productWarehouse.productData?.id}`, formData, {
+				const updateUrl = params.warehouseId
+					? `${baseApiPath}/${productWarehouse.productData?.id}`
+					: `${baseApiPath}/${productWarehouse.productData?.id}`
+
+				await axios.put(updateUrl, formData, {
 					headers: {
 						'Content-Type': 'multipart/form-data',
 					},
@@ -91,7 +97,7 @@ export const ProductModal = () => {
 			} else {
 				formData.append('type', 'single')
 
-				await axios.post(`/api/${params.warehouseId}/products`, formData, {
+				await axios.post(baseApiPath, formData, {
 					headers: {
 						'Content-Type': 'multipart/form-data',
 					},

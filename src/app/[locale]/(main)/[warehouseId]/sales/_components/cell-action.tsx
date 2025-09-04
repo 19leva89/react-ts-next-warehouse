@@ -80,7 +80,7 @@ export const CellAction = ({ data }: Props) => {
 							saleModalWarehouse.setIsEditing(true)
 							saleModalWarehouse.setSaleData({
 								id: data.id,
-								merchantId: data.merchant.id,
+								customerId: data.customer.id,
 								productId: data.product.id,
 								saleDate: data.saleDate,
 								quantity: data.quantity,

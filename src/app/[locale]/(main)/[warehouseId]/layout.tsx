@@ -5,11 +5,9 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { ProductData } from '@/lib/types'
 import { redirect } from '@/i18n/navigation'
-import { Navbar } from '@/components/shared/navbar'
 import { SetProduct } from './_components/set-product'
-import { SetMerchant } from './_components/set-merchant'
+import { SetCustomer } from './_components/set-customer'
 import { SetWarehouse } from './_components/set-warehouse'
-import { ModalProvider } from '@/providers/modal-provider'
 
 interface Props {
 	children: ReactNode
@@ -49,19 +47,15 @@ const RootLayout = async ({ children, params }: Props) => {
 		},
 	})) as ProductData[]
 
-	const merchants = await prisma.merchant.findMany()
+	const customers = await prisma.customer.findMany()
 
 	return (
 		<>
-			<ModalProvider />
-
-			<Navbar />
-
 			<SetWarehouse warehouses={warehouses} />
 
 			<SetProduct products={products} />
 
-			<SetMerchant merchants={merchants} />
+			<SetCustomer customers={customers} />
 
 			{children}
 		</>

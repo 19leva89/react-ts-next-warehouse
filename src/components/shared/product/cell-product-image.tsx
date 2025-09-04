@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl'
 
 import { ProductImage } from './product-image'
 
-export const ProductImageCell = ({ image, name }: { image: string; name: string }) => {
+export const CellProductImage = ({ image, name }: { image: string; name: string }) => {
 	const t = useTranslations('Products')
 
 	if (image === '') {

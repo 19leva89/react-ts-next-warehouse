@@ -9,7 +9,7 @@ import { TableHeader } from '@/components/shared'
 
 export type SalesColumn = {
 	id: string
-	merchant: {
+	customer: {
 		id: string
 		name: string
 	}
@@ -74,17 +74,17 @@ export const SalesColumns: ColumnDef<SalesColumn>[] = [
 	},
 
 	{
-		accessorKey: 'merchant',
+		accessorKey: 'customer',
 		header: ({ column }) => {
 			return (
 				<TableHeader
 					variant='sortable'
-					name='merchant'
+					name='customer'
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
 				/>
 			)
 		},
-		cell: ({ row }) => <span>{row.original.merchant?.name ?? ''}</span>,
+		cell: ({ row }) => <span>{row.original.customer?.name ?? ''}</span>,
 	},
 
 	{
@@ -158,17 +158,17 @@ export const SalesColumnsWithoutAction: ColumnDef<SalesColumn>[] = [
 	},
 
 	{
-		accessorKey: 'merchant',
+		accessorKey: 'customer',
 		header: ({ column }) => {
 			return (
 				<TableHeader
 					variant='sortable'
-					name='merchant'
+					name='customer'
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
 				/>
 			)
 		},
-		cell: ({ row }) => <span>{row.original.merchant?.name ?? ''}</span>,
+		cell: ({ row }) => <span>{row.original.customer?.name ?? ''}</span>,
 	},
 
 	{

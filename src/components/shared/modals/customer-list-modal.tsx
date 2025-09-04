@@ -5,23 +5,23 @@ import { Edit2Icon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { Modal } from '@/components/shared/modals'
-import { DeleteMerchantButton } from '@/components/shared'
+import { DeleteCustomerButton } from '@/components/shared'
 import { Button, ScrollArea, Separator } from '@/components/ui'
-import { useMerchantList } from '@/hooks/use-merchant-list-modal'
-import { useAddMerchantModal } from '@/hooks/use-add-merchant-modal'
+import { useCustomerList } from '@/hooks/use-customer-list-modal'
+import { useAddCustomerModal } from '@/hooks/use-add-customer-modal'
 
-export const MerchantListModal = () => {
-	const t = useTranslations('Merchant')
-	const merchantListWarehouse = useMerchantList()
-	const addMerchantModal = useAddMerchantModal()
+export const CustomerListModal = () => {
+	const t = useTranslations('Customer')
+	const customerListWarehouse = useCustomerList()
+	const addCustomerModal = useAddCustomerModal()
 
 	return (
 		<Modal
-			title={t('merchantListTitle')}
-			description={t('merchantListDescription')}
-			isOpen={merchantListWarehouse.isOpen}
+			title={t('customerListTitle')}
+			description={t('customerListDescription')}
+			isOpen={customerListWarehouse.isOpen}
 			onClose={() => {
-				merchantListWarehouse.onClose()
+				customerListWarehouse.onClose()
 			}}
 		>
 			<div>
@@ -31,24 +31,24 @@ export const MerchantListModal = () => {
 							<div className='flex flex-col gap-2'>
 								<Separator />
 
-								{merchantListWarehouse.merchantList!.map((merchant) => (
-									<Fragment key={merchant.id}>
+								{customerListWarehouse.customerList?.map((customer) => (
+									<Fragment key={customer.id}>
 										<div className='flex items-center justify-between'>
-											<div>{merchant.name}</div>
+											<div>{customer.name}</div>
 
 											<div className='flex'>
 												<Button
 													variant='ghost'
 													onClick={() => {
-														addMerchantModal.setIsEditing(true)
-														addMerchantModal.setMerchantData(merchant)
-														addMerchantModal.onOpen()
+														addCustomerModal.setIsEditing(true)
+														addCustomerModal.setCustomerData(customer)
+														addCustomerModal.onOpen()
 													}}
 												>
 													<Edit2Icon className='size-4' />
 												</Button>
 
-												<DeleteMerchantButton merchantId={merchant.id} />
+												<DeleteCustomerButton customerId={customer.id} />
 											</div>
 										</div>
 
@@ -61,11 +61,11 @@ export const MerchantListModal = () => {
 						<Button
 							variant='default'
 							onClick={() => {
-								addMerchantModal.onOpen()
+								addCustomerModal.onOpen()
 							}}
 							className='w-full'
 						>
-							{t('addMerchantButton')}
+							{t('addCustomerButton')}
 						</Button>
 					</div>
 				</div>

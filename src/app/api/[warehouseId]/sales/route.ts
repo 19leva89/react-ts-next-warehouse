@@ -7,7 +7,7 @@ interface Props {
 	params: Promise<{ warehouseId: string }>
 }
 
-export async function GET(req: NextRequest, { params }: Props) {
+export async function GET({ params }: Props) {
 	const { warehouseId } = await params
 
 	try {
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: Props) {
 			},
 			include: {
 				product: true,
-				merchant: true,
+				customer: true,
 				user: true,
 			},
 		})
@@ -26,8 +26,8 @@ export async function GET(req: NextRequest, { params }: Props) {
 			sales: sales.map((sale) => ({
 				id: sale.id,
 				addedBy: sale.user?.name ?? 'Deleted user',
-				merchantId: sale.merchantId,
-				merchantName: sale.merchant?.name ?? 'Deleted merchant',
+				customerId: sale.customerId,
+				customerName: sale.customer?.name ?? 'Deleted customer',
 				productId: sale.productId,
 				productName: sale.product?.name ?? 'Deleted product',
 				saleDate: sale.saleDate,
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest, { params }: Props) {
 		}
 
 		const body = await req.json()
-		const { merchantId, productId, quantity, saleDate } = body
+		const { customerId, productId, quantity, saleDate } = body
 
 		const product = await prisma.product.findUnique({
 			where: {
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest, { params }: Props) {
 				unitPrice: product.price, // Use the product's price as unit price
 				totalAmount: product.price * quantity, // Calculate total amount
 				saleDate: saleDate,
-				merchantId,
+				customerId,
 				warehouseId,
 				userId,
 				productId: productId,

@@ -4,11 +4,11 @@ import { prisma } from '@/lib/prisma'
 import { GlobalError, SuccessResponse, UnauthorizedError } from '@/lib/helper'
 
 interface Props {
-	params: Promise<{ merchantId: string }>
+	params: Promise<{ customerId: string }>
 }
 
 export async function PUT(req: NextRequest, { params }: Props) {
-	const { merchantId } = await params
+	const { customerId } = await params
 
 	try {
 		const userId = req.cookies.get('userId')?.value
@@ -28,23 +28,23 @@ export async function PUT(req: NextRequest, { params }: Props) {
 		const body = await req.json()
 		const { name } = body
 
-		const merchant = await prisma.merchant.update({
+		const customer = await prisma.customer.update({
 			where: {
-				id: merchantId,
+				id: customerId,
 			},
 			data: {
 				name,
 			},
 		})
 
-		return SuccessResponse(merchant)
+		return SuccessResponse(customer)
 	} catch (error: any) {
 		return GlobalError(error)
 	}
 }
 
 export async function DELETE(req: NextRequest, { params }: Props) {
-	const { merchantId } = await params
+	const { customerId } = await params
 
 	try {
 		const userId = req.cookies.get('userId')?.value
@@ -61,13 +61,13 @@ export async function DELETE(req: NextRequest, { params }: Props) {
 			})
 		}
 
-		const merchant = await prisma.merchant.delete({
+		const customer = await prisma.customer.delete({
 			where: {
-				id: merchantId,
+				id: customerId,
 			},
 		})
 
-		return SuccessResponse(merchant)
+		return SuccessResponse(customer)
 	} catch (error: any) {
 		return GlobalError(error)
 	}
