@@ -13,8 +13,8 @@ import { useAddWarehouseModal } from '@/hooks/use-add-warehouse-modal'
 const MainPage = () => {
 	const currentLocale = useLocale()
 
-	const [warehouse, setWarehouse] = useState<WarehouseData>()
 	const [loading, setLoading] = useState<boolean>(true)
+	const [warehouse, setWarehouse] = useState<WarehouseData>()
 
 	const { isOpen, onOpen } = useAddWarehouseModal()
 

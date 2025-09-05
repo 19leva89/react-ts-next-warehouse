@@ -1,20 +1,14 @@
-import { cookies } from 'next/headers'
+'use client'
 
-import { prisma } from '@/lib/prisma'
+import { useSession } from 'next-auth/react'
+
 import { DropdownContent } from '@/components/shared'
 import { Avatar, AvatarFallback, DropdownMenu, DropdownMenuTrigger } from '@/components/ui'
 
-export async function UserButton() {
-	const cookieWarehouse = cookies()
-	const userId = (await cookieWarehouse).get('userId')?.value
+export const UserButton = () => {
+	const { data: session } = useSession()
 
-	const user = await prisma.user.findFirst({
-		where: {
-			id: userId,
-		},
-	})
-
-	const name = user?.name as string
+	const name = session?.user.name as string
 	const initial = name?.charAt(0)
 
 	return (

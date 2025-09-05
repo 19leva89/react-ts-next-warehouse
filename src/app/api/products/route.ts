@@ -3,23 +3,12 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 import { prisma } from '@/lib/prisma'
 import { storage } from '@/lib/firebase'
-import { GlobalError, SuccessResponse, UnauthorizedError } from '@/lib/helper'
+import { requireAdminOrProduct } from '@/lib/auth'
+import { GlobalError, SuccessResponse } from '@/lib/helper'
 
-export async function GET(req: NextRequest) {
+export async function GET() {
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || (user?.role !== 'ADMIN' && user?.role !== 'PRODUCT_MANAGER')) {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		await requireAdminOrProduct()
 
 		const products = await prisma.product.findMany({
 			select: {
@@ -45,19 +34,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || (user?.role !== 'ADMIN' && user?.role !== 'PRODUCT_MANAGER')) {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		await requireAdminOrProduct()
 
 		const body = await req.formData()
 

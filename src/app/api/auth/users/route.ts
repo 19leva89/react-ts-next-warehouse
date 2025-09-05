@@ -2,23 +2,12 @@ import { hash } from 'bcrypt-ts'
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import { GlobalError, SuccessResponse, UnauthorizedError } from '@/lib/helper'
+import { requireAdmin } from '@/lib/auth'
+import { GlobalError, SuccessResponse } from '@/lib/helper'
 
-export async function GET(req: NextRequest) {
+export async function GET() {
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || user?.role !== 'ADMIN') {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		const user = await requireAdmin()
 
 		const users = await prisma.user.findMany({
 			select: {
@@ -30,7 +19,7 @@ export async function GET(req: NextRequest) {
 		})
 
 		return SuccessResponse({
-			currentUser: userId,
+			currentUser: user.id,
 			users,
 		})
 	} catch (error: any) {
@@ -40,19 +29,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || user?.role !== 'ADMIN') {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		const user = await requireAdmin()
 
 		const { name, email, role, password, confirmPassword } = await req.json()
 
@@ -85,7 +62,7 @@ export async function POST(req: NextRequest) {
 
 		return SuccessResponse({
 			message: 'Successfully created user',
-			currentUser: userId,
+			currentUser: user.id,
 			users,
 		})
 	} catch (error: any) {

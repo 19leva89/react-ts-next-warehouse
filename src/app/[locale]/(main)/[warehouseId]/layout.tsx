@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
-import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 
+import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { ProductData } from '@/lib/types'
 import { redirect } from '@/i18n/navigation'
@@ -17,15 +17,9 @@ interface Props {
 const RootLayout = async ({ children, params }: Props) => {
 	const { warehouseId, locale } = await params
 
-	const userId = (await cookies()).get('userId')?.value
+	const session = await auth()
 
-	const user = await prisma.user.findFirst({
-		where: {
-			id: userId,
-		},
-	})
-
-	if (!user) {
+	if (!session) {
 		redirect({ href: `/auth/login`, locale })
 	}
 

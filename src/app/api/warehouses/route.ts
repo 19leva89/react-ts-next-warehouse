@@ -1,17 +1,12 @@
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import { GlobalError, SuccessResponse, UnauthorizedError } from '@/lib/helper'
+import { requireAdmin, requireAuth } from '@/lib/auth'
+import { GlobalError, SuccessResponse } from '@/lib/helper'
 
-export async function GET(req: NextRequest) {
+export async function GET() {
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		if (!userId) {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		await requireAuth()
 
 		const warehouses = await prisma.warehouse.findFirst()
 
@@ -32,19 +27,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || user?.role !== 'ADMIN') {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		await requireAdmin()
 
 		const body = await req.json()
 		const { name } = body

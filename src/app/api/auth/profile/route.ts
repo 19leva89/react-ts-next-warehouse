@@ -1,16 +1,12 @@
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
+import { getCurrentUser } from '@/lib/auth'
 import { GlobalError, SuccessResponse } from '@/lib/helper'
 
-export async function GET(req: NextRequest) {
+export async function GET() {
 	try {
-		const userId = req.cookies.get('userId')?.value
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
+		const user = await getCurrentUser()
 
 		return SuccessResponse({
 			user: {
@@ -26,22 +22,17 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
 	try {
-		const userId = req.cookies.get('userId')?.value
+		const user = await getCurrentUser()
+
 		const { name, email } = await req.json()
 
 		await prisma.user.update({
 			where: {
-				id: userId,
+				id: user?.id,
 			},
 			data: {
 				name,
 				email,
-			},
-		})
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
 			},
 		})
 

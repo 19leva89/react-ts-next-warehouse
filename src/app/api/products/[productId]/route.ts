@@ -3,7 +3,8 @@ import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage
 
 import { prisma } from '@/lib/prisma'
 import { storage } from '@/lib/firebase'
-import { GlobalError, SuccessResponse, UnauthorizedError } from '@/lib/helper'
+import { requireAdminOrProduct } from '@/lib/auth'
+import { GlobalError, SuccessResponse } from '@/lib/helper'
 
 interface Props {
 	params: Promise<{ productId: string }>
@@ -13,19 +14,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
 	const { productId } = await params
 
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || (user?.role !== 'ADMIN' && user?.role !== 'PRODUCT_MANAGER')) {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		await requireAdminOrProduct()
 
 		const formData = await req.formData()
 		const previousImageId = formData.get('previousImageId') as string
@@ -92,23 +81,11 @@ export async function PUT(req: NextRequest, { params }: Props) {
 	}
 }
 
-export async function DELETE(req: NextRequest, { params }: Props) {
+export async function DELETE(_req: NextRequest, { params }: Props) {
 	const { productId } = await params
 
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || (user?.role !== 'ADMIN' && user?.role !== 'PRODUCT_MANAGER')) {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		await requireAdminOrProduct()
 
 		const product = await prisma.product.findUnique({
 			where: {
