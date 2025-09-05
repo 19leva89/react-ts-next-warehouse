@@ -1,10 +1,10 @@
 import { ReactNode } from 'react'
-import { cookies } from 'next/headers'
 
+import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
+import { ModalProvider } from '@/providers'
 import { redirect } from '@/i18n/navigation'
 import { Navbar } from '@/components/shared/navbar'
-import { ModalProvider } from '@/providers/modal-provider'
 
 interface Props {
 	children: ReactNode
@@ -14,23 +14,21 @@ interface Props {
 const RootLayout = async ({ children, params }: Props) => {
 	const { locale } = await params
 
-	const userId = (await cookies()).get('userId')?.value
+	const session = await auth()
 
-	const user = await prisma.user.findFirst({
-		where: {
-			id: userId,
-		},
-	})
-
-	if (!user) {
+	if (!session) {
 		redirect({ href: `/auth/login`, locale })
+
+		return
 	}
+
+	const warehouses = await prisma.warehouse.findMany()
 
 	return (
 		<>
 			<ModalProvider />
 
-			<Navbar />
+			<Navbar warehouses={warehouses} user={session.user} />
 
 			{children}
 		</>

@@ -2,20 +2,16 @@ import { NextRequest } from 'next/server'
 import { compare, hash } from 'bcrypt-ts'
 
 import { prisma } from '@/lib/prisma'
+import { getCurrentUserWithPassword } from '@/lib/auth'
 import { GlobalError, SuccessResponse } from '@/lib/helper'
 
 export async function PUT(req: NextRequest) {
 	try {
-		const userId = req.cookies.get('userId')?.value
+		const user = await getCurrentUserWithPassword()
+
 		const { oldPassword, password } = await req.json()
 
 		const hashedOldPassword = await hash(oldPassword, 12)
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
 
 		if (await compare(hashedOldPassword, user?.password || '')) {
 			return GlobalError({
@@ -28,7 +24,7 @@ export async function PUT(req: NextRequest) {
 
 		await prisma.user.update({
 			where: {
-				id: userId,
+				id: user?.id,
 			},
 			data: {
 				password: hashedPassword,

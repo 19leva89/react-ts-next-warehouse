@@ -1,12 +1,10 @@
 'use client'
 
-import { z } from 'zod'
-import axios from 'axios'
 import Image from 'next/image'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { useTranslations } from 'next-intl'
+import { Resolver, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
@@ -21,35 +19,45 @@ import {
 } from '@/components/ui'
 import { useRouter } from '@/i18n/navigation'
 import { LocaleSwitcher } from '@/components/shared'
-import { LoginUserSchema } from '@/lib/validations/user.schema'
-
-type loginSchema = z.infer<typeof LoginUserSchema>
+import { credentialsLoginUser } from '@/actions/login'
+import { LoginSchema, TLoginValues } from '@/lib/validations/user-schema'
 
 const LoginPage = () => {
 	const router = useRouter()
 	const t = useTranslations('Login')
 
 	const [loading, setLoading] = useState<boolean>(false)
+	const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false)
 
-	const form = useForm<loginSchema>({
-		resolver: zodResolver(LoginUserSchema),
+	const form = useForm<TLoginValues>({
+		resolver: zodResolver(LoginSchema) as Resolver<TLoginValues>,
 		defaultValues: {
 			email: '',
 			password: '',
+			rememberMe: false,
 		},
 	})
 
-	const onSubmit = async (values: loginSchema) => {
+	const handleCredentialsLogin = async (data: TLoginValues) => {
+		setLoading(true)
+
 		try {
-			setLoading(true)
-			const data = {
-				email: values.email.toLowerCase(),
-				password: values.password,
+			const result = await credentialsLoginUser(data)
+
+			if (result?.error) {
+				toast.error(result.error)
+				return
 			}
 
-			const response = await axios.post('/api/auth/login', data)
+			if (result?.twoFactor) {
+				setShowTwoFactor(true)
 
-			if (response.status === 200) {
+				toast.success('Please verify your email first. We sent you a new 2FA code')
+			}
+
+			if (result?.success) {
+				toast.success('You have successfully login')
+
 				router.push('/')
 			}
 		} catch {
@@ -86,7 +94,7 @@ const LoginPage = () => {
 					<h2 className='mt-4 mb-8 text-center text-sm font-bold text-gray-400'>{t('appDescription')}</h2>
 
 					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
+						<form onSubmit={form.handleSubmit(handleCredentialsLogin)} className='w-full space-y-8'>
 							<FormField
 								control={form.control}
 								name='email'
@@ -118,6 +126,24 @@ const LoginPage = () => {
 									</FormItem>
 								)}
 							/>
+
+							{showTwoFactor && (
+								<FormField
+									control={form.control}
+									name='code'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>2FA code</FormLabel>
+
+											<FormControl>
+												<Input disabled={loading} type='password' placeholder='2FA code' {...field} />
+											</FormControl>
+
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							)}
 
 							<Button type='submit' disabled={loading} className='w-full'>
 								{t('login')}

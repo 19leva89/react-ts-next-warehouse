@@ -1,54 +1,35 @@
+import { getToken } from 'next-auth/jwt'
 import createMiddleware from 'next-intl/middleware'
 import { NextRequest, NextResponse } from 'next/server'
 
-import { verifyJWT } from '@/lib/token'
 import { routing } from '@/i18n/routing'
 
-// Utility function to extract token
-function getToken(req: NextRequest): string | undefined {
-	return req.cookies.get('token')?.value || req.headers.get('Authorization')?.replace('Bearer ', '')
-}
+const secret = process.env.AUTH_SECRET
 
 // Utility function to get locale from pathname
 function getLocaleFromPath(pathname: string): string {
-	const segments = pathname.split('/').filter(Boolean)
+	const locale = pathname.split('/')[1]
 
-	return segments[0] && routing.locales.includes(segments[0] as any) ? segments[0] : routing.defaultLocale
+	return routing.locales.includes(locale as any) ? locale : routing.defaultLocale
 }
 
 async function handleWebAuth(req: NextRequest, intlResponse?: NextResponse) {
-	const token = getToken(req)
-	const pathname = req.nextUrl.pathname
+	const { pathname, protocol } = req.nextUrl
+
+	//! Important to set secureCookie
+	const token = await getToken({ req, secret, secureCookie: protocol === 'https:' })
+	const isLoggedIn = !!token
+
 	const locale = getLocaleFromPath(pathname)
 	const isLoginPage = pathname.includes('/auth/login')
 
-	// If this is a login page and there is no token, continue
-	if (isLoginPage && !token) {
-		return intlResponse || NextResponse.next()
+	// If the user is logged in and is on the login page - redirect to the main page
+	if (isLoggedIn && isLoginPage) {
+		return NextResponse.redirect(new URL(`/${locale}`, req.url))
 	}
 
-	// If there is a token, check it
-	if (token) {
-		try {
-			const { sub } = await verifyJWT<{ sub: string }>(token)
-			const response = intlResponse || NextResponse.next()
-
-			response.headers.set('X-USER-ID', sub)
-
-			// If user is authenticated and on the login page, redirect to home
-			if (isLoginPage) {
-				return NextResponse.redirect(new URL(`/${locale}`, req.url))
-			}
-
-			return response
-		} catch {
-			// Invalid token - redirect to login
-			return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url))
-		}
-	}
-
-	// No token and not login page - redirect to login
-	if (!isLoginPage) {
+	// If the user is not logged in and not on the login page - redirect to login
+	if (!isLoggedIn && !isLoginPage) {
 		return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url))
 	}
 
@@ -61,7 +42,7 @@ export default async function middleware(req: NextRequest) {
 	const intlResponse = handleI18nRouting(req)
 
 	// If internationalization requires a redirect, return it
-	if (intlResponse?.status === 307 || intlResponse?.status === 302) {
+	if (intlResponse && [302, 307].includes(intlResponse.status)) {
 		return intlResponse
 	}
 

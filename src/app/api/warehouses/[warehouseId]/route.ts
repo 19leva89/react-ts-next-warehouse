@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import { GlobalError, SuccessResponse, UnauthorizedError } from '@/lib/helper'
+import { requireAdmin } from '@/lib/auth'
+import { GlobalError, SuccessResponse } from '@/lib/helper'
 
 interface Props {
 	params: Promise<{ warehouseId: string }>
@@ -11,19 +12,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
 	const { warehouseId } = await params
 
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || user?.role !== 'ADMIN') {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		await requireAdmin()
 
 		const body = await req.json()
 		const { name } = body
@@ -43,23 +32,11 @@ export async function PUT(req: NextRequest, { params }: Props) {
 	}
 }
 
-export async function DELETE(req: NextRequest, { params }: Props) {
+export async function DELETE(_req: NextRequest, { params }: Props) {
 	const { warehouseId } = await params
 
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || user?.role !== 'ADMIN') {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		await requireAdmin()
 
 		await prisma.warehouse.delete({
 			where: {

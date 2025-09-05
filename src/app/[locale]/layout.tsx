@@ -5,7 +5,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl'
 
 import { routing } from '@/i18n/routing'
 import { constructMetadata } from '@/lib'
-import { ToasterProvider } from '@/providers/toaster-provider'
+import { SessionProvider, ToasterProvider } from '@/providers'
 
 import './globals.css'
 
@@ -37,9 +37,10 @@ export default async function LocaleLayout({ children, params }: Props) {
 		<html lang={locale}>
 			<body className={nunito.variable}>
 				<NextIntlClientProvider>
-					{children}
-
-					<ToasterProvider />
+					<SessionProvider>
+						{children}
+						<ToasterProvider />
+					</SessionProvider>
 				</NextIntlClientProvider>
 			</body>
 		</html>

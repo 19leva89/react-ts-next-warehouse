@@ -3,7 +3,7 @@
 Authentication and User Management:
 - Bcrypt.ts (password hashing)
 - Firebase (storage)
-- jose (JWT)
+- NextAuth 5 (authentication)
 
 Core Technologies:
 - React 19

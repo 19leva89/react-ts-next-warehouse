@@ -1,24 +1,18 @@
-import { cookies } from 'next/headers'
+import { User } from 'next-auth'
+import { Warehouse } from '@prisma/client'
 
-import { prisma } from '@/lib/prisma'
-import { LocaleSwitcher, MainNav, WarehouseSwitcher } from '@/components/shared'
-import { UserButton } from './user-button'
+import { LocaleSwitcher, MainNav, UserButton, WarehouseSwitcher } from '@/components/shared'
 
-export const Navbar = async () => {
-	const userId = (await cookies()).get('userId')?.value
+interface Props {
+	warehouses: Warehouse[]
+	user: User
+}
 
-	const user = await prisma.user.findFirst({
-		where: {
-			id: userId,
-		},
-	})
-
-	const warehouses = await prisma.warehouse.findMany()
-
+export const Navbar = ({ warehouses, user }: Props) => {
 	return (
 		<div className='border-b'>
 			<div className='flex h-16 items-center px-4'>
-				<WarehouseSwitcher items={warehouses} user={user!} />
+				<WarehouseSwitcher items={warehouses} user={user} />
 
 				<MainNav className='mx-6' />
 

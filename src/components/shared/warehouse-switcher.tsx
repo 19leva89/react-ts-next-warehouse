@@ -1,9 +1,10 @@
 'use client'
 
+import { User } from 'next-auth'
+import { Warehouse } from '@prisma/client'
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Warehouse, User } from '@prisma/client'
-import React, { ComponentPropsWithoutRef, useState } from 'react'
+import { ComponentPropsWithoutRef, useState } from 'react'
 import { CheckIcon, ChevronsUpDownIcon, PlusCircleIcon, SettingsIcon, WarehouseIcon } from 'lucide-react'
 
 import {
@@ -34,8 +35,8 @@ interface Props extends PopoverTriggerProps {
 export const WarehouseSwitcher = ({ items, user, className }: Props) => {
 	const params = useParams()
 	const router = useRouter()
-	const warehouseList = useWarehouseList()
 	const t = useTranslations('Warehouse')
+	const warehouseList = useWarehouseList()
 	const WarehouseModal = useAddWarehouseModal()
 
 	const formattedItems = items.map((item) => ({

@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import { GlobalError, SuccessResponse, UnauthorizedError } from '@/lib/helper'
+import { requireAdminOrSales } from '@/lib/auth'
+import { GlobalError, SuccessResponse } from '@/lib/helper'
 
 interface Props {
 	params: Promise<{ warehouseId: string }>
@@ -45,19 +46,7 @@ export async function POST(req: NextRequest, { params }: Props) {
 	const { warehouseId } = await params
 
 	try {
-		const userId = req.cookies.get('userId')?.value
-
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-		})
-
-		if (!userId || (user?.role !== 'ADMIN' && user?.role !== 'SALES_MANAGER')) {
-			return UnauthorizedError({
-				message: 'You are not authorized to access this resource',
-			})
-		}
+		const user = await requireAdminOrSales()
 
 		const body = await req.json()
 		const { customerId, productId, quantity, saleDate } = body
@@ -101,7 +90,7 @@ export async function POST(req: NextRequest, { params }: Props) {
 				saleDate: saleDate,
 				customerId,
 				warehouseId,
-				userId,
+				userId: user.id,
 				productId: productId,
 			},
 		})
