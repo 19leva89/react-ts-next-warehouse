@@ -56,7 +56,7 @@ function Button({
 			// If two parts are passed (icon + text), replace the first one with Loader2
 			content = (
 				<>
-					<Loader2Icon className='size-5 animate-spin text-white' />
+					<Loader2Icon className='size-5 animate-spin text-current' />
 					{childArray[1]}
 				</>
 			)
@@ -64,7 +64,7 @@ function Button({
 			// If there is no icon, just add Loader2 to the left
 			content = (
 				<>
-					<Loader2Icon className='size-5 animate-spin text-white' />
+					<Loader2Icon className='size-5 animate-spin text-current' />
 					{children}
 				</>
 			)

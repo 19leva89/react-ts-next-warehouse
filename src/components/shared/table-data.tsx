@@ -181,7 +181,7 @@ export function DataTable<TData, TValue>({
 
 			{/* Pagination */}
 			<div className='w-full'>
-				<div className='flex items-center justify-end space-x-2'>
+				<div className='flex items-center justify-end gap-2'>
 					<Button
 						variant='outline'
 						size='sm'

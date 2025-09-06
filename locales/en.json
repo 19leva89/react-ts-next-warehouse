@@ -7,16 +7,32 @@
     "salesManager": "Sales manager",
     "viewer": "Viewer",
     "refresh": "Refresh",
-    "refreshing": "Refreshing"
+    "refreshing": "Refreshing",
+		"invalidImageType": "The file must be an image",
+		"invalidImageSize": "The image size must be less than ",
+		"imagePlaceholderFormat": "Supported formats: JPG, PNG, GIF (max. "
   },
-  "Login": {
+  "Auth": {
     "appName": "Warehouse Management",
     "appDescription": "Manage your warehouse warehouse with ease",
     "emailPasswordError": "Email or password is incorrect",
-    "login": "Login"
-  },
-  "Logout": {
-    "logoutFailed": "Logout failed. Please try again"
+    "login": "Login",
+    "confirm": "Confirm",
+    "email": "Email",
+    "password": "Password",
+    "2faCode": "2FA code",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "logoutFailed": "Logout failed. Please try again",
+    "emailInvalid": "Please enter a valid email address",
+    "emailRequired": "Email is required",
+    "nameRequired": "Enter your first and last name",
+    "passwordMinLength": "Password must be at least 8 characters long",
+    "passwordUppercase": "Password must contain at least one uppercase letter",
+    "passwordLowercase": "Password must contain at least one lowercase letter",
+    "passwordDigit": "Password must contain at least one digit",
+    "passwordsNotMatch": "Passwords do not match",
+    "confirmPasswordRequired": "Please confirm your password"
   },
   "Navigation": {
     "dashboard": "Dashboard",
@@ -104,7 +120,7 @@
     "productName": "Product name",
     "productNamePlaceholder": "Enter product name...",
     "productImage": "Product image",
-    "productImagePlaceholder": "Enter product image...",
+    "productImagePlaceholder": "Add product image...",
     "productDescription": "Product description",
     "productDescriptionPlaceholder": "Enter product description...",
     "productStockThreshold": "Stock threshold",
@@ -145,7 +161,10 @@
     "saleDatePlaceholder": "Select date of sale...",
     "quantity": "Quantity",
     "quantityPlaceholder": "Enter quantity...",
-    "cancelButton": "Cancel"
+    "cancelButton": "Cancel",
+    "noResults": "No results",
+    "deliveryDate": "Delivery date",
+    "deliveryDatePlaceholder": "Select delivery date..."
   },
   "Customer": {
     "updateCustomerSuccess": "Customer updated successfully",
@@ -226,7 +245,8 @@
     "deleteUserError": "User failed to delete. Please try again",
     "profileButton": "My profile",
     "manageUserButton": "Manage user",
-    "logoutButton": "Logout"
+    "logoutButton": "Logout",
+    "noResults": "No results"
   },
   "Profile": {
     "profileUpdateSuccess": "Profile updated successfully",
@@ -251,7 +271,9 @@
     "newPasswordPlaceholder": "Enter your new password...",
     "newPasswordConfirmation": "New password confirmation",
     "newPasswordConfirmationPlaceholder": "Enter your new password confirmation...",
-    "changePasswordButton": "Change password"
+    "changePasswordButton": "Change password",
+    "twoFactorAuth": "Two-factor authentication",
+		"twoFactorAuthDescription": "Enable two-factor authentication"
   },
   "DeleteModal": {
     "title": "Delete confirmation",

@@ -30,9 +30,11 @@ export const Sold = () => {
 	const handleRefresh = async () => {
 		setRefreshing(true)
 
-		await getSold()
-
-		setRefreshing(false)
+		try {
+			await getSold()
+		} finally {
+			setRefreshing(false)
+		}
 	}
 
 	useEffect(() => {

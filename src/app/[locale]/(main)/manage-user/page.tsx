@@ -10,25 +10,11 @@ import { useEffect, useState } from 'react'
 import { User2Icon, UsersIcon } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import {
-	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Separator,
-} from '@/components/ui'
 import { UserTile } from './_components/user-tile'
 import { useUserModal } from '@/hooks/use-user-modal'
 import { useRoleOptions } from '@/hooks/use-role-option'
+import { Button, Form, Separator } from '@/components/ui'
+import { FormCombobox, FormInput } from '@/components/shared/form'
 import { Heading, LoadingIndicator, Subheading } from '@/components/shared'
 
 const userFormSchema = z.object({
@@ -137,6 +123,7 @@ const ManageUserPage = () => {
 
 									<Separator />
 								</>
+
 								{users
 									.filter((user) => user.role === 'PRODUCT_MANAGER')
 									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, t }))}
@@ -154,6 +141,7 @@ const ManageUserPage = () => {
 
 									<Separator />
 								</>
+
 								{users
 									.filter((user) => user.role === 'SALES_MANAGER')
 									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, t }))}
@@ -171,6 +159,7 @@ const ManageUserPage = () => {
 
 									<Separator />
 								</>
+
 								{users
 									.filter((user) => user.role === 'VIEWER')
 									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, t }))}
@@ -187,121 +176,48 @@ const ManageUserPage = () => {
 
 						<Form {...userForm}>
 							<form className='space-y-4' onSubmit={userForm.handleSubmit(handleAddUser)}>
-								<FormField
-									control={userForm.control}
+								<FormInput
 									name='name'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('userName')}</FormLabel>
-
-											<FormControl>
-												<Input
-													disabled={formLoading}
-													type='text'
-													placeholder={t('userNamePlaceholder')}
-													{...field}
-												/>
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='text'
+									label={t('userName')}
+									placeholder={t('userNamePlaceholder')}
+									required
 								/>
 
-								<FormField
-									control={userForm.control}
+								<FormInput
 									name='email'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('userEmail')}</FormLabel>
-
-											<FormControl>
-												<Input
-													disabled={formLoading}
-													type='email'
-													placeholder={t('userEmailPlaceholder')}
-													{...field}
-												/>
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='email'
+									label={t('userEmail')}
+									placeholder={t('userEmailPlaceholder')}
+									required
 								/>
 
-								<FormField
-									control={userForm.control}
+								<FormCombobox
 									name='role'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('userRole')}</FormLabel>
-
-											<Select
-												onValueChange={field.onChange}
-												defaultValue={field.value}
-												value={field.value}
-												disabled={formLoading}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder={t('userRolePlaceholder')} />
-													</SelectTrigger>
-												</FormControl>
-
-												<SelectContent>
-													{roleOptions.map((role) => (
-														<SelectItem key={role.value} value={role.value}>
-															{role.label}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									label={t('userRole')}
+									placeholder={t('userRolePlaceholder')}
+									noResultsText={t('noResults')}
+									selectPlaceholder={t('userRolePlaceholder')}
+									valueKey='value'
+									labelKey='label'
+									mapTable={roleOptions}
+									required
 								/>
 
-								<FormField
-									control={userForm.control}
+								<FormInput
 									name='password'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('userPassword')}</FormLabel>
-
-											<FormControl>
-												<Input
-													disabled={formLoading}
-													type='password'
-													placeholder={t('userPasswordPlaceholder')}
-													{...field}
-												/>
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='password'
+									label={t('userPassword')}
+									placeholder={t('userPasswordPlaceholder')}
+									required
 								/>
 
-								<FormField
-									control={userForm.control}
+								<FormInput
 									name='confirmPassword'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('userPasswordConfirmation')}</FormLabel>
-
-											<FormControl>
-												<Input
-													disabled={formLoading}
-													type='password'
-													placeholder={t('userPasswordConfirmationPlaceholder')}
-													{...field}
-												/>
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='password'
+									label={t('userPasswordConfirmation')}
+									placeholder={t('userPasswordConfirmationPlaceholder')}
+									required
 								/>
 
 								<Button type='submit' disabled={formLoading} className='w-full'>

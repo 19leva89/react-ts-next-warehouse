@@ -2,7 +2,7 @@
 
 import { toast } from 'sonner'
 import { signOut } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 import {
 	DropdownMenuContent,
@@ -18,16 +18,19 @@ interface Props {
 
 export const DropdownContent = ({ name }: Props) => {
 	const router = useRouter()
-	const t = useTranslations('ManageUser')
+	const locale = useLocale()
+
+	const tAuth = useTranslations('Auth')
+	const tUser = useTranslations('ManageUser')
 	const tProducts = useTranslations('Products')
 
 	const handleLogout = async () => {
 		try {
-			await signOut({ callbackUrl: '/auth/login' })
+			await signOut({ callbackUrl: `/${locale}/auth/login` })
 		} catch (error) {
-			console.log(error)
+			console.error(error)
 
-			toast.error(t('logoutFailed'))
+			toast.error(tAuth('logoutFailed'))
 		}
 	}
 
@@ -42,7 +45,7 @@ export const DropdownContent = ({ name }: Props) => {
 					router.push('/profile')
 				}}
 			>
-				{t('profileButton')}
+				{tUser('profileButton')}
 			</DropdownMenuItem>
 
 			<DropdownMenuItem
@@ -50,7 +53,7 @@ export const DropdownContent = ({ name }: Props) => {
 					router.push('/manage-user')
 				}}
 			>
-				{t('manageUserButton')}
+				{tUser('manageUserButton')}
 			</DropdownMenuItem>
 
 			<DropdownMenuItem
@@ -61,7 +64,7 @@ export const DropdownContent = ({ name }: Props) => {
 				{tProducts('productsButton')}
 			</DropdownMenuItem>
 
-			<DropdownMenuItem onClick={handleLogout}>{t('logoutButton')}</DropdownMenuItem>
+			<DropdownMenuItem onClick={handleLogout}>{tUser('logoutButton')}</DropdownMenuItem>
 		</DropdownMenuContent>
 	)
 }

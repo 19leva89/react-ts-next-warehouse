@@ -8,27 +8,12 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import {
-	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-	Label,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Switch,
-} from '@/components/ui'
 import { useRouter } from '@/i18n/navigation'
 import { Modal } from '@/components/shared/modals'
 import { useUserModal } from '@/hooks/use-user-modal'
 import { useRoleOptions } from '@/hooks/use-role-option'
+import { Button, Form, Label, Switch } from '@/components/ui'
+import { FormCombobox, FormInput } from '@/components/shared/form'
 
 const userProfileFormSchema = z.object({
 	name: z.string().min(1),
@@ -137,64 +122,32 @@ export const UserModal = () => {
 					<div className='space-y-4'>
 						<Form {...userProfileForm}>
 							<form className='space-y-4'>
-								<FormField
-									control={userProfileForm.control}
+								<FormInput
 									name='name'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('userName')}</FormLabel>
-
-											<FormControl>
-												<Input disabled={loading} placeholder={t('userNamePlaceholder')} {...field} />
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='text'
+									label={t('userName')}
+									placeholder={t('userNamePlaceholder')}
+									required
 								/>
 
-								<FormField
-									control={userProfileForm.control}
+								<FormInput
 									name='email'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('userEmail')}</FormLabel>
-
-											<FormControl>
-												<Input disabled={loading} placeholder={t('userEmailPlaceholder')} {...field} />
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='email'
+									label={t('userEmail')}
+									placeholder={t('userEmailPlaceholder')}
+									required
 								/>
 
-								<FormField
-									control={userProfileForm.control}
+								<FormCombobox
 									name='role'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('userRole')}</FormLabel>
-
-											<Select onValueChange={field.onChange} defaultValue={field.value}>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder={t('userRolePlaceholder')} />
-													</SelectTrigger>
-												</FormControl>
-
-												<SelectContent>
-													{roleOptions.map((role) => (
-														<SelectItem value={role.value} key={role.value}>
-															{role.label}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									label={t('userRole')}
+									placeholder={t('userRolePlaceholder')}
+									noResultsText={t('noResults')}
+									selectPlaceholder={t('userRolePlaceholder')}
+									valueKey='value'
+									labelKey='label'
+									mapTable={roleOptions}
+									required
 								/>
 							</form>
 						</Form>
@@ -208,46 +161,26 @@ export const UserModal = () => {
 						{updatePassword && (
 							<Form {...userPasswordForm}>
 								<form className='space-y-4'>
-									<FormField
-										control={userPasswordForm.control}
+									<FormInput
 										name='password'
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>{t('newPassword')}</FormLabel>
-
-												<FormControl>
-													<Input disabled={loading} placeholder={t('newPasswordPlaceholder')} {...field} />
-												</FormControl>
-
-												<FormMessage />
-											</FormItem>
-										)}
+										type='password'
+										label={t('newPassword')}
+										placeholder={t('newPasswordPlaceholder')}
+										required
 									/>
 
-									<FormField
-										control={userPasswordForm.control}
+									<FormInput
 										name='confirmPassword'
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>{t('newPasswordConfirmation')}</FormLabel>
-
-												<FormControl>
-													<Input
-														disabled={loading}
-														placeholder={t('newPasswordConfirmationPlaceholder')}
-														{...field}
-													/>
-												</FormControl>
-
-												<FormMessage />
-											</FormItem>
-										)}
+										type='password'
+										label={t('newPasswordConfirmation')}
+										placeholder={t('newPasswordConfirmationPlaceholder')}
+										required
 									/>
 								</form>
 							</Form>
 						)}
 
-						<div className='flex w-full items-center justify-end space-x-2 pt-6'>
+						<div className='flex w-full items-center justify-end gap-2 pt-6'>
 							<Button variant='outline' disabled={loading} onClick={userWarehouse.onClose}>
 								{t('cancelButton')}
 							</Button>

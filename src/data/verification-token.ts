@@ -1,9 +1,13 @@
+import crypto from 'crypto'
+
 import { prisma } from '@/lib/prisma'
 
 export const getVerificationTokenByToken = async (token: string) => {
 	try {
+		const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
+
 		const verificationToken = await prisma.verificationToken.findUnique({
-			where: { token },
+			where: { token: tokenHash },
 		})
 
 		return verificationToken

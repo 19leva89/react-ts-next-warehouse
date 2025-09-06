@@ -39,9 +39,11 @@ export const Rank = () => {
 	const handleRefresh = async () => {
 		setRefreshing(true)
 
-		await getRank()
-
-		setRefreshing(false)
+		try {
+			await getRank()
+		} finally {
+			setRefreshing(false)
+		}
 	}
 
 	useEffect(() => {

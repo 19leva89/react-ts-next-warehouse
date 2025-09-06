@@ -15,6 +15,8 @@ export const getCurrentUser = async () => {
 			role: true,
 			email: true,
 			name: true,
+			isTwoFactorEnabled: true,
+			accounts: true,
 		},
 	})
 
@@ -35,6 +37,7 @@ export const getCurrentUserWithPassword = async () => {
 			role: true,
 			email: true,
 			name: true,
+			isTwoFactorEnabled: true,
 			password: true,
 		},
 	})

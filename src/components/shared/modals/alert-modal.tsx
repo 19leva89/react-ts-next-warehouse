@@ -28,7 +28,7 @@ export const AlertModal = ({ isOpen, loading, onClose, onConfirm }: Props) => {
 
 	return (
 		<Modal title={t('title')} description={t('description')} isOpen={isOpen} onClose={onClose}>
-			<div className='flex w-full items-center justify-end space-x-2 pt-6'>
+			<div className='flex w-full items-center justify-end gap-2 pt-6'>
 				<Button variant='outline' onClick={onClose} disabled={loading}>
 					{t('cancelButton')}
 				</Button>

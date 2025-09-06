@@ -5,14 +5,14 @@ import { getUserByEmail } from '@/data/user'
 
 import { saltAndHashPassword } from '@/lib/salt'
 import { getPasswordResetTokenByToken } from '@/data/password-reset-token'
-import { NewPasswordSchema, TNewPasswordValues } from '@/lib/validations/user-schema'
+import { createNewPasswordSchema, TNewPasswordValues } from '@/lib/validations/user-schema'
 
 export const newPassword = async (values: TNewPasswordValues, token?: string | null) => {
 	if (!token) {
 		return { error: 'Missing token!' }
 	}
 
-	const validatedFields = NewPasswordSchema.safeParse(values)
+	const validatedFields = createNewPasswordSchema((key: string) => key).safeParse(values)
 
 	if (!validatedFields.success) {
 		return { error: 'Invalid fields!' }

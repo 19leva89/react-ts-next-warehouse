@@ -1,6 +1,7 @@
 export { Avatar, AvatarImage, AvatarFallback } from './avatar'
 export { Button, buttonVariants } from './button'
 export { Calendar } from './calendar'
+export { Checkbox } from './checkbox'
 export {
 	Command,
 	CommandEmpty,
@@ -38,5 +39,6 @@ export { Separator } from './separator'
 export { Switch } from './switch'
 export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell } from './table'
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
+export { Textarea } from './textarea'
 export { Toaster } from './sonner'
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from './tooltip'
