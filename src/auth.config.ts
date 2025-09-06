@@ -5,7 +5,7 @@ import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
 
 import { getUserByEmail } from '@/data/user'
-import { LoginSchema } from '@/lib/validations/user-schema'
+import { createLoginSchema } from '@/lib/validations/user-schema'
 
 export default {
 	providers: [
@@ -25,7 +25,7 @@ export default {
 			},
 			async authorize(credentials) {
 				try {
-					const validatedFields = LoginSchema.safeParse(credentials)
+					const validatedFields = createLoginSchema((key: string) => key).safeParse(credentials)
 
 					if (!validatedFields.success) {
 						throw new Error('Invalid fields')

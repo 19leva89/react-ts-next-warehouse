@@ -31,7 +31,7 @@ export const MainNav = ({ className, ...props }: HTMLAttributes<HTMLElement>) =>
 	]
 
 	return (
-		<nav className={cn('flex items-center space-x-4 lg:space-x-6', className)} {...props}>
+		<nav className={cn('flex items-center gap-4 lg:gap-6', className)} {...props}>
 			{routes.map((route) => (
 				<Link
 					key={route.href}

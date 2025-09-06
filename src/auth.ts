@@ -108,8 +108,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
 			if (!token.sub) return token
 
-			// Emulate sliding window: bump exp when updateAge (1 day) has elapsed.
-			if (token.iat && token.exp && now - token.iat >= ONE_DAY) {
+			// Emulate sliding window: bump exp when updateAge (1 day) has elapsed, and only if still valid.
+			if (token.iat && token.exp && now < token.exp && now - token.iat >= ONE_DAY) {
 				token.iat = now
 				token.exp = now + ttl
 			}

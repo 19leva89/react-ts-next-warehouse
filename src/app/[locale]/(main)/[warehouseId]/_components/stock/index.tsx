@@ -32,9 +32,11 @@ export const Stock = () => {
 	const handleRefresh = async () => {
 		setRefreshing(true)
 
-		await getStock()
-
-		setRefreshing(false)
+		try {
+			await getStock()
+		} finally {
+			setRefreshing(false)
+		}
 	}
 
 	useEffect(() => {

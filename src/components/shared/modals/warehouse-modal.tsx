@@ -9,18 +9,10 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import {
-	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-} from '@/components/ui'
 import { useRouter } from '@/i18n/navigation'
+import { Button, Form } from '@/components/ui'
 import { Modal } from '@/components/shared/modals'
+import { FormInput } from '@/components/shared/form'
 import { useWarehouseList } from '@/hooks/use-warehouse-list-modal'
 import { useAddWarehouseModal } from '@/hooks/use-add-warehouse-modal'
 
@@ -104,23 +96,15 @@ export const WarehouseModal = () => {
 					<div className='space-y-2'>
 						<Form {...form}>
 							<form onSubmit={form.handleSubmit(onSubmit)}>
-								<FormField
-									control={form.control}
+								<FormInput
 									name='name'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('warehouseName')}</FormLabel>
-
-											<FormControl>
-												<Input disabled={loading} placeholder={t('warehouseNamePlaceholder')} {...field} />
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='text'
+									label={t('warehouseName')}
+									placeholder={t('warehouseNamePlaceholder')}
+									required
 								/>
 
-								<div className='flex w-full items-center justify-end space-x-2 pt-6'>
+								<div className='flex w-full items-center justify-end gap-2 pt-6'>
 									<Button variant='outline' disabled={loading} onClick={warehouseModalWarehouse.onClose}>
 										{t('cancelButton')}
 									</Button>

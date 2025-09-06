@@ -10,7 +10,7 @@ import { getTwoFactorTokenByEmail } from '@/data/two-factor-token'
 import { generateTwoFactorToken, generateVerificationToken } from '@/lib/tokens'
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation'
 // import { sendTwoFactorTokenEmail, sendVerificationEmail } from '@/lib/send-email'
-import { LoginSchema, TLoginValues } from '@/lib/validations/user-schema'
+import { createLoginSchema, TLoginValues } from '@/lib/validations/user-schema'
 
 export const loginUser = async (provider: string) => {
 	await signIn(provider, { redirectTo: '/' })
@@ -19,7 +19,7 @@ export const loginUser = async (provider: string) => {
 }
 
 export const credentialsLoginUser = async (values: TLoginValues) => {
-	const validatedFields = LoginSchema.safeParse(values)
+	const validatedFields = createLoginSchema((key: string) => key).safeParse(values)
 
 	if (!validatedFields.success) {
 		return { error: 'Invalid fields!' }

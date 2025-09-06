@@ -9,18 +9,10 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import {
-	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-} from '@/components/ui'
 import { useRouter } from '@/i18n/navigation'
+import { Button, Form } from '@/components/ui'
 import { Modal } from '@/components/shared/modals'
+import { FormInput } from '@/components/shared/form'
 import { useCustomerList } from '@/hooks/use-customer-list-modal'
 import { useAddCustomerModal } from '@/hooks/use-add-customer-modal'
 
@@ -112,23 +104,15 @@ export const AddCustomerModal = () => {
 					<div className='space-y-2'>
 						<Form {...form}>
 							<form onSubmit={form.handleSubmit(onSubmit)}>
-								<FormField
-									control={form.control}
+								<FormInput
 									name='name'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('customerName')}</FormLabel>
-
-											<FormControl>
-												<Input disabled={loading} placeholder={t('customerNamePlaceholder')} {...field} />
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='text'
+									label={t('customerName')}
+									placeholder={t('customerNamePlaceholder')}
+									required
 								/>
 
-								<div className='flex w-full items-center justify-end space-x-2 pt-6'>
+								<div className='flex w-full items-center justify-end gap-2 pt-6'>
 									<Button variant='outline' onClick={addCustomerModal.onClose} disabled={loading}>
 										{t('cancelButton')}
 									</Button>

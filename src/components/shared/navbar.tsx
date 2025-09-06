@@ -16,7 +16,7 @@ export const Navbar = ({ warehouses, user }: Props) => {
 
 				<MainNav className='mx-6' />
 
-				<div className='ml-auto flex items-center space-x-4'>
+				<div className='ml-auto flex items-center gap-4'>
 					<LocaleSwitcher />
 
 					<UserButton />

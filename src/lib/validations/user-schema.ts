@@ -1,55 +1,69 @@
 import { z } from 'zod'
 
-const errMsg = {
-	email: 'Please enter a valid email address',
-	name: 'Enter your first and last name',
-	confirmPassword: 'Passwords do not match',
+export const createLoginSchema = (t: (key: string) => string) => {
+	const passwordSchema = z
+		.string()
+		.min(8, { message: t('passwordMinLength') })
+		.regex(/[A-Z]/, { message: t('passwordUppercase') })
+		.regex(/[a-z]/, { message: t('passwordLowercase') })
+		.regex(/\d/, { message: t('passwordDigit') })
+
+	return z.object({
+		email: z.email({ message: t('emailInvalid') }),
+		password: passwordSchema,
+		code: z.optional(z.string()),
+		rememberMe: z.preprocess((val) => (typeof val === 'string' ? val === 'true' : val), z.boolean()),
+	})
 }
 
-// Scheme for password
-const passwordSchema = z
-	.string()
-	.min(8, { message: 'Password must be at least 8 characters long' })
-	.regex(/[A-Z]/, { message: 'Password must contain at least one uppercase letter' })
-	.regex(/[a-z]/, { message: 'Password must contain at least one lowercase letter' })
-	.regex(/\d/, { message: 'Password must contain at least one digit' })
+export const createRegisterSchema = (t: (key: string) => string) => {
+	const passwordSchema = z
+		.string()
+		.min(8, { message: t('passwordMinLength') })
+		.regex(/[A-Z]/, { message: t('passwordUppercase') })
+		.regex(/[a-z]/, { message: t('passwordLowercase') })
+		.regex(/\d/, { message: t('passwordDigit') })
 
-// Scheme for login
-export const LoginSchema = z.object({
-	email: z.email({ message: errMsg.email }),
-	password: passwordSchema,
-	code: z.optional(z.string()),
-	rememberMe: z.preprocess((val) => (typeof val === 'string' ? val === 'true' : val), z.boolean()),
-})
+	return createLoginSchema(t)
+		.omit({ rememberMe: true })
+		.extend({
+			name: z.string().min(2, { message: t('nameRequired') }),
+			confirmPassword: passwordSchema,
+		})
+		.refine((data) => data.password === data.confirmPassword, {
+			message: t('passwordsNotMatch'),
+			path: ['confirmPassword'],
+		})
+}
 
-// Scheme for registration
-export const RegisterSchema = LoginSchema.omit({ rememberMe: true })
-	.extend({
-		name: z.string().min(2, { message: errMsg.name }),
-		confirmPassword: passwordSchema,
+export const createNewPasswordSchema = (t: (key: string) => string) => {
+	const passwordSchema = z
+		.string()
+		.min(8, { message: t('passwordMinLength') })
+		.regex(/[A-Z]/, { message: t('passwordUppercase') })
+		.regex(/[a-z]/, { message: t('passwordLowercase') })
+		.regex(/\d/, { message: t('passwordDigit') })
+
+	return z
+		.object({
+			password: passwordSchema,
+			confirmPassword: z.string().min(1, { message: t('confirmPasswordRequired') }),
+		})
+		.refine((data) => data.password === data.confirmPassword, {
+			message: t('passwordsNotMatch'),
+			path: ['confirmPassword'],
+		})
+}
+
+export const createResetSchema = (t: (key: string) => string) => {
+	return z.object({
+		email: z.email({
+			message: t('emailRequired'),
+		}),
 	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: errMsg.confirmPassword,
-		path: ['confirmPassword'],
-	})
+}
 
-export const NewPasswordSchema = z
-	.object({
-		password: passwordSchema,
-		confirmPassword: z.string().min(1, { message: 'Please confirm your password' }),
-	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: errMsg.confirmPassword,
-		path: ['confirmPassword'],
-	})
-
-export const ResetSchema = z.object({
-	email: z.email({
-		message: 'Email is required',
-	}),
-})
-
-export type TLoginValues = z.infer<typeof LoginSchema>
-export type TRegisterValues = z.infer<typeof RegisterSchema>
-export type TNewPasswordValues = z.infer<typeof NewPasswordSchema>
-export type TResetValues = z.infer<typeof ResetSchema>
+export type TLoginValues = z.infer<ReturnType<typeof createLoginSchema>>
+export type TRegisterValues = z.infer<ReturnType<typeof createRegisterSchema>>
+export type TNewPasswordValues = z.infer<ReturnType<typeof createNewPasswordSchema>>
+export type TResetValues = z.infer<ReturnType<typeof createResetSchema>>

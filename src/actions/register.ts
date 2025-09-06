@@ -6,11 +6,11 @@ import { handleError } from '@/lib/handle-error'
 import { saltAndHashPassword } from '@/lib/salt'
 // import { sendVerificationEmail } from '@/lib/send-email'
 import { generateVerificationToken } from '@/lib/tokens'
-import { RegisterSchema, TRegisterValues } from '@/lib/validations/user-schema'
+import { createRegisterSchema, TRegisterValues } from '@/lib/validations/user-schema'
 
 export const registerUser = async (values: TRegisterValues) => {
 	try {
-		const validatedFields = RegisterSchema.safeParse(values)
+		const validatedFields = createRegisterSchema((key: string) => key).safeParse(values)
 		if (!validatedFields.success) {
 			return { error: 'Invalid fields!' }
 		}

@@ -3,10 +3,10 @@
 import { getUserByEmail } from '@/data/user'
 // import { sendPasswordResetEmail } from '@/lib/send-email'
 import { generatePasswordResetToken } from '@/lib/tokens'
-import { ResetSchema, TResetValues } from '@/lib/validations/user-schema'
+import { createResetSchema, TResetValues } from '@/lib/validations/user-schema'
 
 export const resetPassword = async (values: TResetValues) => {
-	const validatedFields = ResetSchema.safeParse(values)
+	const validatedFields = createResetSchema((key: string) => key).safeParse(values)
 
 	if (!validatedFields.success) {
 		return { error: 'Invalid emaiL!' }

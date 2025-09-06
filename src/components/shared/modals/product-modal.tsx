@@ -9,20 +9,12 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import {
-	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-} from '@/components/ui'
 import { useRouter } from '@/i18n/navigation'
+import { Button, Form } from '@/components/ui'
 import { useProduct } from '@/hooks/use-product'
 import { Modal } from '@/components/shared/modals'
 import { useProductModal } from '@/hooks/use-product-modal'
+import { FormImage, FormInput, FormTextarea } from '@/components/shared/form'
 
 const formSchema = z.object({
 	id: z.string().min(1),
@@ -136,106 +128,48 @@ export const ProductModal = () => {
 					<div className='space-y-2'>
 						<Form {...form}>
 							<form className='space-y-4'>
-								<FormField
-									control={form.control}
+								<FormInput
 									name='name'
-									defaultValue={productWarehouse.productData?.name}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('productName')}</FormLabel>
-
-											<FormControl>
-												<Input disabled={loading} placeholder={t('productNamePlaceholder')} {...field} />
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='text'
+									label={t('productName')}
+									placeholder={t('productNamePlaceholder')}
+									required
 								/>
 
-								<FormItem>
-									<FormLabel>{t('productImage')}</FormLabel>
-
-									<FormControl>
-										<Input
-											name='image'
-											type='file'
-											accept='image/*'
-											disabled={loading}
-											placeholder={t('productImagePlaceholder')}
-											onChange={(event: any) => {
-												setFile(event.target.files?.[0] ?? null)
-											}}
-											className='cursor-pointer file:cursor-pointer'
-										/>
-									</FormControl>
-
-									<FormMessage />
-								</FormItem>
-
-								<FormField
-									control={form.control}
-									name='description'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('productDescription')}</FormLabel>
-
-											<FormControl>
-												<Input
-													disabled={loading}
-													placeholder={t('productDescriptionPlaceholder')}
-													{...field}
-												/>
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+								<FormImage
+									name='image'
+									label={t('productImage')}
+									placeholder={t('productImagePlaceholder')}
+									required
+									maxSize={2 * 1024 * 1024} // 2MB
+									onFileChange={(file) => {
+										setFile(file)
+									}}
 								/>
 
-								<FormField
-									control={form.control}
+								<FormInput
 									name='stock'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('productStock')}</FormLabel>
-
-											<FormControl>
-												<Input
-													disabled={loading}
-													placeholder={t('productStockPlaceholder')}
-													type='number'
-													{...field}
-												/>
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='number'
+									label={t('productStock')}
+									placeholder={t('productStockPlaceholder')}
+									required
 								/>
 
-								<FormField
-									control={form.control}
+								<FormInput
 									name='stockThreshold'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('productStockThreshold')}</FormLabel>
-
-											<FormControl>
-												<Input
-													disabled={loading}
-													placeholder={t('productStockThresholdPlaceholder')}
-													type='number'
-													{...field}
-												/>
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='number'
+									label={t('productStockThreshold')}
+									placeholder={t('productStockThresholdPlaceholder')}
+									required
 								/>
 
-								<div className='flex w-full items-center justify-end space-x-2 pt-6'>
+								<FormTextarea
+									name='description'
+									label={t('productDescription')}
+									placeholder={t('productDescriptionPlaceholder')}
+								/>
+
+								<div className='flex w-full items-center justify-end gap-2 pt-6'>
 									<Button
 										variant='outline'
 										disabled={loading}

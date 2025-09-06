@@ -7,24 +7,17 @@ import { useTranslations } from 'next-intl'
 import { Resolver, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import {
-	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-} from '@/components/ui'
-import { useRouter } from '@/i18n/navigation'
+import { Button, Form } from '@/components/ui'
+import { Link, useRouter } from '@/i18n/navigation'
 import { LocaleSwitcher } from '@/components/shared'
 import { credentialsLoginUser } from '@/actions/login'
-import { LoginSchema, TLoginValues } from '@/lib/validations/user-schema'
+import { FormCheckbox, FormInput } from '@/components/shared/form'
+import { createLoginSchema, TLoginValues } from '@/lib/validations/user-schema'
 
 const LoginPage = () => {
 	const router = useRouter()
-	const t = useTranslations('Login')
+	const t = useTranslations('Auth')
+	const LoginSchema = createLoginSchema(t)
 
 	const [loading, setLoading] = useState<boolean>(false)
 	const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false)
@@ -94,59 +87,21 @@ const LoginPage = () => {
 					<h2 className='mt-4 mb-8 text-center text-sm font-bold text-gray-400'>{t('appDescription')}</h2>
 
 					<Form {...form}>
-						<form onSubmit={form.handleSubmit(handleCredentialsLogin)} className='w-full space-y-8'>
-							<FormField
-								control={form.control}
-								name='email'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Email</FormLabel>
+						<form onSubmit={form.handleSubmit(handleCredentialsLogin)} className='w-full space-y-6'>
+							<FormInput name='email' type='email' placeholder={t('email')} required />
 
-										<FormControl>
-											<Input disabled={loading} placeholder='Email' {...field} />
-										</FormControl>
+							<FormInput name='password' type='password' placeholder={t('password')} required />
 
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+							{showTwoFactor && <FormInput name='code' type='password' placeholder={t('2faCode')} required />}
 
-							<FormField
-								control={form.control}
-								name='password'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Password</FormLabel>
-
-										<FormControl>
-											<Input disabled={loading} type='password' placeholder='Password' {...field} />
-										</FormControl>
-
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							{showTwoFactor && (
-								<FormField
-									control={form.control}
-									name='code'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>2FA code</FormLabel>
-
-											<FormControl>
-												<Input disabled={loading} type='password' placeholder='2FA code' {...field} />
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							)}
+							<FormCheckbox name='rememberMe' label={t('rememberMe')} className='mt-2' required={false} />
 
 							<Button type='submit' disabled={loading} className='w-full'>
-								{t('login')}
+								{showTwoFactor ? t('confirm') : t('login')}
+							</Button>
+
+							<Button asChild size='sm' variant='link' className='px-0 font-normal'>
+								<Link href='/auth/reset'>{t('forgotPassword')}</Link>
 							</Button>
 						</form>
 					</Form>

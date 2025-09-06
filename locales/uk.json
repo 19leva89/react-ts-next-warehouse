@@ -7,16 +7,32 @@
     "salesManager": "Менеджер продаж",
     "viewer": "Глядач",
     "refresh": "Оновити",
-    "refreshing": "Оновлення"
+    "refreshing": "Оновлення",
+		"invalidImageType": "Файл має бути зображенням",
+		"invalidImageSize": "Розмір зображення повинен бути меншим за ",
+		"imagePlaceholderFormat": "Формати, що підтримуються: JPG, PNG, GIF (макс. "
   },
-  "Login": {
+  "Auth": {
     "appName": "Управління складом",
     "appDescription": "Керуйте складом вашого складу з легкістю",
     "emailPasswordError": "Email або пароль невірний",
-    "login": "Увійти"
-  },
-  "Logout": {
-    "logoutFailed": "Не вдалося вийти з системи. Спробуйте ще раз"
+    "login": "Увійти",
+    "confirm": "Підтвердити",
+    "email": "Email",
+    "password": "Пароль",
+    "2faCode": "2FA код",
+    "rememberMe": "Запам'ятати мене",
+    "forgotPassword": "Забули пароль?",
+    "logoutFailed": "Не вдалося вийти з системи. Спробуйте ще раз",
+    "emailInvalid": "Будь ласка, введіть дійсну email адресу",
+    "emailRequired": "Email є обов'язковим",
+    "nameRequired": "Введіть ваше ім'я та прізвище",
+    "passwordMinLength": "Пароль повинен містити принаймні 8 символів",
+    "passwordUppercase": "Пароль повинен містити принаймні одну велику літеру",
+    "passwordLowercase": "Пароль повинен містити принаймні одну малу літеру",
+    "passwordDigit": "Пароль повинен містити принаймні одну цифру",
+    "passwordsNotMatch": "Паролі не співпадають",
+    "confirmPasswordRequired": "Будь ласка, підтвердіть ваш пароль"
   },
   "Navigation": {
     "dashboard": "Панель управління",
@@ -104,7 +120,7 @@
     "productName": "Назва товару",
     "productNamePlaceholder": "Введіть назву товару...",
     "productImage": "Зображення товару",
-    "productImagePlaceholder": "Введіть зображення товару...",
+    "productImagePlaceholder": "Додайте зображення товару...",
     "productDescription": "Опис товару",
     "productDescriptionPlaceholder": "Введіть опис товару...",
     "productStockThreshold": "Поріг залишків",
@@ -145,7 +161,10 @@
     "saleDatePlaceholder": "Оберіть дату продажу...",
     "quantity": "Кількість",
     "quantityPlaceholder": "Введіть кількість...",
-    "cancelButton": "Скасувати"
+    "cancelButton": "Скасувати",
+    "noResults": "Немає результатів",
+    "deliveryDate": "Дата доставки",
+    "deliveryDatePlaceholder": "Оберіть дату доставки..."
   },
   "Customer": {
     "updateCustomerSuccess": "Клієнта успішно оновлено",
@@ -191,8 +210,8 @@
     "adminDescription": "Адміністратор може керувати всім",
     "productManagerTitle": "Менеджер товарів",
     "productManagerDescription": "Менеджер товарів може керувати товарами",
-    "salesManagerTitle": "Менеджер продажів",
-    "salesManagerDescription": "Менеджер продажів може керувати продажами",
+    "salesManagerTitle": "Менеджер з продажу",
+    "salesManagerDescription": "Менеджер з продажу може керувати продажами",
     "viewerTitle": "Глядач",
     "viewerDescription": "Глядач може лише переглядати ваш склад",
     "addUserTitle": "Додати користувача",
@@ -226,7 +245,8 @@
     "deleteUserError": "Не вдалося видалити користувача. Спробуйте ще раз",
     "profileButton": "Мій профіль",
     "manageUserButton": "Керування користувачами",
-    "logoutButton": "Вийти"
+    "logoutButton": "Вийти",
+		"noResults": "Немає результатів"
   },
   "Profile": {
     "profileUpdateSuccess": "Профіль успішно оновлено",
@@ -251,7 +271,9 @@
     "newPasswordPlaceholder": "Введіть ваш новий пароль...",
     "newPasswordConfirmation": "Підтвердження нового паролю",
     "newPasswordConfirmationPlaceholder": "Введіть підтвердження вашого нового паролю...",
-    "changePasswordButton": "Змінити пароль"
+    "changePasswordButton": "Змінити пароль",
+    "twoFactorAuth": "Двухфакторна аутентифікація",
+		"twoFactorAuthDescription": "Увімкнути двухфакторну аутентифікацію"
   },
   "DeleteModal": {
     "title": "Підтвердження видалення",

@@ -10,9 +10,11 @@ export async function GET() {
 
 		return SuccessResponse({
 			user: {
-				name: user?.name,
-				email: user?.email,
 				role: user?.role,
+				email: user?.email,
+				name: user?.name,
+				isOAuth: user?.accounts?.length ?? 0 > 0,
+				isTwoFactorEnabled: user?.isTwoFactorEnabled,
 			},
 		})
 	} catch (error: any) {
@@ -24,22 +26,24 @@ export async function PUT(req: NextRequest) {
 	try {
 		const user = await getCurrentUser()
 
-		const { name, email } = await req.json()
+		const { name, email, isTwoFactorEnabled } = await req.json()
 
-		await prisma.user.update({
+		const updatedUser = await prisma.user.update({
 			where: {
 				id: user?.id,
 			},
 			data: {
 				name,
 				email,
+				isTwoFactorEnabled,
 			},
 		})
 
 		return SuccessResponse({
 			user: {
-				name: user?.name,
-				email: user?.email,
+				name: updatedUser.name,
+				email: updatedUser.email,
+				isTwoFactorEnabled: updatedUser.isTwoFactorEnabled,
 			},
 		})
 	} catch (error: any) {

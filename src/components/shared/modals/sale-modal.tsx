@@ -3,41 +3,20 @@
 import { z } from 'zod'
 import axios from 'axios'
 import { toast } from 'sonner'
-import { format } from 'date-fns'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'next/navigation'
-import { CalendarIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import {
-	Button,
-	Calendar,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Input,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	ScrollArea,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui'
-import { cn } from '@/lib'
 import { ProductData } from '@/lib/types'
 import { useRouter } from '@/i18n/navigation'
+import { Button, Form } from '@/components/ui'
 import { useProduct } from '@/hooks/use-product'
 import { Modal } from '@/components/shared/modals'
 import { useSaleModal } from '@/hooks/use-sale-modal'
 import { useCustomerList } from '@/hooks/use-customer-list-modal'
+import { FormCalendar, FormCombobox, FormInput } from '@/components/shared/form'
 
 const formSchema = z.object({
 	id: z.string().min(1),
@@ -161,149 +140,57 @@ export const SaleModal = () => {
 					<div className='space-y-2'>
 						<Form {...form}>
 							<form className='space-y-4'>
-								<FormField
+								<FormCombobox
 									name='customerId'
-									control={form.control}
-									defaultValue={saleModalWarehouse.saleData?.customerId}
-									render={({ field }) => (
-										<FormItem className='flex flex-col'>
-											<FormLabel>{t('customer')}</FormLabel>
-
-											<Select onValueChange={field.onChange} defaultValue={field.value} disabled={loading}>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder={t('customerPlaceholder')} />
-													</SelectTrigger>
-												</FormControl>
-
-												<SelectContent>
-													{customerListWarehouse.customerList?.map((customer) => (
-														<SelectItem value={customer.id} key={customer.id}>
-															{customer.name}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-
-											<FormMessage />
-
-											<Button
-												type='button'
-												variant='secondary'
-												onClick={() => {
-													customerListWarehouse.onOpen()
-												}}
-												className='mt-2'
-											>
-												{t('manageCustomerButton')}
-											</Button>
-										</FormItem>
-									)}
+									label={t('customer')}
+									placeholder={t('customerPlaceholder')}
+									noResultsText={t('noResults')}
+									selectPlaceholder={t('customerPlaceholder')}
+									valueKey='id'
+									labelKey='name'
+									mapTable={customerListWarehouse.customerList}
+									required
 								/>
 
-								<FormField
+								<Button
+									type='button'
+									variant='secondary'
+									onClick={() => {
+										customerListWarehouse.onOpen()
+									}}
+									className='mt-2 w-full'
+								>
+									{t('manageCustomerButton')}
+								</Button>
+
+								<FormCombobox
 									name='productId'
-									control={form.control}
-									render={({ field }) => (
-										<FormItem className='flex flex-col'>
-											<FormLabel>{t('product')}</FormLabel>
-
-											<Select onValueChange={field.onChange} defaultValue={field.value} disabled={loading}>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder={t('productPlaceholder')} />
-													</SelectTrigger>
-												</FormControl>
-
-												<SelectContent>
-													<ScrollArea className='min-h-[50px]'>
-														{products.length === 0 ? (
-															<p>{t('noProduct')}</p>
-														) : (
-															products.map((product) => (
-																<SelectItem value={product.id} key={product.id}>
-																	{product.name}
-																</SelectItem>
-															))
-														)}
-													</ScrollArea>
-												</SelectContent>
-											</Select>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									label={t('product')}
+									placeholder={t('productPlaceholder')}
+									noResultsText={t('noResults')}
+									selectPlaceholder={t('productPlaceholder')}
+									valueKey='id'
+									labelKey='name'
+									mapTable={products}
+									required
 								/>
 
-								<FormField
-									control={form.control}
+								<FormCalendar
 									name='saleDate'
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('saleDate')}</FormLabel>
-
-											<FormControl>
-												<div className='block'>
-													<Popover>
-														<PopoverTrigger asChild>
-															<Button
-																variant='outline'
-																disabled={loading}
-																className={cn(
-																	'w-full justify-start text-left font-normal',
-																	!field.value && 'text-muted-foreground',
-																)}
-															>
-																<CalendarIcon className='mr-2 size-4' />
-																{field.value ? (
-																	format(new Date(field.value), 'PPP')
-																) : (
-																	<span>{t('saleDatePlaceholder')}</span>
-																)}
-															</Button>
-														</PopoverTrigger>
-
-														<PopoverContent className='w-auto p-0'>
-															<Calendar
-																mode='single'
-																autoFocus
-																selected={field.value ? new Date(field.value) : new Date()}
-																onSelect={(date) => {
-																	if (date) field.onChange(date)
-																}}
-															/>
-														</PopoverContent>
-													</Popover>
-												</div>
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									label={t('deliveryDate')}
+									placeholder={t('deliveryDatePlaceholder')}
+									required
 								/>
 
-								<FormField
+								<FormInput
 									name='quantity'
-									control={form.control}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t('quantity')}</FormLabel>
-
-											<FormControl>
-												<Input
-													type='number'
-													disabled={loading}
-													placeholder={t('quantityPlaceholder')}
-													{...field}
-												/>
-											</FormControl>
-
-											<FormMessage />
-										</FormItem>
-									)}
+									type='number'
+									label={t('quantity')}
+									placeholder={t('quantityPlaceholder')}
+									required
 								/>
 
-								<div className='flex w-full items-center justify-end space-x-2 pt-6'>
+								<div className='flex w-full items-center justify-end gap-2 pt-6'>
 									<Button
 										variant='outline'
 										disabled={loading}
