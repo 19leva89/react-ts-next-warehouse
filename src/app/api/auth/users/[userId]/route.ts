@@ -9,11 +9,17 @@ interface Props {
 	params: Promise<{ userId: string }>
 }
 
-export async function PUT(req: NextRequest) {
+export async function PUT(req: NextRequest, { params }: Props) {
 	try {
 		await requireAdmin()
 
-		const { id, name, email, role, password, updatePassword } = await req.json()
+		const { name, email, role, password, updatePassword } = await req.json()
+		const { userId } = await params
+
+		if (!userId) {
+			return GlobalError({ message: 'Missing userId in path', errorCode: 400 })
+		}
+
 		let hashedPassword = ''
 
 		if (updatePassword) {
@@ -22,9 +28,7 @@ export async function PUT(req: NextRequest) {
 
 		if (updatePassword) {
 			await prisma.user.update({
-				where: {
-					id,
-				},
+				where: { id: userId },
 				data: {
 					name,
 					email,
@@ -40,9 +44,7 @@ export async function PUT(req: NextRequest) {
 			})
 		} else {
 			await prisma.user.update({
-				where: {
-					id,
-				},
+				where: { id: userId },
 				data: {
 					name,
 					email,

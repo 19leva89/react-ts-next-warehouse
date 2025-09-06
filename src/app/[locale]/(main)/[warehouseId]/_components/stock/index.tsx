@@ -4,11 +4,11 @@ import axios from 'axios'
 import { useParams } from 'next/navigation'
 import { PackageXIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { StockDataTable } from './data-table'
 import { StockColumn, StockColumns } from './columns'
-import { LoadingIndicator, Subheading } from '@/components/shared'
+import { LoadingIndicator, RefreshButton, Subheading } from '@/components/shared'
 
 export const Stock = () => {
 	const params = useParams()
@@ -16,24 +16,36 @@ export const Stock = () => {
 
 	const [loading, setLoading] = useState<boolean>(true)
 	const [stocks, setStocks] = useState<StockColumn[]>([])
+	const [refreshing, setRefreshing] = useState<boolean>(false)
 
-	useEffect(() => {
-		const getStocks = async () => {
+	const getStock = useCallback(async () => {
+		try {
 			const response = await axios.get(`/api/${params.warehouseId}/stocks`)
 			const data = response.data.products as StockColumn[]
 
 			setStocks(data)
+		} catch (error) {
+			console.error('Failed to fetch stocks:', error)
+		}
+	}, [params.warehouseId])
+
+	const handleRefresh = async () => {
+		setRefreshing(true)
+
+		await getStock()
+
+		setRefreshing(false)
+	}
+
+	useEffect(() => {
+		const loadInitialData = async () => {
+			await getStock()
+
 			setLoading(false)
 		}
 
-		getStocks()
-
-		const interval = setInterval(() => {
-			getStocks()
-		}, 5000)
-
-		return () => clearInterval(interval)
-	}, [params.warehouseId])
+		loadInitialData()
+	}, [getStock])
 
 	if (loading) {
 		return <LoadingIndicator />
@@ -41,7 +53,11 @@ export const Stock = () => {
 
 	return (
 		<div className='mt-4 w-full rounded-lg p-4'>
-			<Subheading icon={PackageXIcon} title={t('title')} description={t('description')} />
+			<div className='flex items-center justify-between'>
+				<Subheading icon={PackageXIcon} title={t('title')} description={t('description')} />
+
+				<RefreshButton onRefresh={handleRefresh} isRefreshing={refreshing} />
+			</div>
 
 			<div className='mt-4'>
 				{stocks.length > 0 ? (

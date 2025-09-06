@@ -1,6 +1,6 @@
 import { Loader2Icon } from 'lucide-react'
 
-const Loading = () => {
+const LoadingPage = () => {
 	return (
 		<div className='z-50 h-screen w-screen bg-white'>
 			<div className='flex h-full flex-col items-center justify-center'>
@@ -10,4 +10,4 @@ const Loading = () => {
 	)
 }
 
-export default Loading
+export default LoadingPage

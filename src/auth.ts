@@ -90,20 +90,29 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 			const now = Math.floor(Date.now() / 1000)
 			const ONE_DAY = 60 * 60 * 24
 			const SEVEN_DAYS = ONE_DAY * 7
+			const ttl = (token.rememberMe ?? true) ? SEVEN_DAYS : ONE_DAY
 
 			if (user) {
 				const rememberMe = typeof user.rememberMe === 'boolean' ? user.rememberMe : true
 
 				token.rememberMe = rememberMe
 				token.exp = now + (rememberMe ? SEVEN_DAYS : ONE_DAY)
+				token.iat = now
 			}
 
 			if (trigger === 'update' && typeof session?.rememberMe === 'boolean') {
 				token.rememberMe = session.rememberMe
 				token.exp = now + (session.rememberMe ? SEVEN_DAYS : ONE_DAY)
+				token.iat = now
 			}
 
 			if (!token.sub) return token
+
+			// Emulate sliding window: bump exp when updateAge (1 day) has elapsed.
+			if (token.iat && token.exp && now - token.iat >= ONE_DAY) {
+				token.iat = now
+				token.exp = now + ttl
+			}
 
 			const existingUser = await getUserById(token.sub)
 

@@ -69,8 +69,8 @@ const LoginPage = () => {
 
 	return (
 		<section id='background' className='flex h-screen w-screen items-center justify-center bg-slate-600'>
-			<div id='box' className='flex w-full flex-col px-8 md:h-3/4 md:w-1/2 md:flex-row'>
-				<div id='image' className='rounded-l-xl bg-accent md:h-full md:w-1/2'>
+			<div id='box' className='flex w-full flex-col px-8 md:w-2/3 lg:h-3/4 lg:w-1/2 lg:flex-row'>
+				<div id='image' className='hidden rounded-l-xl bg-accent md:h-full lg:block lg:w-1/2'>
 					<Image
 						src='/assets/svg/auth-logo.svg'
 						alt='Auth Logo'
@@ -83,7 +83,7 @@ const LoginPage = () => {
 
 				<div
 					id='login-form'
-					className='relative flex size-full flex-col items-center justify-center rounded-b-xl bg-white p-8 md:w-1/2 md:rounded-r-xl md:rounded-bl-none'
+					className='relative flex size-full flex-col items-center justify-center rounded-xl bg-white p-8 lg:w-1/2 lg:rounded-l-none'
 				>
 					<div className='absolute top-4 right-4'>
 						<LocaleSwitcher />

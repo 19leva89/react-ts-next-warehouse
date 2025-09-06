@@ -26,7 +26,7 @@ interface Props {
 	params: Promise<{ locale: string }>
 }
 
-export default async function LocaleLayout({ children, params }: Props) {
+const LocaleLayout = async ({ children, params }: Props) => {
 	const { locale } = await params
 
 	if (!hasLocale(routing.locales, locale)) {
@@ -46,3 +46,5 @@ export default async function LocaleLayout({ children, params }: Props) {
 		</html>
 	)
 }
+
+export default LocaleLayout
