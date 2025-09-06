@@ -8,8 +8,8 @@ import { Avatar, AvatarFallback, DropdownMenu, DropdownMenuTrigger } from '@/com
 export const UserButton = () => {
 	const { data: session } = useSession()
 
-	const name = session?.user.name as string
-	const initial = name?.charAt(0)
+	const name = session?.user?.name ?? ''
+	const initial = name ? name.charAt(0) : 'U'
 
 	return (
 		<div>
@@ -20,7 +20,7 @@ export const UserButton = () => {
 					</Avatar>
 				</DropdownMenuTrigger>
 
-				<DropdownContent name={name} />
+				<DropdownContent name={name || 'User'} />
 			</DropdownMenu>
 		</div>
 	)

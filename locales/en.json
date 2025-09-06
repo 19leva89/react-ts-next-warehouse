@@ -2,10 +2,12 @@
   "Interface": {
     "switchToUkrainian": "Switch to Ukrainian",
     "switchToEnglish": "Switch to English",
-		"admin": "Admin",
-		"productManager": "Product manager",
-		"salesManager": "Sales manager",
-		"viewer": "Viewer"
+    "admin": "Admin",
+    "productManager": "Product manager",
+    "salesManager": "Sales manager",
+    "viewer": "Viewer",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing"
   },
   "Login": {
     "appName": "Warehouse Management",
@@ -13,20 +15,23 @@
     "emailPasswordError": "Email or password is incorrect",
     "login": "Login"
   },
+  "Logout": {
+    "logoutFailed": "Logout failed. Please try again"
+  },
   "Navigation": {
     "dashboard": "Dashboard",
     "products": "Products",
     "sales": "Sales"
   },
-	"InfoBlock": {
-		"notFoundTitle": "Page not found",
-		"notFoundText": "Please check the address entered is correct or try again later",
-		"unauthorizedTitle": "Access denied",
-		"unauthorizedText": "This page can only be viewed by authorized users",
-		"back": "Back",
-		"signIn": "Sign In",
-		"refresh": "Refresh"
-	},
+  "InfoBlock": {
+    "notFoundTitle": "Page not found",
+    "notFoundText": "Please check the address entered is correct or try again later",
+    "unauthorizedTitle": "Access denied",
+    "unauthorizedText": "This page can only be viewed by authorized users",
+    "back": "Back",
+    "signIn": "Sign In",
+    "refresh": "Refresh"
+  },
   "Warehouse": {
     "warehouseListTitle": "Warehouse list",
     "warehouseListDescription": "List of warehouses that you can manage",
@@ -76,9 +81,9 @@
   },
   "Products": {
     "titleProducts": "Warehouse products",
-		"titleAllProducts": "All products",
+    "titleAllProducts": "All products",
     "descriptionProducts": "List of products in your warehouse",
-		"descriptionAllProducts": "List of all products",
+    "descriptionAllProducts": "List of all products",
     "loadProductError": "Failed to load products. Please refresh the page",
     "loadUserError": "Failed to load users. Please refresh the page",
     "searchPlaceholder": "Find product...",
@@ -108,7 +113,7 @@
     "productStockPlaceholder": "Enter product stock...",
     "cancelButton": "Cancel",
     "noImage": "No image",
-		"productsButton": "Products list"
+    "productsButton": "Products list"
   },
   "Sales": {
     "title": "Sales",
@@ -172,14 +177,11 @@
     "customer": "Customer",
     "quantity": "Quantity"
   },
-	"TableData": {
-		"noResults": "No results",
-		"previousButton": "Previous",
-		"nextButton": "Next",
-		"columns": "Columns"
-	},
-  "Logout": {
-    "logoutError": "Logout failed. Please try again"
+  "TableData": {
+    "noResults": "No results",
+    "previousButton": "Previous",
+    "nextButton": "Next",
+    "columns": "Columns"
   },
   "ManageUser": {
     "userYou": "You",
@@ -224,7 +226,7 @@
     "deleteUserError": "User failed to delete. Please try again",
     "profileButton": "My profile",
     "manageUserButton": "Manage user",
-		"logoutButton": "Logout"
+    "logoutButton": "Logout"
   },
   "Profile": {
     "profileUpdateSuccess": "Profile updated successfully",

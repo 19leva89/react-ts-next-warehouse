@@ -14,7 +14,7 @@ interface Props {
 	params: Promise<{ warehouseId: string; locale: string }>
 }
 
-const RootLayout = async ({ children, params }: Props) => {
+const WarehouseLayout = async ({ children, params }: Props) => {
 	const { warehouseId, locale } = await params
 
 	const session = await auth()
@@ -56,4 +56,4 @@ const RootLayout = async ({ children, params }: Props) => {
 	)
 }
 
-export default RootLayout
+export default WarehouseLayout

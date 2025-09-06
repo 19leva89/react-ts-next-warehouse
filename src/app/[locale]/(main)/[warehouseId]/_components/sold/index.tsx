@@ -4,9 +4,9 @@ import axios from 'axios'
 import { TruckIcon } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-import { LoadingIndicator, Overview, Subheading } from '@/components/shared'
+import { LoadingIndicator, Overview, RefreshButton, Subheading } from '@/components/shared'
 
 export const Sold = () => {
 	const params = useParams()
@@ -14,24 +14,36 @@ export const Sold = () => {
 
 	const [data, setData] = useState([])
 	const [loading, setLoading] = useState<boolean>(true)
+	const [refreshing, setRefreshing] = useState<boolean>(false)
 
-	useEffect(() => {
-		const getSold = async () => {
+	const getSold = useCallback(async () => {
+		try {
 			const response = await axios.get(`/api/${params.warehouseId}/sold`)
 			const data = response.data.data
 
 			setData(data)
+		} catch (error) {
+			console.error('Failed to fetch sold data:', error)
+		}
+	}, [params.warehouseId])
+
+	const handleRefresh = async () => {
+		setRefreshing(true)
+
+		await getSold()
+
+		setRefreshing(false)
+	}
+
+	useEffect(() => {
+		const loadInitialData = async () => {
+			await getSold()
+
 			setLoading(false)
 		}
 
-		getSold()
-
-		const interval = setInterval(() => {
-			getSold()
-		}, 5000)
-
-		return () => clearInterval(interval)
-	}, [params.warehouseId])
+		loadInitialData()
+	}, [getSold])
 
 	if (loading) {
 		return <LoadingIndicator />
@@ -39,7 +51,11 @@ export const Sold = () => {
 
 	return (
 		<div className='mt-4 w-full rounded-lg p-4'>
-			<Subheading icon={TruckIcon} title={t('title')} description={t('description')} />
+			<div className='flex items-center justify-between'>
+				<Subheading icon={TruckIcon} title={t('title')} description={t('description')} />
+
+				<RefreshButton onRefresh={handleRefresh} isRefreshing={refreshing} />
+			</div>
 
 			<div className='mt-8'>
 				<Overview data={data} />

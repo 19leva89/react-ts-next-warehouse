@@ -1,5 +1,7 @@
 'use client'
 
+import { toast } from 'sonner'
+import { signOut } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 
 import {
@@ -18,6 +20,16 @@ export const DropdownContent = ({ name }: Props) => {
 	const router = useRouter()
 	const t = useTranslations('ManageUser')
 	const tProducts = useTranslations('Products')
+
+	const handleLogout = async () => {
+		try {
+			await signOut({ callbackUrl: '/auth/login' })
+		} catch (error) {
+			console.log(error)
+
+			toast.error(t('logoutFailed'))
+		}
+	}
 
 	return (
 		<DropdownMenuContent align='end'>
@@ -49,13 +61,7 @@ export const DropdownContent = ({ name }: Props) => {
 				{tProducts('productsButton')}
 			</DropdownMenuItem>
 
-			<DropdownMenuItem
-				onClick={() => {
-					router.push('/auth/logout')
-				}}
-			>
-				{t('logoutButton')}
-			</DropdownMenuItem>
+			<DropdownMenuItem onClick={handleLogout}>{t('logoutButton')}</DropdownMenuItem>
 		</DropdownMenuContent>
 	)
 }

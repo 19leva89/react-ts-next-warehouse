@@ -3,10 +3,10 @@
 import axios from 'axios'
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { CrownIcon, HistoryIcon, MedalIcon } from 'lucide-react'
 
-import { LoadingIndicator, Subheading } from '@/components/shared'
+import { LoadingIndicator, RefreshButton, Subheading } from '@/components/shared'
 
 interface RankingData {
 	productId: string
@@ -20,21 +20,39 @@ export const Rank = () => {
 
 	const [loading, setLoading] = useState<boolean>(true)
 	const [topFive, setTopFive] = useState<RankingData[]>([])
+	const [refreshing, setRefreshing] = useState<boolean>(false)
 	const [bottomFive, setBottomFive] = useState<RankingData[]>([])
 
-	useEffect(() => {
-		const getSold = async () => {
+	const getRank = useCallback(async () => {
+		try {
 			const response = await axios.get(`/api/${params.warehouseId}/rank`)
 			const top = response.data.topFive
 			const bottom = response.data.bottomFive
 
 			setTopFive(top)
 			setBottomFive(bottom)
+		} catch (error) {
+			console.error('Failed to fetch ranking data:', error)
+		}
+	}, [params.warehouseId])
+
+	const handleRefresh = async () => {
+		setRefreshing(true)
+
+		await getRank()
+
+		setRefreshing(false)
+	}
+
+	useEffect(() => {
+		const loadInitialData = async () => {
+			await getRank()
+
 			setLoading(false)
 		}
 
-		getSold()
-	}, [params.warehouseId])
+		loadInitialData()
+	}, [getRank])
 
 	if (loading) {
 		return <LoadingIndicator />
@@ -42,7 +60,11 @@ export const Rank = () => {
 
 	return (
 		<div className='mt-4 w-full rounded-lg p-4'>
-			<Subheading icon={MedalIcon} title={t('title')} description={t('description')} />
+			<div className='flex items-center justify-between'>
+				<Subheading icon={MedalIcon} title={t('title')} description={t('description')} />
+
+				<RefreshButton onRefresh={handleRefresh} isRefreshing={refreshing} />
+			</div>
 
 			<div className='mt-8'>
 				<div className='flex flex-col gap-4 md:flex-row'>

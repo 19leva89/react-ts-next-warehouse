@@ -6,6 +6,8 @@ import { routing } from '@/i18n/routing'
 
 const secret = process.env.AUTH_SECRET
 
+const authRoutes = ['/auth/reset', '/auth/new-password', '/auth/not-auth']
+
 // Utility function to get locale from pathname
 function getLocaleFromPath(pathname: string): string {
 	const locale = pathname.split('/')[1]
@@ -21,15 +23,17 @@ async function handleWebAuth(req: NextRequest, intlResponse?: NextResponse) {
 	const isLoggedIn = !!token
 
 	const locale = getLocaleFromPath(pathname)
-	const isLoginPage = pathname.includes('/auth/login')
 
-	// If the user is logged in and is on the login page - redirect to the main page
-	if (isLoggedIn && isLoginPage) {
+	const isLoginPage = pathname.includes('/auth/login')
+	const isAuthRoute = authRoutes.some((route) => pathname.includes(route))
+
+	// Logged in users should not see auth pages (except Logout)
+	if (isLoggedIn && (isLoginPage || isAuthRoute)) {
 		return NextResponse.redirect(new URL(`/${locale}`, req.url))
 	}
 
-	// If the user is not logged in and not on the login page - redirect to login
-	if (!isLoggedIn && !isLoginPage) {
+	// Not logged in users should be redirected to Login (except for the auth pages themselves)
+	if (!isLoggedIn && !isLoginPage && !isAuthRoute) {
 		return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url))
 	}
 

@@ -58,7 +58,7 @@ export default {
 						name: user.name,
 						role: user.role,
 						isTwoFactorEnabled: user.isTwoFactorEnabled,
-						isOAuth: user.accounts?.length > 0,
+						isOAuth: false,
 						rememberMe,
 					}
 				} catch (error) {

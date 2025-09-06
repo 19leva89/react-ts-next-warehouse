@@ -11,13 +11,13 @@ export async function PUT(req: NextRequest) {
 
 		const { oldPassword, password } = await req.json()
 
-		const hashedOldPassword = await hash(oldPassword, 12)
+		if (!user?.id || !user?.password) {
+			return GlobalError({ message: 'Unauthorized', errorCode: 401 })
+		}
 
-		if (await compare(hashedOldPassword, user?.password || '')) {
-			return GlobalError({
-				message: 'Old password is incorrect',
-				errorCode: 400,
-			})
+		const isOldPasswordValid = await compare(oldPassword, user.password)
+		if (!isOldPasswordValid) {
+			return GlobalError({ message: 'Old password is incorrect', errorCode: 400 })
 		}
 
 		const hashedPassword = await hash(password, 12)

@@ -1,11 +1,13 @@
 {
-	"Interface": {
+  "Interface": {
     "switchToUkrainian": "Перемкнути на українську",
     "switchToEnglish": "Перемкнути на англійську",
-		"admin": "Адмін",
-		"productManager": "Менеджер товарів",
-		"salesManager": "Менеджер продаж",
-		"viewer": "Глядач"
+    "admin": "Адмін",
+    "productManager": "Менеджер товарів",
+    "salesManager": "Менеджер продаж",
+    "viewer": "Глядач",
+    "refresh": "Оновити",
+    "refreshing": "Оновлення"
   },
   "Login": {
     "appName": "Управління складом",
@@ -13,20 +15,23 @@
     "emailPasswordError": "Email або пароль невірний",
     "login": "Увійти"
   },
+  "Logout": {
+    "logoutFailed": "Не вдалося вийти з системи. Спробуйте ще раз"
+  },
   "Navigation": {
     "dashboard": "Панель управління",
     "products": "Товари",
     "sales": "Продажі"
   },
-	"InfoBlock": {
-		"notFoundTitle": "Сторінка не знайдена",
-		"notFoundText": "Будь ласка, перевірте правильність введеної адреси або спробуйте ще раз пізніше",
-		"unauthorizedTitle": "Доступ заборонено",
-		"unauthorizedText": "Ця сторінка може бути переглянута лише авторизованими користувачами",
-		"back": "Повернутися",
-		"signIn": "Увійти",
-		"refresh": "Оновити"
-	},
+  "InfoBlock": {
+    "notFoundTitle": "Сторінка не знайдена",
+    "notFoundText": "Будь ласка, перевірте правильність введеної адреси або спробуйте ще раз пізніше",
+    "unauthorizedTitle": "Доступ заборонено",
+    "unauthorizedText": "Ця сторінка може бути переглянута лише авторизованими користувачами",
+    "back": "Повернутися",
+    "signIn": "Увійти",
+    "refresh": "Оновити"
+  },
   "Warehouse": {
     "warehouseListTitle": "Список складів",
     "warehouseListDescription": "Список складів, якими ви можете керувати",
@@ -46,7 +51,7 @@
     "deleteWarehouseError": "Не вдалося видалити склад. Переконайтеся, що в складі немає товарів або продажів. Спробуйте ще раз",
     "notFound": "Склад не знайдено",
     "manageWarehouseButton": "Керувати складом",
-		"searchPlaceholder": "Знайти склад..."
+    "searchPlaceholder": "Знайти склад..."
   },
   "Dashboard": {
     "title": "Панель управління",
@@ -76,7 +81,7 @@
   },
   "Products": {
     "titleProducts": "Товари складу",
-		"titleAllProducts": "Всі товари",
+    "titleAllProducts": "Всі товари",
     "descriptionProducts": "Список товарів у вашому складі",
     "descriptionAllProducts": "Список всіх товарів",
     "loadProductError": "Не вдалося завантажити товари. Будь ласка, оновіть сторінку",
@@ -108,7 +113,7 @@
     "productStockPlaceholder": "Введіть залишки товару...",
     "cancelButton": "Скасувати",
     "noImage": "Немає зображення",
-		"productsButton": "Список товарів"
+    "productsButton": "Список товарів"
   },
   "Sales": {
     "title": "Продажі",
@@ -172,14 +177,11 @@
     "customer": "Клієнт",
     "quantity": "Кількість"
   },
-	"TableData": {
-		"noResults": "Немає результатів",
-		"previousButton": "Назад",
-		"nextButton": "Вперед",
-		"columns": "Колонки"
-	},
-  "Logout": {
-    "logoutError": "Не вдалося вийти з системи. Спробуйте ще раз"
+  "TableData": {
+    "noResults": "Немає результатів",
+    "previousButton": "Назад",
+    "nextButton": "Вперед",
+    "columns": "Колонки"
   },
   "ManageUser": {
     "userYou": "Ви",
@@ -224,7 +226,7 @@
     "deleteUserError": "Не вдалося видалити користувача. Спробуйте ще раз",
     "profileButton": "Мій профіль",
     "manageUserButton": "Керування користувачами",
-		"logoutButton": "Вийти"
+    "logoutButton": "Вийти"
   },
   "Profile": {
     "profileUpdateSuccess": "Профіль успішно оновлено",

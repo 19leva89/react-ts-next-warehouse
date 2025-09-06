@@ -50,7 +50,7 @@ model User {
   id                    String                 @id @default(cuid())
   email                 String                 @unique @db.VarChar(255)
   name                  String?                @db.VarChar(100)
-  password              String                 @db.VarChar(255)
+  password              String?                @db.VarChar(255)
   role                  UserRole               @default(VIEWER)
   isFirstTimeLogin      Boolean                @default(true) @map("is_first_time_login")
   emailVerified         DateTime?              @map("email_verified")
