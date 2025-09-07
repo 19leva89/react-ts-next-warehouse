@@ -3,7 +3,7 @@
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 interface Props {
-	data: any[]
+	data: { name: string; total: number }[]
 }
 
 export const Overview = ({ data }: Props) => {

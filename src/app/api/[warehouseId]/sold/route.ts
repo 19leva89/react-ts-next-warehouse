@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 interface GraphData {
 	name: string
@@ -12,7 +13,7 @@ interface Props {
 	params: Promise<{ warehouseId: string }>
 }
 
-export async function GET(req: NextRequest, { params }: Props) {
+export async function GET(_req: NextRequest, { params }: Props) {
 	const { warehouseId } = await params
 
 	try {
@@ -56,10 +57,13 @@ export async function GET(req: NextRequest, { params }: Props) {
 			graphData[parseInt(month)].total = monthlyRevenue[parseInt(month)]
 		}
 
-		return SuccessResponse({
-			data: graphData,
-		})
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				data: graphData,
+			},
+			'GET /api/[warehouseId]/sold',
+		)
+	} catch (error) {
+		return handleApiError(error, 'GET /api/[warehouseId]/sold')
 	}
 }

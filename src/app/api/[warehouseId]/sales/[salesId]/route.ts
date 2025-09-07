@@ -2,7 +2,8 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { requireAdminOrSales } from '@/lib/auth'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
 	params: Promise<{ warehouseId: string; salesId: string }>
@@ -59,11 +60,11 @@ export async function PUT(req: NextRequest, { params }: Props) {
 			},
 		})
 
-		return SuccessResponse(sales)
-	} catch (error: any) {
+		return handleApiSuccess(sales, 'PUT /api/[warehouseId]/sales/[salesId]')
+	} catch (error) {
 		console.log(error)
 
-		return GlobalError(error)
+		return handleApiError(error, 'PUT /api/[warehouseId]/sales/[salesId]')
 	}
 }
 
@@ -97,13 +98,14 @@ export async function DELETE(req: NextRequest, { params }: Props) {
 			},
 		})
 
-		return SuccessResponse({
-			status: 'success',
-			message: 'Sales has been deleted',
-		})
-	} catch (error: any) {
-		console.error(error)
-
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				status: 'success',
+				message: 'Sales has been deleted',
+			},
+			'DELETE /api/[warehouseId]/sales/[salesId]',
+		)
+	} catch (error) {
+		return handleApiError(error, 'DELETE /api/[warehouseId]/sales/[salesId]')
 	}
 }

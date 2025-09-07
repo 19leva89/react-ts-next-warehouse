@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Prisma } from '@prisma/client'
+import { NextResponse } from 'next/server'
 
 export const handleError = (error: unknown, context: string) => {
 	if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -13,4 +14,48 @@ export const handleError = (error: unknown, context: string) => {
 	}
 
 	throw error
+}
+
+export const handleApiError = (error: unknown, context: string) => {
+	// Logging the error
+	if (error instanceof Prisma.PrismaClientKnownRequestError) {
+		console.error(`💾 Prisma error [${context}]:`, error.code, error.message)
+
+		// Prisma specific error handling
+		if (error.code === 'P2002') {
+			return NextResponse.json(
+				{ error: 'Resource already exists', message: 'This record already exists' },
+				{ status: 409 },
+			)
+		}
+		if (error.code === 'P2025') {
+			return NextResponse.json(
+				{ error: 'Resource not found', message: 'The requested record was not found' },
+				{ status: 404 },
+			)
+		}
+
+		return NextResponse.json(
+			{ error: 'Database error', message: 'A database error occurred' },
+			{ status: 500 },
+		)
+	} else if (axios.isAxiosError(error)) {
+		console.error(`🌐 API error [${context}]:`, error.response?.status, error.message)
+
+		return NextResponse.json(
+			{ error: 'External API error', message: error.message },
+			{ status: error.response?.status || 500 },
+		)
+	} else if (error instanceof Error) {
+		console.error(`🚨 Unexpected error [${context}]:`, error.message)
+
+		return NextResponse.json({ error: 'Internal server error', message: error.message }, { status: 500 })
+	} else {
+		console.error(`❌ Unknown error [${context}]`, error)
+
+		return NextResponse.json(
+			{ error: 'Unknown error', message: 'An unknown error occurred' },
+			{ status: 500 },
+		)
+	}
 }

@@ -4,7 +4,8 @@ import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage
 import { prisma } from '@/lib/prisma'
 import { storage } from '@/lib/firebase'
 import { requireAdminOrProduct } from '@/lib/auth'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
 	params: Promise<{ warehouseId: string; productId: string }>
@@ -71,17 +72,20 @@ export async function PUT(req: NextRequest, { params }: Props) {
 			},
 		})
 
-		return SuccessResponse({
-			status: 'success',
-			message: 'Product updated successfully',
-			data: product,
-		})
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				status: 'success',
+				message: 'Product updated successfully',
+				data: product,
+			},
+			'PUT /api/[warehouseId]/products/[productId]',
+		)
+	} catch (error) {
+		return handleApiError(error, 'PUT /api/[warehouseId]/products/[productId]')
 	}
 }
 
-export async function DELETE(req: NextRequest, { params }: Props) {
+export async function DELETE(_req: NextRequest, { params }: Props) {
 	const { productId } = await params
 
 	try {
@@ -104,13 +108,14 @@ export async function DELETE(req: NextRequest, { params }: Props) {
 			await deleteObject(fileRef)
 		}
 
-		return SuccessResponse({
-			status: 'success',
-			message: 'Product deleted successfully',
-		})
-	} catch (error: any) {
-		console.error(error)
-
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				status: 'success',
+				message: 'Product deleted successfully',
+			},
+			'DELETE /api/[warehouseId]/products/[productId]',
+		)
+	} catch (error) {
+		return handleApiError(error, 'DELETE /api/[warehouseId]/products/[productId]')
 	}
 }

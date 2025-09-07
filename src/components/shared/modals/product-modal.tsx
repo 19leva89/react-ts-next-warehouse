@@ -24,6 +24,8 @@ const formSchema = z.object({
 	stock: z.string().min(1),
 })
 
+type TFormValues = z.infer<typeof formSchema>
+
 export const ProductModal = () => {
 	const params = useParams()
 	const router = useRouter()
@@ -34,7 +36,7 @@ export const ProductModal = () => {
 	const [file, setFile] = useState<File | null>(null)
 	const [loading, setLoading] = useState<boolean>(false)
 
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<TFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: productWarehouse.isEditing
 			? productWarehouse.productData
@@ -55,7 +57,7 @@ export const ProductModal = () => {
 		}
 	}, [productWarehouse.isEditing, productWarehouse.productData, form])
 
-	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+	const onSubmit = async (values: TFormValues) => {
 		try {
 			setLoading(true)
 

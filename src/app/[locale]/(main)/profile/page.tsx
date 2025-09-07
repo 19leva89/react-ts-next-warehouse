@@ -10,40 +10,40 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { KeyRoundIcon, User2Icon } from 'lucide-react'
 
 import { useRouter } from '@/i18n/navigation'
+import { handleError } from '@/lib/handle-error'
 import { Button, Form, Separator } from '@/components/ui'
 import { FormInput, FormSwitch } from '@/components/shared/form'
 import { Heading, LoadingIndicator, Subheading } from '@/components/shared'
+import { createChangePasswordSchema, TChangePasswordValues } from '@/lib/validations/auth-schema'
 
-const profileFormSchema = z.object({
+const userProfileFormSchema = z.object({
 	name: z.string().min(1),
 	email: z.email(),
 	isTwoFactorEnabled: z.boolean(),
 	isOAuth: z.boolean().optional(),
 })
 
-const passwordFormSchema = z.object({
-	oldPassword: z.string().min(8),
-	password: z.string().min(8),
-	confirmPassword: z.string().min(8),
-})
+type TUserProfileFormValues = z.infer<typeof userProfileFormSchema>
 
 const ProfilePage = () => {
 	const router = useRouter()
-	const t = useTranslations('Profile')
+	const tAuth = useTranslations('Auth')
+	const tProfile = useTranslations('Profile')
+	const passwordFormSchema = createChangePasswordSchema(tAuth)
 
 	const [loading, setLoading] = useState<boolean>(true)
 	const [loadingProfile, setLoadingProfile] = useState<boolean>(false)
 	const [loadingPassword, setLoadingPassword] = useState<boolean>(false)
 
-	const [profile, setProfile] = useState<z.infer<typeof profileFormSchema>>({
+	const [profile, setProfile] = useState<TUserProfileFormValues>({
 		name: '',
 		email: '',
 		isTwoFactorEnabled: false,
 		isOAuth: false,
 	})
 
-	const form = useForm<z.infer<typeof profileFormSchema>>({
-		resolver: zodResolver(profileFormSchema),
+	const form = useForm<TUserProfileFormValues>({
+		resolver: zodResolver(userProfileFormSchema),
 		defaultValues: {
 			name: '',
 			email: '',
@@ -51,7 +51,7 @@ const ProfilePage = () => {
 		},
 	})
 
-	const passwordForm = useForm<z.infer<typeof passwordFormSchema>>({
+	const passwordForm = useForm<TChangePasswordValues>({
 		resolver: zodResolver(passwordFormSchema),
 		defaultValues: {
 			oldPassword: '',
@@ -68,7 +68,7 @@ const ProfilePage = () => {
 				name: response.data.user?.name,
 				email: response.data.user?.email,
 				isTwoFactorEnabled: response.data.user?.isTwoFactorEnabled,
-				isOAuth: response.data.user?.accounts?.length ?? 0 > 0,
+				isOAuth: (response.data.user?.accounts?.length ?? 0) > 0,
 			})
 
 			setLoading(false)
@@ -83,7 +83,7 @@ const ProfilePage = () => {
 		form.setValue('isTwoFactorEnabled', profile.isTwoFactorEnabled)
 	}, [profile, form])
 
-	async function handleProfileUpdate(values: z.infer<typeof profileFormSchema>) {
+	async function handleProfileUpdate(values: TUserProfileFormValues) {
 		try {
 			setLoadingProfile(true)
 
@@ -97,30 +97,24 @@ const ProfilePage = () => {
 				name: response.data.user?.name,
 				email: response.data.user?.email,
 				isTwoFactorEnabled: response.data.user?.isTwoFactorEnabled,
-				isOAuth: response.data.user?.accounts?.length ?? 0 > 0,
+				isOAuth: (response.data.user?.accounts?.length ?? 0) > 0,
 			}
 
 			setProfile(updatedProfile)
 
-			toast.success(t('profileUpdateSuccess'))
+			toast.success(tProfile('profileUpdateSuccess'))
 		} catch (error) {
-			console.log(error)
+			handleError(error, 'UPDATE_PROFILE')
 
-			toast.error(t('profileUpdateFailed'))
+			toast.error(tProfile('profileUpdateFailed'))
 		} finally {
 			setLoadingProfile(false)
 		}
 	}
 
-	async function handleChangePassword(values: z.infer<typeof passwordFormSchema>) {
+	async function handleChangePassword(values: TChangePasswordValues) {
 		try {
 			setLoadingPassword(true)
-
-			if (values.password !== values.confirmPassword) {
-				toast.error(t('passwordNotMatch'))
-
-				return
-			}
 
 			await axios.put('/api/auth/profile/change-password', {
 				oldPassword: values.oldPassword,
@@ -129,12 +123,13 @@ const ProfilePage = () => {
 
 			router.refresh()
 
-			toast.success(t('passwordUpdateSuccess'))
-		} catch (error: any) {
-			console.log(error)
+			toast.success(tProfile('passwordUpdateSuccess'))
 
-			toast.error(error.response.data.message)
-			toast.error(t('passwordUpdateFailed'))
+			passwordForm.reset()
+		} catch (error) {
+			handleError(error, 'UPDATE_PASSWORD')
+
+			toast.error(tProfile('passwordUpdateFailed'))
 		} finally {
 			setLoadingPassword(false)
 		}
@@ -145,7 +140,7 @@ const ProfilePage = () => {
 	return (
 		<div className='mx-auto my-8 w-4/5 rounded-lg bg-slate-50 p-8 shadow-lg'>
 			<div className='flex-1 space-y-4'>
-				<Heading icon={User2Icon} title={t('title')} description={t('description')} />
+				<Heading icon={User2Icon} title={tProfile('title')} description={tProfile('description')} />
 
 				<Separator />
 
@@ -155,8 +150,8 @@ const ProfilePage = () => {
 							<form className='space-y-4' onSubmit={form.handleSubmit(handleProfileUpdate)}>
 								<Subheading
 									icon={User2Icon}
-									title={t('profileTitle')}
-									description={t('profileDescription')}
+									title={tProfile('profileTitle')}
+									description={tProfile('profileDescription')}
 								/>
 
 								<Separator />
@@ -164,29 +159,29 @@ const ProfilePage = () => {
 								<FormInput
 									name='name'
 									type='text'
-									label={t('name')}
-									placeholder={t('namePlaceholder')}
+									label={tProfile('name')}
+									placeholder={tProfile('namePlaceholder')}
 									required
 								/>
 
 								<FormInput
 									name='email'
 									type='email'
-									label={t('email')}
-									placeholder={t('emailPlaceholder')}
+									label={tProfile('email')}
+									placeholder={tProfile('emailPlaceholder')}
 									required
 								/>
 
 								{profile?.isOAuth === false && (
 									<FormSwitch
 										name='isTwoFactorEnabled'
-										label={t('twoFactorAuth')}
-										description={t('twoFactorAuthDescription')}
+										label={tProfile('twoFactorAuth')}
+										description={tProfile('twoFactorAuthDescription')}
 									/>
 								)}
 
 								<Button type='submit' disabled={loadingProfile} className='w-full'>
-									{t('saveChangesButton')}
+									{tProfile('saveChangesButton')}
 								</Button>
 							</form>
 						</Form>
@@ -199,8 +194,8 @@ const ProfilePage = () => {
 							<form className='space-y-4' onSubmit={passwordForm.handleSubmit(handleChangePassword)}>
 								<Subheading
 									icon={KeyRoundIcon}
-									title={t('changePasswordTitle')}
-									description={t('changePasswordDescription')}
+									title={tProfile('changePasswordTitle')}
+									description={tProfile('changePasswordDescription')}
 								/>
 
 								<Separator />
@@ -208,29 +203,29 @@ const ProfilePage = () => {
 								<FormInput
 									name='oldPassword'
 									type='password'
-									label={t('oldPassword')}
-									placeholder={t('oldPasswordPlaceholder')}
+									label={tProfile('oldPassword')}
+									placeholder={tProfile('oldPasswordPlaceholder')}
 									required
 								/>
 
 								<FormInput
 									name='password'
 									type='password'
-									label={t('newPassword')}
-									placeholder={t('newPasswordPlaceholder')}
+									label={tProfile('newPassword')}
+									placeholder={tProfile('newPasswordPlaceholder')}
 									required
 								/>
 
 								<FormInput
 									name='confirmPassword'
 									type='password'
-									label={t('newPasswordConfirmation')}
-									placeholder={t('newPasswordConfirmationPlaceholder')}
+									label={tProfile('newPasswordConfirmation')}
+									placeholder={tProfile('newPasswordConfirmationPlaceholder')}
 									required
 								/>
 
 								<Button type='submit' disabled={loadingPassword} className='w-full'>
-									{t('changePasswordButton')}
+									{tProfile('changePasswordButton')}
 								</Button>
 							</form>
 						</Form>

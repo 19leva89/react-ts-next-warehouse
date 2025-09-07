@@ -3,16 +3,17 @@ import { Edit2Icon } from 'lucide-react'
 
 import { Button } from '@/components/ui'
 import { DeleteUserButton } from '@/components/shared'
+import { UseUserModalWarehouse } from '@/hooks/use-user-modal'
 
 interface Props {
 	user: User
 	currentUser: string
-	userWarehouse: any
-	setUsers: any
-	t: any
+	userWarehouse: UseUserModalWarehouse
+	setUsers: (users: User[]) => void
+	tUser: (key: string) => string
 }
 
-export const UserTile = ({ user, currentUser, userWarehouse, setUsers, t }: Props) => {
+export const UserTile = ({ user, currentUser, userWarehouse, setUsers, tUser }: Props) => {
 	return (
 		<div
 			key={user.id}
@@ -21,7 +22,8 @@ export const UserTile = ({ user, currentUser, userWarehouse, setUsers, t }: Prop
 			<div className='flex-1'>
 				<div className='flex gap-1'>
 					<p className='text-lg font-semibold'>{user.name}</p>
-					{user.id === currentUser && <p className='text-lg font-semibold'>({t('userYou')})</p>}
+
+					{user.id === currentUser && <p className='text-lg font-semibold'>({tUser('userYou')})</p>}
 				</div>
 
 				<p className='text-sm'>{user.email}</p>

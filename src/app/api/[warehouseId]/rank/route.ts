@@ -1,6 +1,8 @@
-import { GlobalError, SuccessResponse } from '@/lib/helper'
-import { prisma } from '@/lib/prisma'
 import { NextRequest } from 'next/server'
+
+import { prisma } from '@/lib/prisma'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 interface RankingData {
 	productId: string
@@ -12,7 +14,7 @@ interface Props {
 	params: Promise<{ warehouseId: string }>
 }
 
-export async function GET(req: NextRequest, { params }: Props) {
+export async function GET(_req: NextRequest, { params }: Props) {
 	const { warehouseId } = await params
 
 	try {
@@ -60,14 +62,15 @@ export async function GET(req: NextRequest, { params }: Props) {
 			topFive = sortedRanking
 		}
 
-		return SuccessResponse({
-			status: 'success',
-			topFive,
-			bottomFive,
-		})
-	} catch (error: any) {
-		console.error(error)
-
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				status: 'success',
+				topFive,
+				bottomFive,
+			},
+			'GET /api/[warehouseId]/rank',
+		)
+	} catch (error) {
+		return handleApiError(error, 'GET /api/[warehouseId]/rank')
 	}
 }

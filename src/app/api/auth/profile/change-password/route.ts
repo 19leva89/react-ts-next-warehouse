@@ -2,8 +2,9 @@ import { NextRequest } from 'next/server'
 import { compare, hash } from 'bcrypt-ts'
 
 import { prisma } from '@/lib/prisma'
+import { handleApiError } from '@/lib/handle-error'
 import { getCurrentUserWithPassword } from '@/lib/auth'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 export async function PUT(req: NextRequest) {
 	try {
@@ -12,12 +13,12 @@ export async function PUT(req: NextRequest) {
 		const { oldPassword, password } = await req.json()
 
 		if (!user?.id || !user?.password) {
-			return GlobalError({ message: 'Unauthorized', errorCode: 401 })
+			return handleApiError(new Error('User not found'), 'PUT /api/auth/profile/change-password')
 		}
 
 		const isOldPasswordValid = await compare(oldPassword, user.password)
 		if (!isOldPasswordValid) {
-			return GlobalError({ message: 'Old password is incorrect', errorCode: 400 })
+			return handleApiError(new Error('Invalid old password'), 'PUT /api/auth/profile/change-password')
 		}
 
 		const hashedPassword = await hash(password, 12)
@@ -31,10 +32,13 @@ export async function PUT(req: NextRequest) {
 			},
 		})
 
-		return SuccessResponse({
-			message: 'Successfully changed password',
-		})
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				message: 'Successfully changed password',
+			},
+			'PUT /api/auth/profile/change-password',
+		)
+	} catch (error) {
+		return handleApiError(error, 'PUT /api/auth/profile/change-password')
 	}
 }

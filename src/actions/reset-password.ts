@@ -3,7 +3,7 @@
 import { getUserByEmail } from '@/data/user'
 // import { sendPasswordResetEmail } from '@/lib/send-email'
 import { generatePasswordResetToken } from '@/lib/tokens'
-import { createResetSchema, TResetValues } from '@/lib/validations/user-schema'
+import { createResetSchema, TResetValues } from '@/lib/validations/auth-schema'
 
 export const resetPassword = async (values: TResetValues) => {
 	const validatedFields = createResetSchema((key: string) => key).safeParse(values)

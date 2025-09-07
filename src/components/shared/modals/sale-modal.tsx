@@ -13,6 +13,7 @@ import { ProductData } from '@/lib/types'
 import { useRouter } from '@/i18n/navigation'
 import { Button, Form } from '@/components/ui'
 import { useProduct } from '@/hooks/use-product'
+import { handleError } from '@/lib/handle-error'
 import { Modal } from '@/components/shared/modals'
 import { useSaleModal } from '@/hooks/use-sale-modal'
 import { useCustomerList } from '@/hooks/use-customer-list-modal'
@@ -27,6 +28,8 @@ const formSchema = z.object({
 	}),
 	quantity: z.string().min(1),
 })
+
+type TFormValues = z.infer<typeof formSchema>
 
 export const SaleModal = () => {
 	const params = useParams()
@@ -49,7 +52,8 @@ export const SaleModal = () => {
 
 				setProducts(products)
 			} catch (error) {
-				console.log(error)
+				handleError(error, 'GET_PRODUCTS')
+
 				toast.error(tProducts('loadProductFailed'))
 			} finally {
 				setLoading(false)
@@ -62,7 +66,7 @@ export const SaleModal = () => {
 		getProducts()
 	}, [params.warehouseId, productListWarehouse, tProducts])
 
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<TFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: saleModalWarehouse.isEditing
 			? saleModalWarehouse.saleData
@@ -83,7 +87,7 @@ export const SaleModal = () => {
 		}
 	}, [saleModalWarehouse.isEditing, saleModalWarehouse.saleData, form])
 
-	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+	const onSubmit = async (values: TFormValues) => {
 		try {
 			setLoading(true)
 			const sale = {
@@ -115,7 +119,8 @@ export const SaleModal = () => {
 			saleModalWarehouse.setSaleUpdated(true)
 			saleModalWarehouse.onClose()
 		} catch (error) {
-			console.log(error)
+			handleError(error, 'CREATE_SALE')
+
 			toast.error(t('saleError'))
 		} finally {
 			setLoading(false)

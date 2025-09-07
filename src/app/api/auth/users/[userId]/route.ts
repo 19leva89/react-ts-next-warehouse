@@ -3,7 +3,8 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
 	params: Promise<{ userId: string }>
@@ -17,7 +18,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
 		const { userId } = await params
 
 		if (!userId) {
-			return GlobalError({ message: 'Missing userId in path', errorCode: 400 })
+			return handleApiError(new Error('User not found'), 'PUT /api/auth/users')
 		}
 
 		let hashedPassword = ''
@@ -68,12 +69,15 @@ export async function PUT(req: NextRequest, { params }: Props) {
 			},
 		})
 
-		return SuccessResponse({
-			message: 'Successfully updated user',
-			users,
-		})
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				message: 'Successfully updated user',
+				users,
+			},
+			'PUT /api/auth/users',
+		)
+	} catch (error) {
+		return handleApiError(error, 'PUT /api/auth/users')
 	}
 }
 
@@ -98,12 +102,15 @@ export async function DELETE(_req: NextRequest, { params }: Props) {
 			},
 		})
 
-		return SuccessResponse({
-			message: 'Successfully deleted user',
-			currentUser: user.id,
-			users,
-		})
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				message: 'Successfully deleted user',
+				currentUser: user.id,
+				users,
+			},
+			'DELETE /api/auth/users',
+		)
+	} catch (error) {
+		return handleApiError(error, 'DELETE /api/auth/users')
 	}
 }

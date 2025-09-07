@@ -3,6 +3,7 @@
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { User } from '@prisma/client'
 import { Trash2Icon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -11,7 +12,7 @@ import { AlertModal } from '@/components/shared/modals'
 
 interface Props {
 	userId: string
-	setUsers: any
+	setUsers: (users: User[]) => void
 }
 
 export const DeleteUserButton = ({ userId, setUsers }: Props) => {

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface useImageWarehouse {
+interface UseImageWarehouse {
 	isOpen: boolean
 	isLoading: boolean
 	productName: string
@@ -12,7 +12,7 @@ interface useImageWarehouse {
 	setImageUrl: (imageUrl: string) => void
 }
 
-export const useImageModal = create<useImageWarehouse>((set) => ({
+export const useImageModal = create<UseImageWarehouse>((set) => ({
 	isOpen: false,
 	isLoading: false,
 	productName: '',

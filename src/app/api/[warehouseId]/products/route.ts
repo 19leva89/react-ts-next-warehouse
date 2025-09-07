@@ -4,7 +4,8 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { prisma } from '@/lib/prisma'
 import { storage } from '@/lib/firebase'
 import { requireAdminOrProduct } from '@/lib/auth'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
 	params: Promise<{ warehouseId: string }>
@@ -20,12 +21,14 @@ export async function GET(req: NextRequest, { params }: Props) {
 			},
 		})
 
-		return SuccessResponse({
-			products,
-		})
-	} catch (error: any) {
-		console.error(error)
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				products,
+			},
+			'GET /api/[warehouseId]/products',
+		)
+	} catch (error) {
+		return handleApiError(error, 'GET /api/[warehouseId]/products')
 	}
 }
 
@@ -79,9 +82,8 @@ export async function POST(req: NextRequest, { params }: Props) {
 			},
 		})
 
-		return SuccessResponse(product)
-	} catch (error: any) {
-		console.error(error)
-		return GlobalError(error)
+		return handleApiSuccess(product, 'POST /api/[warehouseId]/products', 201)
+	} catch (error) {
+		return handleApiError(error, 'POST /api/[warehouseId]/products')
 	}
 }

@@ -20,17 +20,19 @@ const formSchema = z.object({
 	name: z.string().min(1),
 })
 
+type TFormValues = z.infer<typeof formSchema>
+
 export const AddCustomerModal = () => {
 	const t = useTranslations('Customer')
 
 	const params = useParams()
 	const router = useRouter()
-	const customerListWarehouse = useCustomerList()
 	const addCustomerModal = useAddCustomerModal()
+	const customerListWarehouse = useCustomerList()
 
 	const [loading, setLoading] = useState<boolean>(false)
 
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<TFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: '',
@@ -43,7 +45,7 @@ export const AddCustomerModal = () => {
 		}
 	}, [addCustomerModal.isEditing, addCustomerModal.customerData, form])
 
-	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+	const onSubmit = async (values: TFormValues) => {
 		try {
 			setLoading(true)
 

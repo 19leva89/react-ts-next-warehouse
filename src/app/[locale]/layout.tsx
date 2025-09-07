@@ -39,6 +39,7 @@ const LocaleLayout = async ({ children, params }: Props) => {
 				<NextIntlClientProvider>
 					<SessionProvider>
 						{children}
+
 						<ToasterProvider />
 					</SessionProvider>
 				</NextIntlClientProvider>

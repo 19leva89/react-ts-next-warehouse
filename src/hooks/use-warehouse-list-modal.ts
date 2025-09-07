@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { Warehouse } from '@prisma/client'
 
-interface useWarehouseListWarehouse {
+interface UseWarehouseListWarehouse {
 	isOpen: boolean
 	isEditing: boolean
 	warehouseList?: Warehouse[]
@@ -11,7 +11,7 @@ interface useWarehouseListWarehouse {
 	setWarehouseList: (warehouseList: Warehouse[]) => void
 }
 
-export const useWarehouseList = create<useWarehouseListWarehouse>((set) => ({
+export const useWarehouseList = create<UseWarehouseListWarehouse>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	onOpen: () => set({ isOpen: true }),

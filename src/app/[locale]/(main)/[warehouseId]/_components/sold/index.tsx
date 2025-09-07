@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useState } from 'react'
 
+import { handleError } from '@/lib/handle-error'
 import { LoadingIndicator, Overview, RefreshButton, Subheading } from '@/components/shared'
 
 export const Sold = () => {
@@ -23,7 +24,7 @@ export const Sold = () => {
 
 			setData(data)
 		} catch (error) {
-			console.error('Failed to fetch sold data:', error)
+			handleError(error, 'GET_SOLD')
 		}
 	}, [params.warehouseId])
 
