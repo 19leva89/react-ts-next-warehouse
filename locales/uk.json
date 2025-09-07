@@ -1,7 +1,7 @@
 {
   "Auth": {
     "2faCode": "2FA код",
-    "appDescription": "Керуйте складом вашого складу з легкістю",
+    "appDescription": "Керуйте своїм складом з легкістю",
     "appName": "Управління складом",
     "confirm": "Підтвердити",
     "confirmPasswordRequired": "Будь ласка, підтвердіть ваш пароль",
@@ -187,8 +187,8 @@
     "profileUpdateSuccess": "Профіль успішно оновлено",
     "saveChangesButton": "Зберегти зміни",
     "title": "Профіль",
-    "twoFactorAuth": "Двухфакторна автентифікація",
-    "twoFactorAuthDescription": "Увімкнути двухфакторну автентифікацію"
+    "twoFactorAuth": "Двофакторна автентифікація",
+    "twoFactorAuthDescription": "Увімкнути двофакторну автентифікацію"
   },
   "RankPage": {
     "5bottomDescription": "Останні 5 товарів на основі продажів цього місяця",
@@ -268,7 +268,7 @@
     "addWarehouseSuccess": "Склад успішно додано",
     "addWarehouseTitle": "Додати склад",
     "cancelButton": "Скасувати",
-    "deleteWarehouseError": "Не вдалося видалити склад. Переконайтеся, що в складі немає товарів або продажів. Спробуйте ще раз",
+    "deleteWarehouseError": "Не вдалося видалити склад. Переконайтеся, що на складі немає жодних товарів або продаж. Спробуйте ще раз",
     "deleteWarehouseSuccess": "Склад успішно видалено",
     "manageWarehouseButton": "Керувати складом",
     "notFound": "Склад не знайдено",

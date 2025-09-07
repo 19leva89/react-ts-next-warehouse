@@ -110,7 +110,16 @@ const ManageUserPage = () => {
 
 							{users
 								.filter((user) => user.role === 'ADMIN')
-								.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, tUser }))}
+								.map((user) => (
+									<UserTile
+										key={user.id}
+										user={user}
+										currentUser={currentUser}
+										userWarehouse={userWarehouse}
+										setUsers={setUsers}
+										tUser={tUser}
+									/>
+								))}
 						</div>
 
 						{users.some((user) => user.role === 'PRODUCT_MANAGER') && (
@@ -127,7 +136,16 @@ const ManageUserPage = () => {
 
 								{users
 									.filter((user) => user.role === 'PRODUCT_MANAGER')
-									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, tUser }))}
+									.map((user) => (
+										<UserTile
+											key={user.id}
+											user={user}
+											currentUser={currentUser}
+											userWarehouse={userWarehouse}
+											setUsers={setUsers}
+											tUser={tUser}
+										/>
+									))}
 							</div>
 						)}
 
@@ -145,7 +163,16 @@ const ManageUserPage = () => {
 
 								{users
 									.filter((user) => user.role === 'SALES_MANAGER')
-									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, tUser }))}
+									.map((user) => (
+										<UserTile
+											key={user.id}
+											user={user}
+											currentUser={currentUser}
+											userWarehouse={userWarehouse}
+											setUsers={setUsers}
+											tUser={tUser}
+										/>
+									))}
 							</div>
 						)}
 
@@ -163,7 +190,16 @@ const ManageUserPage = () => {
 
 								{users
 									.filter((user) => user.role === 'VIEWER')
-									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, tUser }))}
+									.map((user) => (
+										<UserTile
+											key={user.id}
+											user={user}
+											currentUser={currentUser}
+											userWarehouse={userWarehouse}
+											setUsers={setUsers}
+											tUser={tUser}
+										/>
+									))}
 							</div>
 						)}
 					</div>

@@ -1,8 +1,8 @@
 {
   "Auth": {
     "2faCode": "2FA code",
-    "appDescription": "Manage your warehouse warehouse with ease",
-    "appName": "Warehouse Management",
+    "appDescription": "Manage your warehouse with ease",
+    "appName": "Warehouse management",
     "confirm": "Confirm",
     "confirmPasswordRequired": "Please confirm your password",
     "email": "Email",
@@ -268,7 +268,7 @@
     "addWarehouseSuccess": "Warehouse added successfully",
     "addWarehouseTitle": "Add warehouse",
     "cancelButton": "Cancel",
-    "deleteWarehouseError": "Warehouse failed to delete. Please make sure the warehouse not have any products or sales. Please try again",
+    "deleteWarehouseError": "Warehouse failed to delete. Please make sure the warehouse does not have any products or sales. Please try again",
     "deleteWarehouseSuccess": "Warehouse deleted successfully",
     "manageWarehouseButton": "Manage warehouse",
     "notFound": "Warehouse not found",
