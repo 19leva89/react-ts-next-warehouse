@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface useCustomerListWarehouse {
+interface UseCustomerListWarehouse {
 	isOpen: boolean
 	isEditing: boolean
 	customerList?: {
@@ -18,7 +18,7 @@ interface useCustomerListWarehouse {
 	) => void
 }
 
-export const useCustomerList = create<useCustomerListWarehouse>((set) => ({
+export const useCustomerList = create<UseCustomerListWarehouse>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	onOpen: () => set({ isOpen: true }),

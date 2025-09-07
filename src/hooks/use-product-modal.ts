@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface useProductModalStore {
+interface UseProductModalStore {
 	isOpen: boolean
 	isEditing: boolean
 	productData?: {
@@ -26,7 +26,7 @@ interface useProductModalStore {
 	}) => void
 }
 
-export const useProductModal = create<useProductModalStore>((set) => ({
+export const useProductModal = create<UseProductModalStore>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	onOpen: () => set({ isOpen: true }),

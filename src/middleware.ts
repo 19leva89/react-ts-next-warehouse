@@ -2,17 +2,23 @@ import { getToken } from 'next-auth/jwt'
 import createMiddleware from 'next-intl/middleware'
 import { NextRequest, NextResponse } from 'next/server'
 
-import { routing } from '@/i18n/routing'
+import { Locale, routing } from '@/i18n/routing'
 
 const secret = process.env.AUTH_SECRET
 
 const authRoutes = ['/auth/reset', '/auth/new-password', '/auth/not-auth']
 
 // Utility function to get locale from pathname
-function getLocaleFromPath(pathname: string): string {
-	const locale = pathname.split('/')[1]
+function getLocaleFromPath(pathname: string): Locale {
+	const pathSegments = pathname.split('/')
+	const potentialLocale = pathSegments[1]
 
-	return routing.locales.includes(locale as any) ? locale : routing.defaultLocale
+	// Type guard to check if the string is a valid locale
+	if (routing.locales.includes(potentialLocale as Locale)) {
+		return potentialLocale as Locale
+	}
+
+	return routing.defaultLocale
 }
 
 async function handleWebAuth(req: NextRequest, intlResponse?: NextResponse) {

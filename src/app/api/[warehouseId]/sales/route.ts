@@ -2,13 +2,14 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { requireAdminOrSales } from '@/lib/auth'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
 	params: Promise<{ warehouseId: string }>
 }
 
-export async function GET(req: NextRequest, { params }: Props) {
+export async function GET(_req: NextRequest, { params }: Props) {
 	const { warehouseId } = await params
 
 	try {
@@ -23,22 +24,23 @@ export async function GET(req: NextRequest, { params }: Props) {
 			},
 		})
 
-		return SuccessResponse({
-			sales: sales.map((sale) => ({
-				id: sale.id,
-				addedBy: sale.user?.name ?? 'Deleted user',
-				customerId: sale.customerId,
-				customerName: sale.customer?.name ?? 'Deleted customer',
-				productId: sale.productId,
-				productName: sale.product?.name ?? 'Deleted product',
-				saleDate: sale.saleDate,
-				quantity: sale.quantity,
-			})),
-		})
-	} catch (error: any) {
-		console.error(error)
-
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				sales: sales.map((sale) => ({
+					id: sale.id,
+					addedBy: sale.user?.name ?? 'Deleted user',
+					customerId: sale.customerId,
+					customerName: sale.customer?.name ?? 'Deleted customer',
+					productId: sale.productId,
+					productName: sale.product?.name ?? 'Deleted product',
+					saleDate: sale.saleDate,
+					quantity: sale.quantity,
+				})),
+			},
+			'GET /api/[warehouseId]/sales',
+		)
+	} catch (error) {
+		return handleApiError(error, 'GET /api/[warehouseId]/sales')
 	}
 }
 
@@ -58,18 +60,12 @@ export async function POST(req: NextRequest, { params }: Props) {
 		})
 
 		if (!product) {
-			return GlobalError({
-				message: 'Product not found',
-				errorCode: 404,
-			})
+			return handleApiError(new Error('Product not found'), 'POST /api/[warehouseId]/sales')
 		}
 
 		if (product.stock !== 0) {
 			if (product.stock < quantity) {
-				return GlobalError({
-					message: 'The quantity is greater than the stock',
-					errorCode: 400,
-				})
+				return handleApiError(new Error('Product stock is not enough'), 'POST /api/[warehouseId]/sales')
 			}
 
 			await prisma.product.update({
@@ -95,10 +91,8 @@ export async function POST(req: NextRequest, { params }: Props) {
 			},
 		})
 
-		return SuccessResponse(sales)
-	} catch (error: any) {
-		console.error(error)
-
-		return GlobalError(error)
+		return handleApiSuccess(sales, 'POST /api/[warehouseId]/sales', 201)
+	} catch (error) {
+		return handleApiError(error, 'POST /api/[warehouseId]/sales')
 	}
 }

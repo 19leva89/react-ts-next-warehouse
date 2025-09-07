@@ -5,7 +5,7 @@ import { getUserByEmail } from '@/data/user'
 
 import { saltAndHashPassword } from '@/lib/salt'
 import { getPasswordResetTokenByToken } from '@/data/password-reset-token'
-import { createNewPasswordSchema, TNewPasswordValues } from '@/lib/validations/user-schema'
+import { createNewPasswordSchema, TNewPasswordValues } from '@/lib/validations/auth-schema'
 
 export const newPassword = async (values: TNewPasswordValues, token?: string | null) => {
 	if (!token) {

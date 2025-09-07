@@ -20,6 +20,8 @@ const formSchema = z.object({
 	name: z.string().min(1),
 })
 
+type TFormValues = z.infer<typeof formSchema>
+
 export const WarehouseModal = () => {
 	const router = useRouter()
 	const t = useTranslations('Warehouse')
@@ -28,7 +30,7 @@ export const WarehouseModal = () => {
 
 	const [loading, setLoading] = useState<boolean>(false)
 
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<TFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: '',
@@ -41,7 +43,7 @@ export const WarehouseModal = () => {
 		}
 	}, [warehouseModalWarehouse.isEditing, warehouseModalWarehouse.warehouseData, form])
 
-	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+	const onSubmit = async (values: TFormValues) => {
 		try {
 			setLoading(true)
 

@@ -14,6 +14,7 @@ import { useUserModal } from '@/hooks/use-user-modal'
 import { useRoleOptions } from '@/hooks/use-role-option'
 import { Button, Form, Label, Switch } from '@/components/ui'
 import { FormCombobox, FormInput } from '@/components/shared/form'
+import { createNewPasswordSchema, TNewPasswordValues } from '@/lib/validations/auth-schema'
 
 const userProfileFormSchema = z.object({
 	name: z.string().min(1),
@@ -21,21 +22,20 @@ const userProfileFormSchema = z.object({
 	role: z.enum(['ADMIN', 'PRODUCT_MANAGER', 'SALES_MANAGER', 'VIEWER']),
 })
 
-const userPasswordFormSchema = z.object({
-	password: z.string().min(8),
-	confirmPassword: z.string().min(8),
-})
+type TUserProfileForm = z.infer<typeof userProfileFormSchema>
 
 export const UserModal = () => {
 	const router = useRouter()
 	const roleOptions = useRoleOptions()
 	const userWarehouse = useUserModal()
-	const t = useTranslations('ManageUser')
+	const tAuth = useTranslations('Auth')
+	const tUser = useTranslations('ManageUser')
+	const userPasswordFormSchema = createNewPasswordSchema(tAuth)
 
 	const [loading, setLoading] = useState<boolean>(false)
 	const [updatePassword, setUpdatePassword] = useState<boolean>(false)
 
-	const userProfileForm = useForm<z.infer<typeof userProfileFormSchema>>({
+	const userProfileForm = useForm<TUserProfileForm>({
 		resolver: zodResolver(userProfileFormSchema),
 		defaultValues: {
 			name: '',
@@ -44,7 +44,7 @@ export const UserModal = () => {
 		},
 	})
 
-	const userPasswordForm = useForm<z.infer<typeof userPasswordFormSchema>>({
+	const userPasswordForm = useForm<TNewPasswordValues>({
 		resolver: zodResolver(userPasswordFormSchema),
 		defaultValues: {
 			password: '',
@@ -67,19 +67,22 @@ export const UserModal = () => {
 		}
 	}, [userWarehouse.isEditing, userWarehouse.userData, userProfileForm, userPasswordForm])
 
-	const onSubmit = async (
-		profileValues: z.infer<typeof userProfileFormSchema>,
-		passwordValues: z.infer<typeof userPasswordFormSchema>,
-	) => {
+	const onProfileSubmit = async (profileValues: TUserProfileForm) => {
+		// If updatePassword is true, validate the password form
+		if (updatePassword) {
+			const isPasswordValid = await userPasswordForm.trigger()
+
+			if (!isPasswordValid) {
+				return
+			}
+		}
+
+		await submitData(profileValues, userPasswordForm.getValues())
+	}
+
+	const submitData = async (profileValues: TUserProfileForm, passwordValues: TNewPasswordValues) => {
 		try {
 			setLoading(true)
-
-			if (updatePassword) {
-				if (passwordValues.password !== passwordValues.confirmPassword) {
-					toast.error(t('passwordNotMatch'))
-					return
-				}
-			}
 
 			const response = await axios.put(`/api/auth/users/${userWarehouse.userData?.id}`, {
 				id: userWarehouse.userData?.id,
@@ -87,31 +90,37 @@ export const UserModal = () => {
 				email: profileValues.email.toLowerCase(),
 				role: profileValues.role,
 				updatePassword: updatePassword,
-				password: passwordValues.password,
+				password: updatePassword ? passwordValues.password : undefined,
 			})
 
-			toast.success(t('updateUserSuccess'))
+			toast.success(tUser('updateUserSuccess'))
 
 			userProfileForm.reset()
+			userPasswordForm.reset()
 			setUpdatePassword(false)
 			userWarehouse.setIsEditing(false)
-			userWarehouse.userSetter(response.data?.users)
+			userWarehouse.userSetter?.(response.data?.users)
 			userWarehouse.onClose()
 			router.refresh()
 		} catch {
-			toast.error(t('updateUserFailed'))
+			toast.error(tUser('updateUserFailed'))
 		} finally {
 			setLoading(false)
 		}
 	}
 
+	const handleFormSubmit = () => {
+		userProfileForm.handleSubmit(onProfileSubmit)()
+	}
+
 	return (
 		<Modal
-			title={t('updateUserTitle')}
-			description={t('updateUserDescription')}
+			title={tUser('updateUserTitle')}
+			description={tUser('updateUserDescription')}
 			isOpen={userWarehouse.isOpen}
 			onClose={() => {
 				userProfileForm.reset()
+				userPasswordForm.reset()
 				setUpdatePassword(false)
 				userWarehouse.setIsEditing(false)
 				userWarehouse.onClose()
@@ -121,29 +130,29 @@ export const UserModal = () => {
 				<div className='space-y-4 py-2 pb-4'>
 					<div className='space-y-4'>
 						<Form {...userProfileForm}>
-							<form className='space-y-4'>
+							<form className='space-y-4' onSubmit={userProfileForm.handleSubmit(onProfileSubmit)}>
 								<FormInput
 									name='name'
 									type='text'
-									label={t('userName')}
-									placeholder={t('userNamePlaceholder')}
+									label={tUser('userName')}
+									placeholder={tUser('userNamePlaceholder')}
 									required
 								/>
 
 								<FormInput
 									name='email'
 									type='email'
-									label={t('userEmail')}
-									placeholder={t('userEmailPlaceholder')}
+									label={tUser('userEmail')}
+									placeholder={tUser('userEmailPlaceholder')}
 									required
 								/>
 
 								<FormCombobox
 									name='role'
-									label={t('userRole')}
-									placeholder={t('userRolePlaceholder')}
-									noResultsText={t('noResults')}
-									selectPlaceholder={t('userRolePlaceholder')}
+									label={tUser('userRole')}
+									placeholder={tUser('userRolePlaceholder')}
+									noResultsText={tUser('noResults')}
+									selectPlaceholder={tUser('userRolePlaceholder')}
 									valueKey='value'
 									labelKey='label'
 									mapTable={roleOptions}
@@ -154,8 +163,7 @@ export const UserModal = () => {
 
 						<div className='flex items-center gap-2'>
 							<Switch id='usePassword' checked={updatePassword} onCheckedChange={setUpdatePassword} />
-
-							<Label htmlFor='usePassword'>{t('updateUserPassword')}</Label>
+							<Label htmlFor='usePassword'>{tUser('updateUserPassword')}</Label>
 						</div>
 
 						{updatePassword && (
@@ -164,16 +172,16 @@ export const UserModal = () => {
 									<FormInput
 										name='password'
 										type='password'
-										label={t('newPassword')}
-										placeholder={t('newPasswordPlaceholder')}
+										label={tUser('newPassword')}
+										placeholder={tUser('newPasswordPlaceholder')}
 										required
 									/>
 
 									<FormInput
 										name='confirmPassword'
 										type='password'
-										label={t('newPasswordConfirmation')}
-										placeholder={t('newPasswordConfirmationPlaceholder')}
+										label={tUser('newPasswordConfirmation')}
+										placeholder={tUser('newPasswordConfirmationPlaceholder')}
 										required
 									/>
 								</form>
@@ -182,17 +190,11 @@ export const UserModal = () => {
 
 						<div className='flex w-full items-center justify-end gap-2 pt-6'>
 							<Button variant='outline' disabled={loading} onClick={userWarehouse.onClose}>
-								{t('cancelButton')}
+								{tUser('cancelButton')}
 							</Button>
 
-							<Button
-								type='submit'
-								disabled={loading}
-								onClick={() => {
-									onSubmit(userProfileForm.getValues(), userPasswordForm.getValues())
-								}}
-							>
-								{t('updateUserButton')}
+							<Button type='button' disabled={loading} onClick={handleFormSubmit}>
+								{tUser('updateUserButton')}
 							</Button>
 						</div>
 					</div>

@@ -1,6 +1,5 @@
 'use client'
 
-import { z } from 'zod'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { User } from '@prisma/client'
@@ -10,32 +9,28 @@ import { useEffect, useState } from 'react'
 import { User2Icon, UsersIcon } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { handleError } from '@/lib/handle-error'
 import { UserTile } from './_components/user-tile'
 import { useUserModal } from '@/hooks/use-user-modal'
 import { useRoleOptions } from '@/hooks/use-role-option'
 import { Button, Form, Separator } from '@/components/ui'
 import { FormCombobox, FormInput } from '@/components/shared/form'
 import { Heading, LoadingIndicator, Subheading } from '@/components/shared'
-
-const userFormSchema = z.object({
-	name: z.string().min(1),
-	email: z.email(),
-	role: z.enum(['ADMIN', 'PRODUCT_MANAGER', 'SALES_MANAGER', 'VIEWER']),
-	password: z.string().min(8),
-	confirmPassword: z.string().min(8),
-})
+import { createUserFormSchema, TUserFormValues } from '@/lib/validations/user-schema'
 
 const ManageUserPage = () => {
 	const roleOptions = useRoleOptions()
 	const userWarehouse = useUserModal()
-	const t = useTranslations('ManageUser')
+	const tAuth = useTranslations('Auth')
+	const tUser = useTranslations('ManageUser')
+	const userFormSchema = createUserFormSchema(tAuth)
 
 	const [users, setUsers] = useState<User[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
 	const [currentUser, setCurrentUser] = useState<string>('')
 	const [formLoading, setFormLoading] = useState<boolean>(false)
 
-	const userForm = useForm<z.infer<typeof userFormSchema>>({
+	const userForm = useForm<TUserFormValues>({
 		resolver: zodResolver(userFormSchema),
 		defaultValues: {
 			name: '',
@@ -59,7 +54,7 @@ const ManageUserPage = () => {
 		getProfile()
 	}, [])
 
-	async function handleAddUser(values: z.infer<typeof userFormSchema>) {
+	async function handleAddUser(values: TUserFormValues) {
 		try {
 			setFormLoading(true)
 
@@ -73,15 +68,17 @@ const ManageUserPage = () => {
 
 			const response = await axios.post('/api/auth/users', user)
 
-			if (response.status === 200) {
-				toast.success(t('addUserSuccess'))
+			if (response.status === 201) {
+				toast.success(tUser('addUserSuccess'))
+
 				userForm.reset()
-				userForm.setValue('role', 'VIEWER')
+
 				setUsers(response.data?.users)
 			}
 		} catch (error) {
-			console.log(error)
-			toast.error(t('addUserFailed'))
+			handleError(error, 'ADD_USER')
+
+			toast.error(tUser('addUserFailed'))
 		} finally {
 			setFormLoading(false)
 		}
@@ -92,7 +89,7 @@ const ManageUserPage = () => {
 	return (
 		<div className='mx-auto my-8 w-4/5 rounded-lg bg-slate-50 p-8 shadow-lg'>
 			<div className='flex-1 space-y-4'>
-				<Heading icon={UsersIcon} title={t('title')} description={t('description')} />
+				<Heading icon={UsersIcon} title={tUser('title')} description={tUser('description')} />
 
 				<Separator />
 
@@ -101,7 +98,11 @@ const ManageUserPage = () => {
 						<div className='flex flex-col gap-2'>
 							{users.some((user) => user.role === 'ADMIN') && (
 								<>
-									<Subheading icon={User2Icon} title={t('adminTitle')} description={t('adminDescription')} />
+									<Subheading
+										icon={User2Icon}
+										title={tUser('adminTitle')}
+										description={tUser('adminDescription')}
+									/>
 
 									<Separator />
 								</>
@@ -109,7 +110,7 @@ const ManageUserPage = () => {
 
 							{users
 								.filter((user) => user.role === 'ADMIN')
-								.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, t }))}
+								.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, tUser }))}
 						</div>
 
 						{users.some((user) => user.role === 'PRODUCT_MANAGER') && (
@@ -117,8 +118,8 @@ const ManageUserPage = () => {
 								<>
 									<Subheading
 										icon={User2Icon}
-										title={t('productManagerTitle')}
-										description={t('productManagerDescription')}
+										title={tUser('productManagerTitle')}
+										description={tUser('productManagerDescription')}
 									/>
 
 									<Separator />
@@ -126,7 +127,7 @@ const ManageUserPage = () => {
 
 								{users
 									.filter((user) => user.role === 'PRODUCT_MANAGER')
-									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, t }))}
+									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, tUser }))}
 							</div>
 						)}
 
@@ -135,8 +136,8 @@ const ManageUserPage = () => {
 								<>
 									<Subheading
 										icon={User2Icon}
-										title={t('salesManagerTitle')}
-										description={t('salesManagerDescription')}
+										title={tUser('salesManagerTitle')}
+										description={tUser('salesManagerDescription')}
 									/>
 
 									<Separator />
@@ -144,7 +145,7 @@ const ManageUserPage = () => {
 
 								{users
 									.filter((user) => user.role === 'SALES_MANAGER')
-									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, t }))}
+									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, tUser }))}
 							</div>
 						)}
 
@@ -153,8 +154,8 @@ const ManageUserPage = () => {
 								<>
 									<Subheading
 										icon={User2Icon}
-										title={t('viewerTitle')}
-										description={t('viewerDescription')}
+										title={tUser('viewerTitle')}
+										description={tUser('viewerDescription')}
 									/>
 
 									<Separator />
@@ -162,7 +163,7 @@ const ManageUserPage = () => {
 
 								{users
 									.filter((user) => user.role === 'VIEWER')
-									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, t }))}
+									.map((user) => UserTile({ user, currentUser, userWarehouse, setUsers, tUser }))}
 							</div>
 						)}
 					</div>
@@ -170,7 +171,11 @@ const ManageUserPage = () => {
 					<Separator orientation='vertical' className='h-144' />
 
 					<div className='flex w-2/5 flex-col gap-2'>
-						<Subheading icon={UsersIcon} title={t('addUserTitle')} description={t('addUserDescription')} />
+						<Subheading
+							icon={UsersIcon}
+							title={tUser('addUserTitle')}
+							description={tUser('addUserDescription')}
+						/>
 
 						<Separator />
 
@@ -179,25 +184,25 @@ const ManageUserPage = () => {
 								<FormInput
 									name='name'
 									type='text'
-									label={t('userName')}
-									placeholder={t('userNamePlaceholder')}
+									label={tUser('userName')}
+									placeholder={tUser('userNamePlaceholder')}
 									required
 								/>
 
 								<FormInput
 									name='email'
 									type='email'
-									label={t('userEmail')}
-									placeholder={t('userEmailPlaceholder')}
+									label={tUser('userEmail')}
+									placeholder={tUser('userEmailPlaceholder')}
 									required
 								/>
 
 								<FormCombobox
 									name='role'
-									label={t('userRole')}
-									placeholder={t('userRolePlaceholder')}
-									noResultsText={t('noResults')}
-									selectPlaceholder={t('userRolePlaceholder')}
+									label={tUser('userRole')}
+									placeholder={tUser('userRolePlaceholder')}
+									noResultsText={tUser('noResults')}
+									selectPlaceholder={tUser('userRolePlaceholder')}
 									valueKey='value'
 									labelKey='label'
 									mapTable={roleOptions}
@@ -207,21 +212,21 @@ const ManageUserPage = () => {
 								<FormInput
 									name='password'
 									type='password'
-									label={t('userPassword')}
-									placeholder={t('userPasswordPlaceholder')}
+									label={tUser('userPassword')}
+									placeholder={tUser('userPasswordPlaceholder')}
 									required
 								/>
 
 								<FormInput
 									name='confirmPassword'
 									type='password'
-									label={t('userPasswordConfirmation')}
-									placeholder={t('userPasswordConfirmationPlaceholder')}
+									label={tUser('userPasswordConfirmation')}
+									placeholder={tUser('userPasswordConfirmationPlaceholder')}
 									required
 								/>
 
 								<Button type='submit' disabled={formLoading} className='w-full'>
-									{t('addUserButton')}
+									{tUser('addUserButton')}
 								</Button>
 							</form>
 						</Form>

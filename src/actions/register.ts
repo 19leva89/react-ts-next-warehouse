@@ -6,7 +6,7 @@ import { handleError } from '@/lib/handle-error'
 import { saltAndHashPassword } from '@/lib/salt'
 // import { sendVerificationEmail } from '@/lib/send-email'
 import { generateVerificationToken } from '@/lib/tokens'
-import { createRegisterSchema, TRegisterValues } from '@/lib/validations/user-schema'
+import { createRegisterSchema, TRegisterValues } from '@/lib/validations/auth-schema'
 
 export const registerUser = async (values: TRegisterValues) => {
 	try {

@@ -1,8 +1,9 @@
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
+import { handleApiError } from '@/lib/handle-error'
 import { requireAdmin, requireAuth } from '@/lib/auth'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 export async function GET() {
 	try {
@@ -11,18 +12,21 @@ export async function GET() {
 		const warehouses = await prisma.warehouse.findFirst()
 
 		if (!warehouses) {
-			return SuccessResponse({
-				warehouse: null,
-			})
+			return handleApiSuccess({ warehouse: null }, 'GET /api/warehouses')
 		}
 
-		return SuccessResponse({
-			warehouse: {
-				id: warehouses?.id,
-				name: warehouses?.name,
+		return handleApiSuccess(
+			{
+				warehouse: {
+					id: warehouses?.id,
+					name: warehouses?.name,
+				},
 			},
-		})
-	} catch {}
+			'GET /api/warehouses',
+		)
+	} catch (error) {
+		return handleApiError(error, 'GET /api/warehouses')
+	}
 }
 
 export async function POST(req: NextRequest) {
@@ -33,10 +37,7 @@ export async function POST(req: NextRequest) {
 		const { name } = body
 
 		if (!name) {
-			return GlobalError({
-				message: 'Name is required',
-				errorCode: 400,
-			})
+			return handleApiError(new Error('Name is required'), 'POST /api/warehouses')
 		}
 
 		const warehouse = await prisma.warehouse.create({
@@ -45,8 +46,8 @@ export async function POST(req: NextRequest) {
 			},
 		})
 
-		return SuccessResponse(warehouse)
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(warehouse, 'POST /api/warehouses', 201)
+	} catch (error) {
+		return handleApiError(error, 'POST /api/warehouses')
 	}
 }

@@ -1,13 +1,14 @@
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
 	params: Promise<{ warehouseId: string }>
 }
 
-export async function GET(req: NextRequest, { params }: Props) {
+export async function GET(_req: NextRequest, { params }: Props) {
 	const { warehouseId } = await params
 
 	try {
@@ -30,10 +31,13 @@ export async function GET(req: NextRequest, { params }: Props) {
 			take: 10,
 		})
 
-		return SuccessResponse({
-			products,
-		})
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				products,
+			},
+			'GET /api/[warehouseId]/stocks',
+		)
+	} catch (error) {
+		return handleApiError(error, 'GET /api/[warehouseId]/stocks')
 	}
 }

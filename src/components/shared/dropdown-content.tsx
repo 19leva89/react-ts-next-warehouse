@@ -1,7 +1,7 @@
 'use client'
 
 import { toast } from 'sonner'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { useLocale, useTranslations } from 'next-intl'
 
 import {
@@ -11,6 +11,7 @@ import {
 	DropdownMenuSeparator,
 } from '@/components/ui'
 import { useRouter } from '@/i18n/navigation'
+import { handleError } from '@/lib/handle-error'
 
 interface Props {
 	name: string
@@ -19,6 +20,7 @@ interface Props {
 export const DropdownContent = ({ name }: Props) => {
 	const router = useRouter()
 	const locale = useLocale()
+	const { data: session } = useSession()
 
 	const tAuth = useTranslations('Auth')
 	const tUser = useTranslations('ManageUser')
@@ -28,7 +30,7 @@ export const DropdownContent = ({ name }: Props) => {
 		try {
 			await signOut({ callbackUrl: `/${locale}/auth/login` })
 		} catch (error) {
-			console.error(error)
+			handleError(error, 'LOGOUT')
 
 			toast.error(tAuth('logoutFailed'))
 		}
@@ -48,21 +50,25 @@ export const DropdownContent = ({ name }: Props) => {
 				{tUser('profileButton')}
 			</DropdownMenuItem>
 
-			<DropdownMenuItem
-				onClick={() => {
-					router.push('/manage-user')
-				}}
-			>
-				{tUser('manageUserButton')}
-			</DropdownMenuItem>
+			{session?.user?.role === 'ADMIN' && (
+				<DropdownMenuItem
+					onClick={() => {
+						router.push('/manage-user')
+					}}
+				>
+					{tUser('manageUserButton')}
+				</DropdownMenuItem>
+			)}
 
-			<DropdownMenuItem
-				onClick={() => {
-					router.push('/products')
-				}}
-			>
-				{tProducts('productsButton')}
-			</DropdownMenuItem>
+			{(session?.user?.role === 'ADMIN' || session?.user?.role === 'PRODUCT_MANAGER') && (
+				<DropdownMenuItem
+					onClick={() => {
+						router.push('/products')
+					}}
+				>
+					{tProducts('productsButton')}
+				</DropdownMenuItem>
+			)}
 
 			<DropdownMenuItem onClick={handleLogout}>{tUser('logoutButton')}</DropdownMenuItem>
 		</DropdownMenuContent>

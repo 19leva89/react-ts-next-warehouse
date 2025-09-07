@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface useAddCustomerModalStore {
+interface UseAddCustomerModalStore {
 	isOpen: boolean
 	isEditing: boolean
 	customerData?: {
@@ -13,7 +13,7 @@ interface useAddCustomerModalStore {
 	setCustomerData: (customerData: { id: string; name: string }) => void
 }
 
-export const useAddCustomerModal = create<useAddCustomerModalStore>((set) => ({
+export const useAddCustomerModal = create<UseAddCustomerModalStore>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	onOpen: () => set({ isOpen: true }),

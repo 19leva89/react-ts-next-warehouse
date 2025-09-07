@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { Warehouse } from '@prisma/client'
 
-interface useAddWarehouseModalWarehouse {
+interface UseAddWarehouseModalWarehouse {
 	isOpen: boolean
 	isEditing: boolean
 	warehouseData?: Warehouse
@@ -11,7 +11,7 @@ interface useAddWarehouseModalWarehouse {
 	setWarehouseData: (WarehouseData: Warehouse) => void
 }
 
-export const useAddWarehouseModal = create<useAddWarehouseModalWarehouse>((set) => ({
+export const useAddWarehouseModal = create<UseAddWarehouseModalWarehouse>((set) => ({
 	isOpen: false,
 	isEditing: false,
 	onOpen: () => set({ isOpen: true }),

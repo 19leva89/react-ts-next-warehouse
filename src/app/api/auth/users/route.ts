@@ -3,7 +3,8 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 export async function GET() {
 	try {
@@ -18,12 +19,15 @@ export async function GET() {
 			},
 		})
 
-		return SuccessResponse({
-			currentUser: user.id,
-			users,
-		})
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				currentUser: user.id,
+				users,
+			},
+			'GET /api/auth/users',
+		)
+	} catch (error) {
+		return handleApiError(error, 'GET /api/auth/users')
 	}
 }
 
@@ -34,10 +38,7 @@ export async function POST(req: NextRequest) {
 		const { name, email, role, password, confirmPassword } = await req.json()
 
 		if (password !== confirmPassword) {
-			return GlobalError({
-				message: 'Password and Confirm Password does not match',
-				errorCode: 400,
-			})
+			return handleApiError(new Error('Passwords do not match'), 'POST /api/auth/users')
 		}
 
 		const hashedPassword = await hash(password, 12)
@@ -60,12 +61,16 @@ export async function POST(req: NextRequest) {
 			},
 		})
 
-		return SuccessResponse({
-			message: 'Successfully created user',
-			currentUser: user.id,
-			users,
-		})
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(
+			{
+				message: 'Successfully created user',
+				currentUser: user.id,
+				users,
+			},
+			'POST /api/auth/users',
+			201,
+		)
+	} catch (error) {
+		return handleApiError(error, 'POST /api/auth/users')
 	}
 }

@@ -12,7 +12,7 @@ import { Link, useRouter } from '@/i18n/navigation'
 import { LocaleSwitcher } from '@/components/shared'
 import { credentialsLoginUser } from '@/actions/login'
 import { FormCheckbox, FormInput } from '@/components/shared/form'
-import { createLoginSchema, TLoginValues } from '@/lib/validations/user-schema'
+import { createLoginSchema, TLoginValues } from '@/lib/validations/auth-schema'
 
 const LoginPage = () => {
 	const router = useRouter()
@@ -66,7 +66,7 @@ const LoginPage = () => {
 				<div id='image' className='hidden rounded-l-xl bg-accent md:h-full lg:block lg:w-1/2'>
 					<Image
 						src='/assets/svg/auth-logo.svg'
-						alt='Auth Logo'
+						alt='Auth logo'
 						width={400}
 						height={500}
 						objectFit='cover'

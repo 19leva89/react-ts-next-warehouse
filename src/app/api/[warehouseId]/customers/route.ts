@@ -2,15 +2,16 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { requireAdminOrSales } from '@/lib/auth'
-import { GlobalError, SuccessResponse } from '@/lib/helper'
+import { handleApiError } from '@/lib/handle-error'
+import { handleApiSuccess } from '@/lib/handle-success'
 
 export async function GET() {
 	try {
 		const customers = await prisma.customer.findMany()
 
-		return SuccessResponse(customers)
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(customers, 'GET /api/[warehouseId]/customers')
+	} catch (error) {
+		return handleApiError(error, 'GET /api/[warehouseId]/customers')
 	}
 }
 
@@ -27,8 +28,8 @@ export async function POST(req: NextRequest) {
 			},
 		})
 
-		return SuccessResponse(customer)
-	} catch (error: any) {
-		return GlobalError(error)
+		return handleApiSuccess(customer, 'POST /api/[warehouseId]/customers', 201)
+	} catch (error) {
+		return handleApiError(error, 'POST /api/[warehouseId]/customers')
 	}
 }

@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useState } from 'react'
 
 import { StockDataTable } from './data-table'
+import { handleError } from '@/lib/handle-error'
 import { StockColumn, StockColumns } from './columns'
 import { LoadingIndicator, RefreshButton, Subheading } from '@/components/shared'
 
@@ -25,7 +26,7 @@ export const Stock = () => {
 
 			setStocks(data)
 		} catch (error) {
-			console.error('Failed to fetch stocks:', error)
+			handleError(error, 'GET_STOCK')
 		}
 	}, [params.warehouseId])
 

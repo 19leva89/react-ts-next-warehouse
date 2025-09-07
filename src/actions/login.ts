@@ -6,11 +6,12 @@ import { revalidatePath } from 'next/cache'
 import { signIn } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { getUserByEmail } from '@/data/user'
+import { handleError } from '@/lib/handle-error'
 import { getTwoFactorTokenByEmail } from '@/data/two-factor-token'
+import { createLoginSchema, TLoginValues } from '@/lib/validations/auth-schema'
 import { generateTwoFactorToken, generateVerificationToken } from '@/lib/tokens'
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation'
 // import { sendTwoFactorTokenEmail, sendVerificationEmail } from '@/lib/send-email'
-import { createLoginSchema, TLoginValues } from '@/lib/validations/user-schema'
 
 export const loginUser = async (provider: string) => {
 	await signIn(provider, { redirectTo: '/' })
@@ -111,7 +112,7 @@ export const credentialsLoginUser = async (values: TLoginValues) => {
 
 		return { success: true }
 	} catch (error) {
-		console.error('Login error:', error)
+		handleError(error, 'LOGIN_USER')
 
 		return { error: 'An unexpected error occurred. Please try again' }
 	}
