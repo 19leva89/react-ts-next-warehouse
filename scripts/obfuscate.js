@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { glob } from 'glob'
+import { globSync } from 'glob'
 import { execSync } from 'child_process'
 import JavaScriptObfuscator from 'javascript-obfuscator'
 
@@ -137,13 +137,20 @@ function obfuscateFile(filePath, config) {
 		const obfuscated = JavaScriptObfuscator.obfuscate(code, config)
 		const newCode = obfuscated.getObfuscatedCode()
 
-		// Check if obfuscation failed
-		if (newCode.length === 0 || newCode === code) {
-			return { success: false, reason: 'obfuscation failed' }
+		// Check if obfuscation produced empty output
+		if (newCode.length === 0) {
+			return { success: false, reason: 'obfuscation produced empty output' }
 		}
 
-		// Remove sourcemap comments
-		const cleaned = newCode.replace(/\n\/\/# sourceMappingURL=.*$/gm, '')
+		// Check if obfuscation produced unchanged output
+		if (newCode === code) {
+			return { success: false, reason: 'skipped (unchanged)' }
+		}
+
+		// Remove sourcemap comments (both styles)
+		const cleaned = newCode
+			.replace(/\/\/#\s*sourceMappingURL=.*$/gm, '')
+			.replace(/\/\*#\s*sourceMappingURL=.*?\*\//gs, '')
 
 		// Atomic write through temporary file
 		const tmp = `${filePath}.tmp`
@@ -166,14 +173,14 @@ function getFilePatterns() {
 
 	return {
 		// Application chunks (main obfuscation target)
-		chunks: [
-			`${buildDir}/static/chunks/**/*.js`,
-			`!${buildDir}/static/chunks/polyfills-*.js`,
-			`!${buildDir}/static/chunks/webpack-*.js`,
-			`!${buildDir}/static/chunks/main-*.js`,
-			`!${buildDir}/static/chunks/framework-*.js`,
-			`!${buildDir}/static/chunks/commons-*.js`,
-			`!${buildDir}/static/chunks/runtime-*.js`,
+		chunks: `${buildDir}/static/chunks/**/*.js`,
+		chunksIgnore: [
+			`${buildDir}/static/chunks/polyfills-*.js`,
+			`${buildDir}/static/chunks/webpack-*.js`,
+			`${buildDir}/static/chunks/main-*.js`,
+			`${buildDir}/static/chunks/framework-*.js`,
+			`${buildDir}/static/chunks/commons-*.js`,
+			`${buildDir}/static/chunks/runtime-*.js`,
 		],
 
 		// Application pages
@@ -203,7 +210,7 @@ async function obfuscateNextJSBuild() {
 
 	// Obfuscation chunks
 	console.log('🔄 Processing chunks...')
-	const chunkFiles = glob.sync(patterns.chunks)
+	const chunkFiles = globSync(patterns.chunks, { ignore: patterns.chunksIgnore })
 	console.log(`📁 Found ${chunkFiles.length} chunk files`)
 
 	for (const file of chunkFiles) {
@@ -214,7 +221,7 @@ async function obfuscateNextJSBuild() {
 
 	// Obfuscation pages (more conservative)
 	console.log('\n🔄 Processing pages...')
-	const pageFiles = glob.sync(patterns.pages)
+	const pageFiles = globSync(patterns.pages)
 	console.log(`📄 Found ${pageFiles.length} page files`)
 
 	for (const file of pageFiles) {
@@ -225,7 +232,7 @@ async function obfuscateNextJSBuild() {
 
 	// Obfuscation components (most conservative)
 	console.log('\n🔄 Processing components...')
-	const componentFiles = glob.sync(patterns.components)
+	const componentFiles = globSync(patterns.components, { ignore: patterns.componentsIgnore })
 	if (componentFiles.length > 0) {
 		console.log(`🧩 Found ${componentFiles.length} component files`)
 
@@ -250,9 +257,11 @@ function updateStats(stats, result, file, type) {
 		stats.totalOriginalSize += result.originalSize
 		stats.totalNewSize += result.newSize
 
-		const compression = ((result.originalSize - result.newSize) / result.originalSize * 100).toFixed(1)
+		const base = result.originalSize || 1
+		const compression = (((result.originalSize - result.newSize) / base) * 100).toFixed(1)
+
 		console.log(`✅ ${type}: ${fileName} (${compression}% size change)`)
-	} else if (result.reason.includes('skipped')) {
+	} else if (result.reason && result.reason.includes('skipped')) {
 		stats.skipped++
 
 		console.log(`⏭️  ${type}: ${fileName} (${result.reason})`)
