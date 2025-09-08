@@ -1,17 +1,17 @@
 export const obfuscatorOptions = {
-	compact: true,
-	controlFlowFlattening: true,
-	controlFlowFlatteningThreshold: 0.5,
-	deadCodeInjection: false,
-	debugProtection: false,
-	disableConsoleOutput: true,
-	identifierNamesGenerator: 'hexadecimal',
-	rotateStringArray: true,
-	selfDefending: false,
-	stringArray: true,
-	stringArrayThreshold: 0.7,
-	transformObjectKeys: true,
-	unicodeEscapeSequence: false,
+	compact: true, // Minify the code
+	controlFlowFlattening: true, // Radically changes the structure of the code
+	controlFlowFlatteningThreshold: 0.5, // Balance of protection/performance
+	deadCodeInjection: false, // Increases the bundle size
+	debugProtection: false, // May cause infinite loops
+	disableConsoleOutput: false, // Removes console.log
+	identifierNamesGenerator: 'mangled-shuffled', // Generating new identifier names
+	rotateStringArray: true, // Dynamically shuffles lines
+	selfDefending: false, // Conflicts with CDN optimizations
+	stringArray: true, // Good protection without big problems
+	stringArrayThreshold: 0.7, // What proportion of string literals in your code will be moved to stringArray
+	transformObjectKeys: true, // Hide API structure
+	unicodeEscapeSequence: false, // Bloats the code a lot
 	reservedNames: [
 		'^__next', // Next.js runtime
 		'^__webpack', // Webpack chunks
@@ -25,11 +25,11 @@ export const obfuscatorOptions = {
 
 export const pluginOptions = {
 	enabled: process.env.NODE_ENV === 'production',
-	patterns: ['**/*.js'],
+	patterns: ['.next/static/**/*.js'],
 	obfuscateFiles: {
-		buildManifest: true,
-		ssgManifest: true,
-		webpack: true,
+		buildManifest: false,
+		ssgManifest: false,
+		webpack: false,
 	},
 	log: true,
 }
