@@ -1,7 +1,12 @@
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
+import createNextJsObfuscator from 'nextjs-obfuscator'
 
-const nextConfig: NextConfig = {
+import { obfuscatorOptions, pluginOptions } from './obfuscator-options'
+
+const withNextJsObfuscator = createNextJsObfuscator(obfuscatorOptions, pluginOptions)
+
+const nextConfig: NextConfig = withNextJsObfuscator({
 	images: {
 		remotePatterns: [
 			{
@@ -12,7 +17,7 @@ const nextConfig: NextConfig = {
 		unoptimized: true,
 	},
 	reactStrictMode: false,
-}
+})
 
 const withNextIntl = createNextIntlPlugin()
 
