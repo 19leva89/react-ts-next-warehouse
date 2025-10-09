@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { Nunito } from 'next/font/google'
 import { notFound } from 'next/navigation'
+import { Analytics } from '@vercel/analytics/next'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 
 import { routing } from '@/i18n/routing'
@@ -43,6 +44,9 @@ const LocaleLayout = async ({ children, params }: Props) => {
 						<ToasterProvider />
 					</SessionProvider>
 				</NextIntlClientProvider>
+
+				{/* Allow track page views for Vercel */}
+				<Analytics />
 			</body>
 		</html>
 	)
