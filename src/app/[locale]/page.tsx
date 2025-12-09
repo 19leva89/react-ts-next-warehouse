@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react'
 
 import { WarehouseData } from '@/lib/types'
 import { redirect } from '@/i18n/navigation'
-import { handleError } from '@/lib/handle-error'
 import { LoadingIndicator } from '@/components/shared'
 import { WarehouseModal } from '@/components/shared/modals'
+import { handleErrorClient } from '@/lib/handle-error-client'
 import { useAddWarehouseModal } from '@/hooks/use-add-warehouse-modal'
 
 const MainPage = () => {
@@ -26,7 +26,7 @@ const MainPage = () => {
 
 				setWarehouse(response.data.warehouse)
 			} catch (error) {
-				handleError(error, 'GET_WAREHOUSE')
+				handleErrorClient(error, 'GET_WAREHOUSE')
 			} finally {
 				setLoading(false)
 			}

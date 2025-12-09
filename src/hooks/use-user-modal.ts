@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { User } from '@prisma/client'
+
+import { User } from '@/generated/prisma/client'
 
 export interface UseUserModalWarehouse {
 	isOpen: boolean

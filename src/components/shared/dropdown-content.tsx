@@ -11,7 +11,7 @@ import {
 	DropdownMenuSeparator,
 } from '@/components/ui'
 import { useRouter } from '@/i18n/navigation'
-import { handleError } from '@/lib/handle-error'
+import { handleErrorClient } from '@/lib/handle-error-client'
 
 interface Props {
 	name: string
@@ -30,7 +30,7 @@ export const DropdownContent = ({ name }: Props) => {
 		try {
 			await signOut({ callbackUrl: `/${locale}/auth/login` })
 		} catch (error) {
-			handleError(error, 'LOGOUT')
+			handleErrorClient(error, 'LOGOUT')
 
 			toast.error(tAuth('logoutFailed'))
 		}

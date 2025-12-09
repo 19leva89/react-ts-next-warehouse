@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { requireAdminOrSales } from '@/lib/auth'
-import { handleApiError } from '@/lib/handle-error'
+import { handleErrorApi } from '@/lib/handle-error-server'
 import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
@@ -40,7 +40,7 @@ export async function GET(_req: NextRequest, { params }: Props) {
 			'GET /api/[warehouseId]/sales',
 		)
 	} catch (error) {
-		return handleApiError(error, 'GET /api/[warehouseId]/sales')
+		return handleErrorApi(error, 'GET /api/[warehouseId]/sales')
 	}
 }
 
@@ -60,12 +60,12 @@ export async function POST(req: NextRequest, { params }: Props) {
 		})
 
 		if (!product) {
-			return handleApiError(new Error('Product not found'), 'POST /api/[warehouseId]/sales')
+			return handleErrorApi(new Error('Product not found'), 'POST /api/[warehouseId]/sales')
 		}
 
 		if (product.stock !== 0) {
 			if (product.stock < quantity) {
-				return handleApiError(new Error('Product stock is not enough'), 'POST /api/[warehouseId]/sales')
+				return handleErrorApi(new Error('Product stock is not enough'), 'POST /api/[warehouseId]/sales')
 			}
 
 			await prisma.product.update({
@@ -93,6 +93,6 @@ export async function POST(req: NextRequest, { params }: Props) {
 
 		return handleApiSuccess(sales, 'POST /api/[warehouseId]/sales', 201)
 	} catch (error) {
-		return handleApiError(error, 'POST /api/[warehouseId]/sales')
+		return handleErrorApi(error, 'POST /api/[warehouseId]/sales')
 	}
 }

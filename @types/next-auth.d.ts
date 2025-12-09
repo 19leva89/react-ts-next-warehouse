@@ -1,7 +1,8 @@
 // src/types/next-auth.d.ts
 import { DefaultJWT } from 'next-auth/jwt'
 import { type DefaultUser } from 'next-auth'
-import type { UserRole } from '@prisma/client'
+
+import type { UserRole } from '@/generated/prisma/enums'
 
 declare module 'next-auth' {
 	interface User extends DefaultUser {

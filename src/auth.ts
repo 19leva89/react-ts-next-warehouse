@@ -1,5 +1,4 @@
 import { JWT } from 'next-auth/jwt'
-import { UserRole } from '@prisma/client'
 import { Adapter } from 'next-auth/adapters'
 import NextAuth, { Session } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
@@ -7,6 +6,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@/lib/prisma'
 import authConfig from '@/auth.config'
 import { getUserById } from '@/data/user'
+import { UserRole } from '@/generated/prisma/enums'
 import { getAccountByUserId } from '@/data/account'
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation'
 

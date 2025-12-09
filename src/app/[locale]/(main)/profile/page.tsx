@@ -10,8 +10,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { KeyRoundIcon, User2Icon } from 'lucide-react'
 
 import { useRouter } from '@/i18n/navigation'
-import { handleError } from '@/lib/handle-error'
 import { Button, Form, Separator } from '@/components/ui'
+import { handleErrorClient } from '@/lib/handle-error-client'
 import { FormInput, FormSwitch } from '@/components/shared/form'
 import { Heading, LoadingIndicator, Subheading } from '@/components/shared'
 import { createChangePasswordSchema, TChangePasswordValues } from '@/lib/validations/auth-schema'
@@ -104,7 +104,7 @@ const ProfilePage = () => {
 
 			toast.success(tProfile('profileUpdateSuccess'))
 		} catch (error) {
-			handleError(error, 'UPDATE_PROFILE')
+			handleErrorClient(error, 'UPDATE_PROFILE')
 
 			toast.error(tProfile('profileUpdateFailed'))
 		} finally {
@@ -127,7 +127,7 @@ const ProfilePage = () => {
 
 			passwordForm.reset()
 		} catch (error) {
-			handleError(error, 'UPDATE_PASSWORD')
+			handleErrorClient(error, 'UPDATE_PASSWORD')
 
 			toast.error(tProfile('passwordUpdateFailed'))
 		} finally {

@@ -1,6 +1,6 @@
 import { User } from 'next-auth'
-import { Warehouse } from '@prisma/client'
 
+import { Warehouse } from '@/generated/prisma/client'
 import { LocaleSwitcher, MainNav, UserButton, WarehouseSwitcher } from '@/components/shared'
 
 interface Props {

@@ -12,8 +12,8 @@ import {
 	ProductColumnsWithoutAction,
 } from '@/components/shared/product/table-columns'
 import { useProduct } from '@/hooks/use-product'
-import { handleError } from '@/lib/handle-error'
 import { ProductData, UserData } from '@/lib/types'
+import { handleErrorClient } from '@/lib/handle-error-client'
 import { AddProductButton } from '@/components/shared/product'
 import { DataTable, Heading, LoadingIndicator } from '@/components/shared'
 
@@ -43,7 +43,7 @@ const ProductsPage = () => {
 
 				setFormattedProduct(tempProducts)
 			} catch (error) {
-				handleError(error, 'GET_PRODUCTS')
+				handleErrorClient(error, 'GET_PRODUCTS')
 
 				toast.error(t('loadProductFailed'))
 			} finally {
@@ -58,7 +58,7 @@ const ProductsPage = () => {
 
 				setUser(user)
 			} catch (error) {
-				handleError(error, 'GET_USER_DATA')
+				handleErrorClient(error, 'GET_USER_DATA')
 
 				toast.error(t('loadUserFailed'))
 			} finally {

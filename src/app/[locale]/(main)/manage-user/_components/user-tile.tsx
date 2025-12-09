@@ -1,7 +1,7 @@
-import { User } from '@prisma/client'
 import { Edit2Icon } from 'lucide-react'
 
 import { Button } from '@/components/ui'
+import { User } from '@/generated/prisma/client'
 import { DeleteUserButton } from '@/components/shared'
 import { UseUserModalWarehouse } from '@/hooks/use-user-modal'
 

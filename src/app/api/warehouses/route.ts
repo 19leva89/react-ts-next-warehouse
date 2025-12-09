@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import { handleApiError } from '@/lib/handle-error'
+import { handleErrorApi } from '@/lib/handle-error-server'
 import { requireAdmin, requireAuth } from '@/lib/auth'
 import { handleApiSuccess } from '@/lib/handle-success'
 
@@ -25,7 +25,7 @@ export async function GET() {
 			'GET /api/warehouses',
 		)
 	} catch (error) {
-		return handleApiError(error, 'GET /api/warehouses')
+		return handleErrorApi(error, 'GET /api/warehouses')
 	}
 }
 
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 		const { name } = body
 
 		if (!name) {
-			return handleApiError(new Error('Name is required'), 'POST /api/warehouses')
+			return handleErrorApi(new Error('Name is required'), 'POST /api/warehouses')
 		}
 
 		const warehouse = await prisma.warehouse.create({
@@ -48,6 +48,6 @@ export async function POST(req: NextRequest) {
 
 		return handleApiSuccess(warehouse, 'POST /api/warehouses', 201)
 	} catch (error) {
-		return handleApiError(error, 'POST /api/warehouses')
+		return handleErrorApi(error, 'POST /api/warehouses')
 	}
 }

@@ -4,7 +4,7 @@ import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage
 import { prisma } from '@/lib/prisma'
 import { storage } from '@/lib/firebase'
 import { requireAdminOrProduct } from '@/lib/auth'
-import { handleApiError } from '@/lib/handle-error'
+import { handleErrorApi } from '@/lib/handle-error-server'
 import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
@@ -81,7 +81,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
 			'PUT /api/products/[productId]',
 		)
 	} catch (error) {
-		return handleApiError(error, 'PUT /api/products/[productId]')
+		return handleErrorApi(error, 'PUT /api/products/[productId]')
 	}
 }
 
@@ -116,6 +116,6 @@ export async function DELETE(_req: NextRequest, { params }: Props) {
 			'DELETE /api/products/[productId]',
 		)
 	} catch (error) {
-		return handleApiError(error, 'DELETE /api/products/[productId]')
+		return handleErrorApi(error, 'DELETE /api/products/[productId]')
 	}
 }

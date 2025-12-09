@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
-import { handleApiError } from '@/lib/handle-error'
+import { handleErrorApi } from '@/lib/handle-error-server'
 import { handleApiSuccess } from '@/lib/handle-success'
 
 export async function GET() {
@@ -27,7 +27,7 @@ export async function GET() {
 			'GET /api/auth/users',
 		)
 	} catch (error) {
-		return handleApiError(error, 'GET /api/auth/users')
+		return handleErrorApi(error, 'GET /api/auth/users')
 	}
 }
 
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 		const { name, email, role, password, confirmPassword } = await req.json()
 
 		if (password !== confirmPassword) {
-			return handleApiError(new Error('Passwords do not match'), 'POST /api/auth/users')
+			return handleErrorApi(new Error('Passwords do not match'), 'POST /api/auth/users')
 		}
 
 		const hashedPassword = await hash(password, 12)
@@ -71,6 +71,6 @@ export async function POST(req: NextRequest) {
 			201,
 		)
 	} catch (error) {
-		return handleApiError(error, 'POST /api/auth/users')
+		return handleErrorApi(error, 'POST /api/auth/users')
 	}
 }

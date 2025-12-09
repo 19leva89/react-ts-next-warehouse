@@ -5,7 +5,7 @@ import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
 
 import { getUserByEmail } from '@/data/user'
-import { handleError } from '@/lib/handle-error'
+import { handleErrorServer } from '@/lib/handle-error-server'
 import { createLoginSchema } from '@/lib/validations/auth-schema'
 
 export default {
@@ -63,7 +63,7 @@ export default {
 						rememberMe,
 					}
 				} catch (error) {
-					handleError(error, 'AUTHORIZATION_ERROR')
+					handleErrorServer(error, 'AUTHORIZATION_ERROR')
 
 					return null
 				}

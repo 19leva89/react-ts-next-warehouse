@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { Warehouse } from '@prisma/client'
+
+import { Warehouse } from '@/generated/prisma/client'
 
 interface UseWarehouseListWarehouse {
 	isOpen: boolean

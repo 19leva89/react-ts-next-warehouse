@@ -13,9 +13,9 @@ import { ProductData } from '@/lib/types'
 import { useRouter } from '@/i18n/navigation'
 import { Button, Form } from '@/components/ui'
 import { useProduct } from '@/hooks/use-product'
-import { handleError } from '@/lib/handle-error'
 import { Modal } from '@/components/shared/modals'
 import { useSaleModal } from '@/hooks/use-sale-modal'
+import { handleErrorClient } from '@/lib/handle-error-client'
 import { useCustomerList } from '@/hooks/use-customer-list-modal'
 import { FormCalendar, FormCombobox, FormInput } from '@/components/shared/form'
 
@@ -52,7 +52,7 @@ export const SaleModal = () => {
 
 				setProducts(products)
 			} catch (error) {
-				handleError(error, 'GET_PRODUCTS')
+				handleErrorClient(error, 'GET_PRODUCTS')
 
 				toast.error(tProducts('loadProductFailed'))
 			} finally {
@@ -119,7 +119,7 @@ export const SaleModal = () => {
 			saleModalWarehouse.setSaleUpdated(true)
 			saleModalWarehouse.onClose()
 		} catch (error) {
-			handleError(error, 'CREATE_SALE')
+			handleErrorClient(error, 'CREATE_SALE')
 
 			toast.error(t('saleError'))
 		} finally {

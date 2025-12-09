@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/auth'
-import { handleApiError } from '@/lib/handle-error'
+import { handleErrorApi } from '@/lib/handle-error-server'
 import { handleApiSuccess } from '@/lib/handle-success'
 
 export async function GET() {
@@ -22,7 +22,7 @@ export async function GET() {
 			'GET /api/auth/profile',
 		)
 	} catch (error) {
-		return handleApiError(error, 'GET /api/auth/profile')
+		return handleErrorApi(error, 'GET /api/auth/profile')
 	}
 }
 
@@ -54,6 +54,6 @@ export async function PUT(req: NextRequest) {
 			'PUT /api/auth/profile',
 		)
 	} catch (error) {
-		return handleApiError(error, 'PUT /api/auth/profile')
+		return handleErrorApi(error, 'PUT /api/auth/profile')
 	}
 }

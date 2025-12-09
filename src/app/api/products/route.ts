@@ -4,7 +4,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { prisma } from '@/lib/prisma'
 import { storage } from '@/lib/firebase'
 import { requireAdminOrProduct } from '@/lib/auth'
-import { handleApiError } from '@/lib/handle-error'
+import { handleErrorApi } from '@/lib/handle-error-server'
 import { handleApiSuccess } from '@/lib/handle-success'
 
 export async function GET() {
@@ -31,7 +31,7 @@ export async function GET() {
 			'GET /api/products',
 		)
 	} catch (error) {
-		return handleApiError(error, 'GET /api/products')
+		return handleErrorApi(error, 'GET /api/products')
 	}
 }
 
@@ -84,6 +84,6 @@ export async function POST(req: NextRequest) {
 
 		return handleApiSuccess(product, 'POST /api/products', 201)
 	} catch (error) {
-		return handleApiError(error, 'POST /api/products')
+		return handleErrorApi(error, 'POST /api/products')
 	}
 }

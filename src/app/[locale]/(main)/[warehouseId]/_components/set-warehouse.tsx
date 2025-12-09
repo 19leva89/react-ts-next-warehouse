@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Warehouse } from '@prisma/client'
 
+import { Warehouse } from '@/generated/prisma/client'
 import { useWarehouseList } from '@/hooks/use-warehouse-list-modal'
 
 export const SetWarehouse = ({ warehouses }: { warehouses: Warehouse[] }) => {

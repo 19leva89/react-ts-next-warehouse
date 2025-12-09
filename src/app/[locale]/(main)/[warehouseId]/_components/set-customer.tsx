@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Customer } from '@prisma/client'
 
+import { Customer } from '@/generated/prisma/client'
 import { useCustomerList } from '@/hooks/use-customer-list-modal'
 
 export const SetCustomer = ({ customers }: { customers: Customer[] }) => {

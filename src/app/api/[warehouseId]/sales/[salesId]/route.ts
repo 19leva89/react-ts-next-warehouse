@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { requireAdminOrSales } from '@/lib/auth'
-import { handleApiError } from '@/lib/handle-error'
+import { handleErrorApi } from '@/lib/handle-error-server'
 import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
@@ -64,7 +64,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
 	} catch (error) {
 		console.log(error)
 
-		return handleApiError(error, 'PUT /api/[warehouseId]/sales/[salesId]')
+		return handleErrorApi(error, 'PUT /api/[warehouseId]/sales/[salesId]')
 	}
 }
 
@@ -106,6 +106,6 @@ export async function DELETE(req: NextRequest, { params }: Props) {
 			'DELETE /api/[warehouseId]/sales/[salesId]',
 		)
 	} catch (error) {
-		return handleApiError(error, 'DELETE /api/[warehouseId]/sales/[salesId]')
+		return handleErrorApi(error, 'DELETE /api/[warehouseId]/sales/[salesId]')
 	}
 }

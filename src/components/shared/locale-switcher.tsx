@@ -5,8 +5,8 @@ import { useTransition } from 'react'
 import { GlobeIcon } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 
-import { handleError } from '@/lib/handle-error'
 import { useRouter, usePathname } from '@/i18n/navigation'
+import { handleErrorClient } from '@/lib/handle-error-client'
 import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui'
 
 export const LocaleSwitcher = () => {
@@ -25,7 +25,7 @@ export const LocaleSwitcher = () => {
 			try {
 				router.replace(pathname, { locale: targetLocale })
 			} catch (error) {
-				handleError(error, 'CHANGE_LOCALE')
+				handleErrorClient(error, 'CHANGE_LOCALE')
 
 				toast.error('Failed to change language')
 			}

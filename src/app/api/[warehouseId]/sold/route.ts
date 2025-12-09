@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import { handleApiError } from '@/lib/handle-error'
+import { handleErrorApi } from '@/lib/handle-error-server'
 import { handleApiSuccess } from '@/lib/handle-success'
 
 interface GraphData {
@@ -64,6 +64,6 @@ export async function GET(_req: NextRequest, { params }: Props) {
 			'GET /api/[warehouseId]/sold',
 		)
 	} catch (error) {
-		return handleApiError(error, 'GET /api/[warehouseId]/sold')
+		return handleErrorApi(error, 'GET /api/[warehouseId]/sold')
 	}
 }

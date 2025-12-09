@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useState } from 'react'
 import { CrownIcon, HistoryIcon, MedalIcon } from 'lucide-react'
 
-import { handleError } from '@/lib/handle-error'
+import { handleErrorClient } from '@/lib/handle-error-client'
 import { LoadingIndicator, RefreshButton, Subheading } from '@/components/shared'
 
 interface RankingData {
@@ -33,7 +33,7 @@ export const Rank = () => {
 			setTopFive(top)
 			setBottomFive(bottom)
 		} catch (error) {
-			handleError(error, 'GET_RANK')
+			handleErrorClient(error, 'GET_RANK')
 		}
 	}, [params.warehouseId])
 

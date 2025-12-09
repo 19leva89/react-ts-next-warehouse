@@ -2,18 +2,18 @@
 
 import axios from 'axios'
 import { toast } from 'sonner'
-import { User } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { User2Icon, UsersIcon } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { handleError } from '@/lib/handle-error'
+import { User } from '@/generated/prisma/client'
 import { UserTile } from './_components/user-tile'
 import { useUserModal } from '@/hooks/use-user-modal'
 import { useRoleOptions } from '@/hooks/use-role-option'
 import { Button, Form, Separator } from '@/components/ui'
+import { handleErrorClient } from '@/lib/handle-error-client'
 import { FormCombobox, FormInput } from '@/components/shared/form'
 import { Heading, LoadingIndicator, Subheading } from '@/components/shared'
 import { createUserFormSchema, TUserFormValues } from '@/lib/validations/user-schema'
@@ -76,7 +76,7 @@ const ManageUserPage = () => {
 				setUsers(response.data?.users)
 			}
 		} catch (error) {
-			handleError(error, 'ADD_USER')
+			handleErrorClient(error, 'ADD_USER')
 
 			toast.error(tUser('addUserFailed'))
 		} finally {

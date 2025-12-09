@@ -2,10 +2,10 @@
 
 import { prisma } from '@/lib/prisma'
 import { getUserByEmail } from '@/data/user'
-import { handleError } from '@/lib/handle-error'
 import { saltAndHashPassword } from '@/lib/salt'
 // import { sendVerificationEmail } from '@/lib/send-email'
 import { generateVerificationToken } from '@/lib/tokens'
+import { handleErrorServer } from '@/lib/handle-error-server'
 import { createRegisterSchema, TRegisterValues } from '@/lib/validations/auth-schema'
 
 export const registerUser = async (values: TRegisterValues) => {
@@ -40,6 +40,6 @@ export const registerUser = async (values: TRegisterValues) => {
 
 		// await sendVerificationEmail(createdUser.email, verificationToken.token)
 	} catch (error) {
-		handleError(error, 'CREATE_USER')
+		handleErrorServer(error, 'CREATE_USER')
 	}
 }

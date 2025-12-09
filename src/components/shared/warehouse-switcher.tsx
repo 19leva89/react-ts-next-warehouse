@@ -1,7 +1,6 @@
 'use client'
 
 import { User } from 'next-auth'
-import { Warehouse } from '@prisma/client'
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { ComponentPropsWithoutRef, useState } from 'react'
@@ -22,6 +21,7 @@ import {
 } from '@/components/ui'
 import { cn } from '@/lib'
 import { useRouter } from '@/i18n/navigation'
+import { Warehouse } from '@/generated/prisma/client'
 import { useWarehouseList } from '@/hooks/use-warehouse-list-modal'
 import { useAddWarehouseModal } from '@/hooks/use-add-warehouse-modal'
 

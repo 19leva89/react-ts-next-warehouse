@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { ZodError } from 'zod'
-import { Prisma } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
-export const handleError = (error: unknown, context: string) => {
+import { Prisma } from '@/generated/prisma/client'
+
+export const handleErrorServer = (error: unknown, context: string) => {
 	if (error instanceof Prisma.PrismaClientKnownRequestError) {
 		console.error(`💾 Prisma error [${context}]:`, error.code, error.message)
 	} else if (axios.isAxiosError(error)) {
@@ -17,7 +18,7 @@ export const handleError = (error: unknown, context: string) => {
 	throw error
 }
 
-export const handleApiError = (error: unknown, context: string) => {
+export const handleErrorApi = (error: unknown, context: string) => {
 	// Logging the error
 	if (error instanceof Prisma.PrismaClientKnownRequestError) {
 		console.error(`💾 Prisma error [${context}]:`, error.code, error.message)

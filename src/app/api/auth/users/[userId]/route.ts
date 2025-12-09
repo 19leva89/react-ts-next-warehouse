@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
-import { handleApiError } from '@/lib/handle-error'
+import { handleErrorApi } from '@/lib/handle-error-server'
 import { handleApiSuccess } from '@/lib/handle-success'
 
 interface Props {
@@ -18,7 +18,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
 		const { userId } = await params
 
 		if (!userId) {
-			return handleApiError(new Error('User not found'), 'PUT /api/auth/users')
+			return handleErrorApi(new Error('User not found'), 'PUT /api/auth/users')
 		}
 
 		let hashedPassword = ''
@@ -77,7 +77,7 @@ export async function PUT(req: NextRequest, { params }: Props) {
 			'PUT /api/auth/users',
 		)
 	} catch (error) {
-		return handleApiError(error, 'PUT /api/auth/users')
+		return handleErrorApi(error, 'PUT /api/auth/users')
 	}
 }
 
@@ -111,6 +111,6 @@ export async function DELETE(_req: NextRequest, { params }: Props) {
 			'DELETE /api/auth/users',
 		)
 	} catch (error) {
-		return handleApiError(error, 'DELETE /api/auth/users')
+		return handleErrorApi(error, 'DELETE /api/auth/users')
 	}
 }

@@ -6,9 +6,9 @@ import { useTranslations } from 'next-intl'
 import { PackageCheckIcon } from 'lucide-react'
 import { use, useEffect, useState } from 'react'
 
-import { handleError } from '@/lib/handle-error'
 import { SalesData, UserData } from '@/lib/types'
 import { useSaleModal } from '@/hooks/use-sale-modal'
+import { handleErrorClient } from '@/lib/handle-error-client'
 import { AddSaleButton } from './_components/add-sale-button'
 import { DataTable, Heading, LoadingIndicator } from '@/components/shared'
 import { SalesColumn, SalesColumns, SalesColumnsWithoutAction } from './_components/columns'
@@ -50,7 +50,7 @@ const SalesPage = ({ params }: Props) => {
 
 				setFormattedSales(tempSales)
 			} catch (error) {
-				handleError(error, 'GET_SALES')
+				handleErrorClient(error, 'GET_SALES')
 
 				toast.error(t('loadSaleFailed'))
 			} finally {
@@ -63,7 +63,7 @@ const SalesPage = ({ params }: Props) => {
 				const response = await axios.get('/api/auth/profile')
 				setUser(response.data.user)
 			} catch (error) {
-				handleError(error, 'GET_USER_DATA')
+				handleErrorClient(error, 'GET_USER_DATA')
 
 				toast.error(t('loadUserFailed'))
 			} finally {
