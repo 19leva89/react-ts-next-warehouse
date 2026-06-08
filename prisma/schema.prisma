@@ -62,11 +62,11 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   //
   accounts              Account[]
-  sessions              Session[]
-  authenticator         Authenticator[]
-  sales                 Sales[]
   auditLogs             AuditLog[]
+  authenticator         Authenticator[]
   notifications         Notification[]
+  sales                 Sales[]
+  sessions              Session[]
   systemSettingsCreated SystemSetting[]        @relation("SettingCreatedBy")
   systemSettingsUpdated SystemSetting[]        @relation("SettingUpdatedBy")
   //
@@ -155,12 +155,9 @@ model TwoFactorToken {
 }
 
 model TwoFactorConfirmation {
-  id String @id @default(cuid())
-
-  userId String
+  id     String @id @default(cuid())
+  userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId])
 }
 
 model Warehouse {
